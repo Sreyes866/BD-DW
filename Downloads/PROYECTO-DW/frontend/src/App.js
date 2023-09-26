@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect, Link } from 'react-router-dom';
-import './App.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.css';
+import './App.css';
 import CreateArticle from './components/CreateArticlePage.jsx';
-import Home from './components/Home.jsx';
+import Home from './components/Home.jsx'; 
 import Login from './components/Login.jsx';
 import ListArticles from './components/ListArticles.jsx';
 import ArticleDetail from './components/ArticleDetail.jsx';
@@ -12,6 +14,8 @@ import Contact from './components/Contact.jsx';
 import History from './components/History.jsx';
 import FAQ from './components/FAQ.jsx';
 import Announcements from './components/Announcements.jsx';
+
+
 
 const App = () => {
   
@@ -26,19 +30,23 @@ const App = () => {
   return (
     <Router>
       <div className="App">
-        <h1>Revista de Artículos</h1>
         {isLoggedIn && (
-          <nav>
-            <ul>
-              <li><Link to="/home">Home</Link></li>
-              <li><Link to="/create-article">Crear Artículo</Link></li>
-              <li><Link to="/list-articles">Artículos Publicados</Link></li>
-              <li><Link to="/profile">Perfil</Link></li>
-              <li><Link to="/contact">Contacto</Link></li>
-              <li><Link to="/history">Historia</Link></li>
-              <li><Link to="/faq">Preguntas frecuentes</Link></li>
-              <li><Link to="/announcements">Anuncios</Link></li>
-            </ul>
+          <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <div className="container-fluid">
+              <Link className="navbar-brand" to="/home">ThinkSphere</Link>
+              <div className="collapse navbar-collapse">
+                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li className="nav-item"><Link className="nav-link" to="/home">Home</Link></li>
+                  <li className="nav-item"><Link className="nav-link" to="/create-article">Crear Artículo</Link></li>
+                  <li className="nav-item"><Link className="nav-link" to="/list-articles">Artículos Publicados</Link></li>
+                  <li className="nav-item"><Link className="nav-link" to="/profile">Perfil</Link></li>
+                  <li className="nav-item"><Link className="nav-link" to="/contact">Contacto</Link></li>
+                  <li className="nav-item"><Link className="nav-link" to="/history">Historia</Link></li>
+                  <li className="nav-item"><Link className="nav-link" to="/faq">Preguntas frecuentes</Link></li>
+                  <li className="nav-item"><Link className="nav-link" to="/announcements">Anuncios</Link></li>
+                </ul>
+              </div>
+            </div>
           </nav>
         )}
 <Switch>

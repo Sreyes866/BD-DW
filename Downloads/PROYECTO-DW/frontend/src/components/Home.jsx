@@ -6,6 +6,7 @@ const Home = ({ articles }) => {
 
   return (
     <div>
+      
       <h2>Artículos Recientes</h2>
       <ul>
         {sortedArticles.map((article, index) => (

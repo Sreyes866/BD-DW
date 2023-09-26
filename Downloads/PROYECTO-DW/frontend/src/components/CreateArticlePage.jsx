@@ -3,6 +3,7 @@
 import React from 'react';
 import CreateArticle from './CreateArticle';
 
+
 const CreateArticlePage = ({ addArticle }) => {
   return (
     <div>
