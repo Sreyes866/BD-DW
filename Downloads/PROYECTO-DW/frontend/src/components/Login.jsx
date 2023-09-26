@@ -11,7 +11,7 @@ const Login = ({ setIsLoggedIn }) => {
 
     if (username === 'pablo' && password === 'db00') {
       setIsLoggedIn(true);
-      history.push('/create-article');
+      history.push('/home');
     } else {
       alert('Usuario o contraseña incorrectos');
     }

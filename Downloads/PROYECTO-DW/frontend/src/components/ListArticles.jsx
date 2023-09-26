@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const ListArticles = ({ articles }) => {
+const ListArticles = ({ articles }) => {  
   const [searchTerm, setSearchTerm] = useState('');
   const [sortType, setSortType] = useState('asc'); // 'asc' o 'desc'
 
@@ -18,23 +18,31 @@ const ListArticles = ({ articles }) => {
   });
 
   return (
-    <div>
+    <div className="container">
       <input 
         type="text" 
+        className="form-control"
         placeholder="Buscar artículo" 
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <button onClick={() => setSortType('asc')}>Ascendente</button>
-      <button onClick={() => setSortType('desc')}>Descendente</button>
+      <button className="btn btn-primary" onClick={() => setSortType('asc')}>Ascendente</button>
+      <button className="btn btn-secondary" onClick={() => setSortType('desc')}>Descendente</button>
 
-      <ul>
+      <div className="row">
         {sortedArticles.map((article, index) => (
-          <li key={index}>
-            <Link to={`/article/${article.id}`}>{article.title}</Link>
-          </li>
+          <div className="col-md-3" key={index}>
+            <Link to={`/article/${article.id}`} className="text-decoration-none">
+              <div className="card h-100">
+                <div className="card-body">
+                  <h5 className="card-title">{article.title}</h5>
+                  <p className="card-text">{article.content.substring(0, 50)}...</p>
+                </div>
+              </div>
+            </Link>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
