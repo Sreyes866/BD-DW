@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'; //Redireccionado al usuario al articulo
 
 const Home = ({ articles }) => {
   // Ordena los artículos por id de forma descendente para mostrar los más recientes primero
