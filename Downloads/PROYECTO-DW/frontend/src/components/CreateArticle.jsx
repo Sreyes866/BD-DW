@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import Template1 from './Template1';
+import Template2 from './Template2';
+import Template3 from './Template3';
 
 const CreateArticle = ({ addArticle }) => {
-  // Estado para guardar los detalles del artículo
   const [article, setArticle] = useState({
     title: '',
     content: '',
     category: '',
-    subCategory: ''
+    subCategory: '',
+    templateType: 'Template1',
+    image: null,
+    author: ''  // Nuevo campo para el autor
   });
 
-  // Lista de categorías y subcategorías
   const categories = {
     'Tecnologia': ['Programación', 'Inteligencia Artificial', 'Ciberseguridad', 'IoT', 'Blockchain'],
     'Ciencia': ['Biología', 'Física', 'Química', 'Astronomía', 'Geología'],
@@ -19,34 +23,34 @@ const CreateArticle = ({ addArticle }) => {
     'Negocios y finanzas': ['Inversión en Criptomonedas', 'Marketing Digital', 'Gestión de Proyectos', 'Finanzas Personales', 'Emprendimiento']
   };
 
-  // Manejar cambios en los campos del formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setArticle({
-      ...article,
-      [name]: value
-    });
-    if (name === 'category') {
-      setArticle({ ...article, category: value, subCategory: '' });
-    }
+    setArticle({ ...article, [name]: value });
   };
 
-  // Objeto de historia para navegar entre rutas
+  const handleImageChange = (e) => {
+    setArticle({ ...article, image: e.target.files[0] });
+  };
+
   const history = useHistory();
 
-  // Manejar el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
     addArticle(article);
-    setArticle({
-      title: '',
-      content: '',
-      category: '',
-      subCategory: ''
-    });
-
-    // Redirigir al usuario a la página de selección de plantillas de artículo
     history.push('/article-templates');
+  };
+
+  const renderTemplate = () => {
+    switch (article.templateType) {
+      case 'Template1':
+        return <Template1 article={article} />;
+      case 'Template2':
+        return <Template2 article={article} />;
+      case 'Template3':
+        return <Template3 article={article} />;
+      default:
+        return <p>No se seleccionó ninguna plantilla.</p>;
+    }
   };
 
   return (
@@ -55,8 +59,20 @@ const CreateArticle = ({ addArticle }) => {
         <div className="col-md-6">
           <form onSubmit={handleSubmit} className="border p-4 rounded">
             <div className="form-group">
+              <label htmlFor="templateType">Selecciona una plantilla</label>
+              <select id="templateType" name="templateType" value={article.templateType} onChange={handleChange} className="form-control">
+                <option value="Template1">Plantilla 1</option>
+                <option value="Template2">Plantilla 2</option>
+                <option value="Template3">Plantilla 3</option>
+              </select>
+            </div>
+            <div className="form-group">
               <label htmlFor="title">Título</label>
               <input type="text" id="title" name="title" value={article.title} onChange={handleChange} className="form-control" />
+            </div>
+            <div className="form-group">
+              <label htmlFor="author">Autor</label>
+              <input type="text" id="author" name="author" value={article.author} onChange={handleChange} className="form-control" />
             </div>
             <div className="form-group">
               <label htmlFor="content">Contenido</label>
@@ -80,8 +96,18 @@ const CreateArticle = ({ addArticle }) => {
                 ))}
               </select>
             </div>
+            <div className="form-group">
+              <label htmlFor="image">Imagen</label>
+              <input type="file" id="image" onChange={handleImageChange} className="form-control-file" />
+            </div>
             <button type="submit" className="btn btn-primary">Crear</button>
           </form>
+        </div>
+      </div>
+      <div className="row justify-content-center mt-5">
+        <div className="col-md-8">
+          <h2>Previsualización del artículo</h2>
+          {renderTemplate()}
         </div>
       </div>
     </div>
