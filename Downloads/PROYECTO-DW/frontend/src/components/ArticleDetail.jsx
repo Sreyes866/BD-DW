@@ -88,4 +88,4 @@ const ArticleDetail = ({ articles, deleteArticle, updateArticle }) => {
   );
 };
 
-export default ArticleDetail;
+export default ArticleDetail;
