@@ -15,6 +15,9 @@ const CreateArticle = ({ addArticle }) => {
     author: ''  // Nuevo campo para el autor
   });
 
+  const [articleCreated, setArticleCreated] = useState(false);
+  const [articleLink, setArticleLink] = useState('');
+
   const categories = {
     'Tecnologia': ['Programación', 'Inteligencia Artificial', 'Ciberseguridad', 'IoT', 'Blockchain'],
     'Ciencia': ['Biología', 'Física', 'Química', 'Astronomía', 'Geología'],
@@ -37,7 +40,9 @@ const CreateArticle = ({ addArticle }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     addArticle(article);
-    history.push('/article-templates');
+    setArticleCreated(true);
+    // Aquí debes establecer el enlace al artículo creado (reemplaza '/ruta-del-articulo-creado' con la URL real)
+    setArticleLink('/ruta-del-articulo-creado');
   };
 
   const renderTemplate = () => {
@@ -106,6 +111,12 @@ const CreateArticle = ({ addArticle }) => {
       </div>
       <div className="row justify-content-center mt-5">
         <div className="col-md-8">
+          {articleCreated ? (
+            <div>
+              <p>El artículo se ha creado con éxito.</p>
+              <a href={articleLink} className="btn btn-success">Ver artículo</a>
+            </div>
+          ) : null}
           <h2>Previsualización del artículo</h2>
           {renderTemplate()}
         </div>
