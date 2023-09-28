@@ -13,7 +13,8 @@ import ArticleDetail from './components/ArticleDetail.jsx';
 import Contact from './components/Contact.jsx';
 import History from './components/History.jsx';
 import FAQ from './components/FAQ.jsx';
-import Announcements from './components/Announcements.jsx';
+import Announcements from './components/Announcements.jsx'
+
 
 const App = () => {
   
@@ -134,9 +135,6 @@ const App = () => {
             </Route>
             <Route path="/article/:id">
               {isLoggedIn ? <ArticleDetail articles={articles} deleteArticle={deleteArticle} updateArticle={updateArticle} /> : <Redirect to="/login" />}
-            </Route>
-            <Route path="/articles/:category/:subCategory">
-              {/* Aquí puedes renderizar los artículos basados en la categoría y subcategoría */}
             </Route>
           </Switch>
         </div>
