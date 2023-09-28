@@ -14,8 +14,7 @@ import Contact from './components/Contact.jsx';
 import History from './components/History.jsx';
 import FAQ from './components/FAQ.jsx';
 import Announcements from './components/Announcements.jsx'
-import ArticlesByCategory from './components/ArticlesByCategory.jsx';
-import { useParams } from 'react-router-dom';
+import ArticlesByCategory from './components/ArticlesByCategory.jsx';;
 
 const App = () => {
   
@@ -47,17 +46,6 @@ const App = () => {
     setArticles(newArticles);
   };
 
-
-  const ArticlesByCategory = ({ articles }) => {
-    const { category, subCategory } = useParams();
-
-    return (
-      <div>
-        <h1>{subCategory}</h1>  {/* Aquí se mostrará el título basado en la subcategoría */}
-        {/* Renderiza tus artículos filtrados aquí */}
-      </div>
-    );
-  };
   return (
       <Router>
         <div className="App">
@@ -151,6 +139,9 @@ const App = () => {
             <Route path="/article/:id">
               {isLoggedIn ? <ArticleDetail articles={articles} deleteArticle={deleteArticle} updateArticle={updateArticle} /> : <Redirect to="/login" />}
             </Route>
+            <Route path="/articles/:category/:subCategory">
+        <ArticlesByCategory articles={articles} />
+      </Route>
           </Switch>
         </div>
       </Router>
