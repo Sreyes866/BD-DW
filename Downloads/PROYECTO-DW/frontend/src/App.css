@@ -48,6 +48,7 @@ nav ul li {
 /* Cuadros de entrada y botones */
 input[type="text"],
 input[type="password"],
+input[type="email"], /* Añadido */
 button[type="submit"] {
   width: 100%;
   padding: 12px 20px;
@@ -144,6 +145,7 @@ label {
   color: white;
   padding: 10px;
   border-radius: 5px;
+  margin-top: 10px;
 }
 
 .article-section h3 {
