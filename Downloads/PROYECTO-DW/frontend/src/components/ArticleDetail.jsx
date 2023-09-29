@@ -10,6 +10,7 @@ const ArticleDetail = ({ articles, deleteArticle, updateArticle }) => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedArticle, setEditedArticle] = useState(article);
+  const [showImage, setShowImage] = useState(false);
 
   const [message, setMessage] = useState("");
 
@@ -28,11 +29,13 @@ const ArticleDetail = ({ articles, deleteArticle, updateArticle }) => {
 
   const handleEdit = () => {
     setIsEditing(true);
+    setShowImage(true);
   };
 
   const handleSave = () => {
     updateArticle(editedArticle);
     setIsEditing(false);
+    setShowImage(false);
   };
 
   const handleChange = (e) => {
@@ -76,8 +79,23 @@ const ArticleDetail = ({ articles, deleteArticle, updateArticle }) => {
       {message && <p className="alert alert-success">{message}</p>}
       {isEditing ? (
         <div className="form-group">
-          <input type="text" name="title" value={editedArticle.title} onChange={handleChange} />
-          <textarea name="content" value={editedArticle.content} onChange={handleChange}></textarea>
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div style={{ flex: '1', marginRight: '10px' }}>
+              <input type="text" name="title" value={editedArticle.title} onChange={handleChange} />
+              <textarea
+                name="content"
+                value={editedArticle.content}
+                onChange={handleChange}
+                style={{ width: '100%' }}
+                rows={Math.max(3, editedArticle.content.split('\n').length)}
+              ></textarea>
+            </div>
+            {showImage && (
+              <div style={{ flex: '1' }}>
+                <img src={URL.createObjectURL(editedArticle.image)} alt="Imagen" style={{ maxWidth: '100%' }} />
+              </div>
+            )}
+          </div>
           <select name="category" value={editedArticle.category} onChange={handleChange}>
             {Object.keys(categories).map((cat, index) => (
               <option key={index} value={cat}>{cat}</option>
@@ -96,6 +114,9 @@ const ArticleDetail = ({ articles, deleteArticle, updateArticle }) => {
           {article && (
             <>
               {renderTemplate(article, isEditing, handleChange, handleImageChange)}
+              {showImage && (
+                <img src={URL.createObjectURL(article.image)} alt="Imagen" style={{ maxWidth: '100%' }} />
+              )}
             </>
           )}
           {!message && (
@@ -111,3 +132,5 @@ const ArticleDetail = ({ articles, deleteArticle, updateArticle }) => {
 };
 
 export default ArticleDetail;
+
+
