@@ -14,12 +14,12 @@ const ModerateArticles = () => {
   }, []);
 
   const handleApprove = (id) => {
-    // Aquí podrías hacer una llamada a la API para aprobar el artículo
+ // una llamada a la API para aprobar el artículo
     console.log(`Artículo ${id} aprobado`);
   };
 
   const handleReject = (id) => {
-    // Aquí podrías hacer una llamada a la API para rechazar el artículo
+// una llamada a la API para rechazar el artículo
     console.log(`Artículo ${id} rechazado`);
   };
 
