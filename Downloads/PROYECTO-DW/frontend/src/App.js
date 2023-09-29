@@ -5,16 +5,17 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './index.css';
 import './App.css';
 import CreateArticle from './components/CreateArticle.jsx';
-import Home from './components/Home.jsx'; 
+import Home from './components/Home.jsx';
 import Login from './components/Login.jsx';
-import Profile from './components/Profile.jsx';  
+import Profile from './components/Profile.jsx';
 import ListArticles from './components/ListArticles.jsx';
 import ArticleDetail from './components/ArticleDetail.jsx';
 import Contact from './components/Contact.jsx';
 import History from './components/History.jsx';
 import FAQ from './components/FAQ.jsx';
-import Announcements from './components/Announcements.jsx'
-import ArticlesByCategory from './components/ArticlesByCategory.jsx';;
+import Announcements from './components/Announcements.jsx';
+import ArticlesByCategory from './components/ArticlesByCategory.jsx';
+import Subscription from './components/Subscription';  // Asegúrate de que esta ruta sea la correcta
 
 const App = () => {
   
@@ -142,6 +143,7 @@ const App = () => {
             <Route path="/articles/:category/:subCategory">
         <ArticlesByCategory articles={articles} />
       </Route>
+        <Route path="/subscription" component={Subscription} /> {/* Nueva ruta */}
           </Switch>
         </div>
       </Router>

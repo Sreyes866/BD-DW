@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom'
 
 const Profile = () => {
+  const history = useHistory();
+
   const [showPassword, setShowPassword] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [name, setName] = useState('Pablo Morales');
@@ -15,6 +18,9 @@ const Profile = () => {
   const draftArticles = ['Draft 1', 'Draft 2'];
   const reviewArticles = ['Review 1', 'Review 2'];
 
+
+
+  
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -28,7 +34,7 @@ const Profile = () => {
   };
 
   const handleSubscription = () => {
-    setShowSubscription(!showSubscription);
+    history.push('/subscription'); // Añade esta línea
   };
 
   const saveChanges = () => {
@@ -60,14 +66,7 @@ const Profile = () => {
           <button onClick={togglePasswordVisibility}>{showPassword ? 'Ocultar' : 'Ver'}</button>
           <button className="btn btn-primary" onClick={saveChanges}>Guardar Cambios</button> {}
           <button className="btn btn-primary" onClick={handleSubscription}>Administrar Suscripción</button>
-            {showSubscription && (
-              <div>
-                <h3>Estado de Suscripción: {subscriptionActive ? 'Activa' : 'Inactiva'}</h3>
-                <button onClick={() => setSubscriptionActive(true)}>Comprar por Q469.99/año</button>
-                <button onClick={() => setSubscriptionActive(true)}>Comprar por Q46.99/mes</button>
-              </div>
-            )}
-          </div>
+        </div>
         ) : (
           <div className="left-section">
             <h2>{name}</h2>
