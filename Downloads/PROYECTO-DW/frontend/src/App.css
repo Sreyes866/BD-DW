@@ -118,3 +118,38 @@ label {
 .dropdown-submenu:hover > .dropdown-menu {
   display: block;
 }
+
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.profile-card {
+  display: flex;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  width: 80%;
+}
+
+.left-section, .right-section {
+  flex: 1;
+  padding: 20px;
+}
+
+.btn-primary {
+  background-color: blue;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.article-section h3 {
+  cursor: pointer;
+}
+
+.article-list {
+  padding-left: 20px;
+}
