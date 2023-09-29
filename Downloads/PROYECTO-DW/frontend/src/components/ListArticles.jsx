@@ -39,7 +39,7 @@ const ListArticles = ({ articles }) => {
 
       <select onChange={(e) => {
         setSelectedCategory(e.target.value);
-        setSelectedSubCategory(''); // Reset subcategory when main category changes
+        setSelectedSubCategory('');
       }}>
         <option value="">--Seleccionar Categoría--</option>
         {Object.keys(categories).map((category, index) => (
