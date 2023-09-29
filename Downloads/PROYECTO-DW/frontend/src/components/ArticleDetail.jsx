@@ -132,5 +132,3 @@ const ArticleDetail = ({ articles, deleteArticle, updateArticle }) => {
 };
 
 export default ArticleDetail;
-
-
