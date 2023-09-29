@@ -12,9 +12,15 @@ const CreateArticle = ({ addArticle }) => {
     subCategory: '',
     templateType: 'Template1',
     image: null,
-    author: ''  // Nuevo campo para el autor
+    author: '' 
   });
 
+
+  const [articleCreated, setArticleCreated] = useState(false);
+  const [newArticleId, setNewArticleId] = useState(null);
+
+
+  
   const categories = {
     'Tecnologia': ['Programación', 'Inteligencia Artificial', 'Ciberseguridad', 'IoT', 'Blockchain'],
     'Ciencia': ['Biología', 'Física', 'Química', 'Astronomía', 'Geología'],
@@ -110,8 +116,15 @@ const CreateArticle = ({ addArticle }) => {
           {renderTemplate()}
         </div>
       </div>
+      {articleCreated && (
+        <div>
+          <h3>Artículo creado con éxito</h3>
+          <button onClick={() => history.push(`/article/${newArticleId}`)}>Ver artículo</button>
+        </div>
+      )}
     </div>
   );
 };
 
 export default CreateArticle;
+
