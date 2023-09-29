@@ -155,3 +155,26 @@ label {
 .article-list {
   padding-left: 20px;
 }
+
+/* ... (resto del código CSS) ... */
+
+.article-section h3 {
+  cursor: pointer;
+  padding: 10px;
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.article-list {
+  padding-left: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  display: none; /* Por defecto, está oculto */
+}
+
+.article-list.show {
+  display: block; /* Se muestra cuando se hace clic */
+}
