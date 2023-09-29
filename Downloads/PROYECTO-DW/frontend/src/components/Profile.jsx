@@ -8,7 +8,9 @@ const Profile = () => {
   const [email, setEmail] = useState('pablo.m@example.com');
   const [password, setPassword] = useState('db00');
   const [showArticles, setShowArticles] = useState({ published: false, drafts: false, review: false });
-
+  const [subscriptionActive, setSubscriptionActive] = useState(false);
+  const [showSubscription, setShowSubscription] = useState(false);
+  
   const publishedArticles = ['Articulo 1', 'Articulo 2'];
   const draftArticles = ['Draft 1', 'Draft 2'];
   const reviewArticles = ['Review 1', 'Review 2'];
@@ -26,16 +28,17 @@ const Profile = () => {
   };
 
   const handleSubscription = () => {
-    // Lógica para manejar la suscripción
+    setShowSubscription(!showSubscription);
   };
 
   const saveChanges = () => {
-  if (name && username && email && password) {
-    toggleEditMode(); // Cambia el modo solo si todos los campos tienen valor
-  } else {
-    alert('Todos los campos son obligatorios.'); // Muestra una alerta si algún campo está vacío
-  }
-};
+    if (name && username && email && password) {
+      toggleEditMode();
+    } else {
+      alert('Todos los campos son obligatorios.');
+    }
+  };
+
   return (
     <div className="profile-container">
       <div className="profile-card">
@@ -55,9 +58,16 @@ const Profile = () => {
               onChange={e => setPassword(e.target.value)} 
             />
           <button onClick={togglePasswordVisibility}>{showPassword ? 'Ocultar' : 'Ver'}</button>
-          <button className="btn btn-primary" onClick={saveChanges}>Guardar Cambios</button> {/* Llama a saveChanges en lugar de toggleEditMode */}
+          <button className="btn btn-primary" onClick={saveChanges}>Guardar Cambios</button> {}
           <button className="btn btn-primary" onClick={handleSubscription}>Administrar Suscripción</button>
-        </div>
+            {showSubscription && (
+              <div>
+                <h3>Estado de Suscripción: {subscriptionActive ? 'Activa' : 'Inactiva'}</h3>
+                <button onClick={() => setSubscriptionActive(true)}>Comprar por Q469.99/año</button>
+                <button onClick={() => setSubscriptionActive(true)}>Comprar por Q46.99/mes</button>
+              </div>
+            )}
+          </div>
         ) : (
           <div className="left-section">
             <h2>{name}</h2>
