@@ -33,6 +33,7 @@ const Subscription = () => {
           <button className="btn btn-primary">Comprar</button>
         </div>
       </div>
+      <p>La suscripción se renueva automáticamente</p>
     </div>
   );
 };
