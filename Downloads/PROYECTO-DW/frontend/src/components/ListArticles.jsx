@@ -1,22 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Template1 from './Template1';  
+import Template1 from './Template1';
 
 const ListArticles = () => {
   const [articles, setArticles] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
-  const [editingArticle, setEditingArticle] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedSubcategory, setSelectedSubcategory] = useState('');
+
+  const fetchData = (category = '', subcategory = '') => {
+    let url = 'http://localhost/Articles.php';
+    const params = [];
+    if (category) params.push(`category_id=${category}`);
+    if (subcategory) params.push(`sub_category_id=${subcategory}`);
+    if (params.length) url += '?' + params.join('&');
+    axios.get(url)
+      .then(response => setArticles(response.data))
+      .catch(error => console.error('Error fetching articles:', error));
+  };
 
   useEffect(() => {
     fetchData();
-  }, []);
-
-  const fetchData = () => {
-    axios.get('http://localhost/Articles.php')
-      .then(response => setArticles(response.data))
-      .catch(error => console.error('Error fetching articles:', error));
-
+    // Suponemos que tienes funciones similares para obtener categorías y subcategorías.
+    // Si no es así, puedes adaptar este código según tus necesidades.
     axios.get('http://localhost/Categories.php')
       .then(response => setCategories(response.data))
       .catch(error => console.error('Error fetching categories:', error));
@@ -24,73 +31,61 @@ const ListArticles = () => {
     axios.get('http://localhost/Subcategories.php')
       .then(response => setSubcategories(response.data))
       .catch(error => console.error('Error fetching subcategories:', error));
+  }, []);
+
+  const applyFilter = () => {
+    let filteredArticles = articles;
+    
+    if (selectedCategory) {
+      filteredArticles = filteredArticles.filter(article => article.category_id === selectedCategory);
+    }
+  
+    if (selectedSubcategory) {
+      filteredArticles = filteredArticles.filter(article => article.sub_category_id === selectedSubcategory);
+    }
+  
+    setArticles(filteredArticles);
   };
 
-  const handleDelete = (id) => {
-    console.log("handleDelete called", id);
-    axios.post('http://localhost/deleteArticle.php', { id: id })
-      .then(response => {
-        fetchData();  
-      })
-      .catch(error => console.error('Error deleting article:', error));
-};
+  return (
+    <div className="container">
+      <div>
+        <select onChange={(e) => setSelectedCategory(e.target.value)}>
+          <option value="">Select Category</option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
+        </select>
 
-const handleEdit = (article) => {
-  setEditingArticle(article);
-};
+        <select onChange={(e) => setSelectedSubcategory(e.target.value)}>
+          <option value="">Select Subcategory</option>
+          {subcategories.map((subcategory) => (
+            <option key={subcategory.id} value={subcategory.id}>
+              {subcategory.name}
+            </option>
+          ))}
+        </select>
 
-const handleSave = () => {
-  axios.post('http://localhost/updateArticle.php', editingArticle)
-    .then(response => {
-      setEditingArticle(null);
-      fetchData();
-    })
-    .catch(error => console.error('Error updating article:', error));
-};
-
-const handleInputChange = (event) => {
-  const { name, value } = event.target;
-  setEditingArticle({ ...editingArticle, [name]: value });
-};
-
-if (!articles.length) return <div>Loading...</div>;
-
-return (
-  <div className="container">
-    {articles.map((article, index) => (
-      <div key={index} style={{border: '1px solid #ccc', margin: '20px', padding: '15px'}}>
-        {editingArticle && editingArticle.id === article.id ? (
-          <>
-            <Template1 
-              article={editingArticle} 
-              isEditing={true} 
-              handleChange={handleInputChange} 
-              categories={categories} 
-              subcategories={subcategories} 
-            />
-            <button onClick={handleSave}>Guardar</button>
-          </>
-        ) : (
-          <>
-            <h1>{article.title}</h1>
-            <p>{article.content}</p>
-            <div>
-              Categoría: {categories.find(cat => cat.id === article.category_id)?.name || 'No especificada'}
-            </div>
-            <div>
-              Subcategoría: {subcategories.find(sub => sub.id === article.sub_category_id)?.name || 'No especificada'}
-            </div>
-            <button onClick={() => handleDelete(article.id)}>Eliminar</button>
-            <button onClick={() => handleEdit(article)}>Editar</button>
-          </>
-        )}
+        <button onClick={applyFilter}>Apply Filter</button>
       </div>
-    ))}
-  </div>
-);
+
+      {articles.map((article, index) => (
+        <Template1 
+          key={index} 
+          article={article}
+          categories={categories}
+          subcategories={subcategories}
+        />
+      ))}
+    </div>
+  );
 };
 
 export default ListArticles;
+
+
 
 
 
