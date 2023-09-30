@@ -92,7 +92,7 @@ const ArticleDetail = ({ articles, deleteArticle, updateArticle }) => {
             </div>
             {showImage && (
               <div style={{ flex: '1' }}>
-                <img src={URL.createObjectURL(editedArticle.image)} alt="Imagen" style={{ maxWidth: '100%' }} />
+{editedArticle.image && <img src={URL.createObjectURL(editedArticle.image)} alt="Imagen" style={{ maxWidth: '100%' }} />}
               </div>
             )}
           </div>
