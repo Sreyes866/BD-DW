@@ -1,8 +1,8 @@
 <?php
-$servername = "localhost";
+$servername = "127.0.0.1:3306";
 $username = "root";
 $password = "";
-$dbname = "your_database_name";
+$dbname = "Revista";
 
 // Crear conexión
 $conn = new mysqli($servername, $username, $password, $dbname);
