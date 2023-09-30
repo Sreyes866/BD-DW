@@ -130,11 +130,3 @@ const CreateArticle = () => {
 };
 
 export default CreateArticle;
-
-
-
-
-
-
-
-
