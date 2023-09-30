@@ -14,21 +14,22 @@ const CreateArticle = () => {
 
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
+  const [filteredSubcategories, setFilteredSubcategories] = useState([]);
   const [articleCreated, setArticleCreated] = useState(false);
 
   useEffect(() => {
     axios.get('http://localhost/Categories.php')
-      .then(response => {
-        setCategories(response.data);
-      })
+      .then(response => setCategories(response.data))
       .catch(error => console.error('Error fetching categories:', error));
 
     axios.get('http://localhost/Subcategories.php')
-      .then(response => {
-        setSubcategories(response.data);
-      })
+      .then(response => setSubcategories(response.data))
       .catch(error => console.error('Error fetching subcategories:', error));
   }, []);
+
+  useEffect(() => {
+    setFilteredSubcategories(subcategories.filter(sub => sub.category_id === article.category_id));
+  }, [article.category_id, subcategories]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,13 +42,20 @@ const CreateArticle = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost/addarticule.php', article)
-      .then(response => {
-        if (response.data.message === 'Artículo añadido') {
-          setArticleCreated(true);
-        }
-      })
-      .catch(error => console.error('Fetch Error:', error));
+    fetch('http://localhost/addarticule.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(article)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.message === 'Artículo añadido') {
+        setArticleCreated(true);
+      }
+    })
+    .catch(error => console.error('Fetch Error:', error));
   };
 
   return (
@@ -57,12 +65,12 @@ const CreateArticle = () => {
           <label htmlFor="title">Título</label>
           <input type="text" id="title" name="title" value={article.title} onChange={handleChange} className="form-control" />
         </div>
-        
+
         <div className="form-group">
           <label htmlFor="author_id">Autor</label>
           <input type="text" id="author_id" name="author_id" value={article.author_id} onChange={handleChange} className="form-control" />
         </div>
-        
+
         <div className="form-group">
           <label htmlFor="content">Contenido</label>
           <textarea id="content" name="content" value={article.content} onChange={handleChange} className="form-control" rows="5"></textarea>
@@ -82,7 +90,7 @@ const CreateArticle = () => {
           <label htmlFor="sub_category_id">Subcategoría</label>
           <select id="sub_category_id" name="sub_category_id" value={article.sub_category_id} onChange={handleChange} className="form-control">
             <option value="" disabled>Seleccione una subcategoría</option>
-            {subcategories.map((subcategory, index) => (
+            {filteredSubcategories.map((subcategory, index) => (
               <option key={index} value={subcategory.id}>{subcategory.name}</option>
             ))}
           </select>
