@@ -1,77 +1,46 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const ListArticles = ({ articles }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortType, setSortType] = useState('asc');
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedSubCategory, setSelectedSubCategory] = useState('');
+const ListArticles = () => {
+  const [articles, setArticles] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
 
-  const categories = {
-    'Tecnologia': ['Programación', 'Inteligencia Artificial', 'Ciberseguridad', 'IoT', 'Blockchain'],
-    'Ciencia': ['Biología', 'Física', 'Química', 'Astronomía', 'Geología'],
-    'Salud': ['Nutrición', 'Salud Mental', 'Cardiología', 'Pediatría', 'Neurología'],
-    'Arte y cultura': ['Historia del Arte', 'Literatura Clásica', 'Música', 'Teatro', 'Cine'],
-    'Negocios y finanzas': ['Inversión en Criptomonedas', 'Marketing Digital', 'Gestión de Proyectos', 'Finanzas Personales', 'Emprendimiento']
-  };
+  useEffect(() => {
+    axios.get('http://localhost/Articles.php')
+      .then(response => setArticles(response.data))
+      .catch(error => console.error('Error fetching articles:', error));
 
-  const filteredArticles = articles.filter(article => {
-    return article.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-           (!selectedCategory || article.category === selectedCategory) &&
-           (!selectedSubCategory || article.subCategory === selectedSubCategory);
-  });
+    axios.get('http://localhost/Categories.php')
+      .then(response => setCategories(response.data))
+      .catch(error => console.error('Error fetching categories:', error));
 
-  const sortedArticles = filteredArticles.sort((a, b) => {
-    return sortType === 'asc' ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title);
-  });
+    axios.get('http://localhost/Subcategories.php')
+      .then(response => setSubcategories(response.data))
+      .catch(error => console.error('Error fetching subcategories:', error));
+  }, []);
+
+  if (!articles.length) return <div>Loading...</div>;
 
   return (
     <div className="container">
-      <input 
-        type="text"
-        className="form-control"
-        placeholder="Buscar artículo"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      <button className="btn btn-primary" onClick={() => setSortType('asc')}>Ascendente</button>
-      <button className="btn btn-secondary" onClick={() => setSortType('desc')}>Descendente</button>
-
-      <select onChange={(e) => {
-        setSelectedCategory(e.target.value);
-        setSelectedSubCategory('');
-      }}>
-        <option value="">--Seleccionar Categoría--</option>
-        {Object.keys(categories).map((category, index) => (
-          <option value={category} key={index}>{category}</option>
-        ))}
-      </select>
-
-      {selectedCategory && (
-        <select onChange={(e) => setSelectedSubCategory(e.target.value)}>
-          <option value="">--Seleccionar Subcategoría--</option>
-          {categories[selectedCategory].map((subCategory, index) => (
-            <option value={subCategory} key={index}>{subCategory}</option>
-          ))}
-        </select>
-      )}
-
-      <div className="row">
-        {sortedArticles.map((article, index) => (
-          <div className="col-md-3" key={index}>
-            <Link to={`/article/${article.id}`} className="text-decoration-none">
-              <div className="card h-100">
-                <div className="card-body">
-                  <h5 className="card-title">{article.title}</h5>
-                  <p className="card-text">{article.content.substring(0, 50)}...</p>
-                </div>
-              </div>
-            </Link>
+      {articles.map((article, index) => (
+        <div key={index} style={{border: '1px solid #ccc', margin: '20px', padding: '15px'}}>
+          <h1>{article.title}</h1>
+          <p>{article.content}</p>
+          
+          <div>
+            Categoría: {categories.find(cat => cat.id === article.category_id)?.name || 'No especificada'}
           </div>
-        ))}
-      </div>
+          <div>
+            Subcategoría: {subcategories.find(sub => sub.id === article.sub_category_id)?.name || 'No especificada'}
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
 
 export default ListArticles;
+
+

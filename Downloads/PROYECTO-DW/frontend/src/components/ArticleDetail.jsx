@@ -1,134 +1,74 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import Template1 from './Template1';
-import Template2 from './Template2';
-import Template3 from './Template3';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams, useHistory } from 'react-router-dom';
 
-const ArticleDetail = ({ articles, deleteArticle, updateArticle }) => {
+const ArticleDetail = () => {
   const { id } = useParams();
-  const article = articles.find(a => a.id === Number(id));
+  const history = useHistory();
+  const [article, setArticle] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedArticle, setEditedArticle] = useState(article);
-  const [showImage, setShowImage] = useState(false);
+  useEffect(() => {
+    // Cargar categorías y subcategorías
+    axios.get('http://localhost/getCategories.php')
+      .then(response => setCategories(response.data))
+      .catch(error => console.error('Error fetching categories:', error));
 
-  const [message, setMessage] = useState("");
+    axios.get('http://localhost/getSubcategories.php')
+      .then(response => setSubcategories(response.data))
+      .catch(error => console.error('Error fetching subcategories:', error));
 
-  const categories = {
-    'Tecnologia': ['Programación', 'Inteligencia Artificial', 'Ciberseguridad', 'IoT', 'Blockchain'],
-    'Ciencia': ['Biología', 'Física', 'Química', 'Astronomía', 'Geología'],
-    'Salud': ['Nutrición', 'Salud Mental', 'Cardiología', 'Pediatría', 'Neurología'],
-    'Arte y cultura': ['Historia del Arte', 'Literatura Clásica', 'Música', 'Teatro', 'Cine'],
-    'Negocios y finanzas': ['Inversión en Criptomonedas', 'Marketing Digital', 'Gestión de Proyectos', 'Finanzas Personales', 'Emprendimiento']
-  };
+  }, [id]);
 
   const handleDelete = () => {
-    deleteArticle(article.id);
-    setMessage("Artículo eliminado con éxito.");
-  };
-
-  const handleEdit = () => {
-    setIsEditing(true);
-    setShowImage(true);
+    axios.post('http://localhost/deleteArticle.php', { id })
+      .then(response => {
+        history.push('/articles'); // Redirigir al usuario a la lista de artículos
+      })
+      .catch(error => console.error('Error deleting article:', error));
   };
 
   const handleSave = () => {
-    updateArticle(editedArticle);
-    setIsEditing(false);
-    setShowImage(false);
+    axios.post('http://localhost/updateArticle.php', article)
+      .then(response => {
+        console.log('Artículo actualizado');
+      })
+      .catch(error => console.error('Error updating article:', error));
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setEditedArticle({
-      ...editedArticle,
+    setArticle({
+      ...article,
       [name]: value
     });
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setEditedArticle({
-      ...editedArticle,
-      image: file
-    });
-  };
-
-  const renderTemplate = (article, isEditing, handleChange, handleImageChange) => {
-    const commonProps = {
-      article,
-      isEditing,
-      handleChange,
-      handleImageChange
-    };
-
-    switch (article.templateType) {
-      case 'Template1':
-        return <Template1 {...commonProps} />;
-      case 'Template2':
-        return <Template2 {...commonProps} />;
-      case 'Template3':
-        return <Template3 {...commonProps} />;
-      default:
-        return <p>Plantilla no encontrada</p>;
-    }
-  };
+  if (!article) return <div>Loading...</div>;
 
   return (
     <div className="container">
-      {message && <p className="alert alert-success">{message}</p>}
-      {isEditing ? (
-        <div className="form-group">
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
-            <div style={{ flex: '1', marginRight: '10px' }}>
-              <input type="text" name="title" value={editedArticle.title} onChange={handleChange} />
-              <textarea
-                name="content"
-                value={editedArticle.content}
-                onChange={handleChange}
-                style={{ width: '100%' }}
-                rows={Math.max(3, editedArticle.content.split('\n').length)}
-              ></textarea>
-            </div>
-            {showImage && (
-              <div style={{ flex: '1' }}>
-{editedArticle.image && <img src={URL.createObjectURL(editedArticle.image)} alt="Imagen" style={{ maxWidth: '100%' }} />}
-              </div>
-            )}
-          </div>
-          <select name="category" value={editedArticle.category} onChange={handleChange}>
-            {Object.keys(categories).map((cat, index) => (
-              <option key={index} value={cat}>{cat}</option>
-            ))}
-          </select>
-          <select name="subCategory" value={editedArticle.subCategory} onChange={handleChange}>
-            {categories[editedArticle.category]?.map((subCat, index) => (
-              <option key={index} value={subCat}>{subCat}</option>
-            ))}
-          </select>
-          <input type="file" onChange={handleImageChange} />
-          <button className="btn btn-primary" onClick={handleSave}>Guardar Cambios</button>
-        </div>
-      ) : (
-        <div>
-          {article && (
-            <>
-              {renderTemplate(article, isEditing, handleChange, handleImageChange)}
-              {showImage && (
-                <img src={URL.createObjectURL(article.image)} alt="Imagen" style={{ maxWidth: '100%' }} />
-              )}
-            </>
-          )}
-          {!message && (
-            <>
-              <button className="btn btn-danger" onClick={handleDelete}>Eliminar</button>
-              <button className="btn btn-warning" onClick={handleEdit}>Modificar</button>
-            </>
-          )}
-        </div>
-      )}
+      <h1>{article.title}</h1>
+      <p>{article.content}</p>
+      
+      <select name="category_id" value={article.category_id} onChange={handleChange}>
+        {categories.map((category, index) => (
+          <option key={index} value={category.id}>{category.name}</option>
+        ))}
+      </select>
+
+      <select name="sub_category_id" value={article.sub_category_id} onChange={handleChange}>
+        {subcategories.map((subcategory, index) => (
+          <option key={index} value={subcategory.id}>{subcategory.name}</option>
+        ))}
+      </select>
+
+      <button onClick={handleSave}>Guardar cambios</button>
+      <button onClick={handleDelete}>Eliminar artículo</button>
     </div>
   );
 };
 
 export default ArticleDetail;
+

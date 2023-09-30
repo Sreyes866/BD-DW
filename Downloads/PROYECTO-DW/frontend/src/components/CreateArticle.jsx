@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Template1 from './Template1';  // Importa las plantillas aquí
+import Template2 from './Template2';
+import Template3 from './Template3';
 
 const CreateArticle = () => {
   const [article, setArticle] = useState({
@@ -8,7 +11,7 @@ const CreateArticle = () => {
     category_id: '',
     sub_category_id: '',
     author_id: '',
-    templateType: 'Template1',
+    templateType: 'Template1',  // Selecciona una plantilla por defecto
     image: null
   });
 
@@ -97,9 +100,22 @@ const CreateArticle = () => {
         </div>
 
         <div className="form-group">
+          <label htmlFor="templateType">Tipo de Plantilla</label>
+          <select id="templateType" name="templateType" value={article.templateType} onChange={handleChange} className="form-control">
+            <option value="Template1">Plantilla 1</option>
+            <option value="Template2">Plantilla 2</option>
+            <option value="Template3">Plantilla 3</option>
+          </select>
+        </div>
+
+        <div className="form-group">
           <label htmlFor="image">Imagen</label>
           <input type="file" id="image" onChange={handleImageChange} className="form-control-file" />
         </div>
+
+        {article.templateType === 'Template1' && <Template1 article={article} />}
+        {article.templateType === 'Template2' && <Template2 article={article} />}
+        {article.templateType === 'Template3' && <Template3 article={article} />}
 
         <button type="submit" className="btn btn-primary">Crear</button>
       </form>
@@ -114,6 +130,7 @@ const CreateArticle = () => {
 };
 
 export default CreateArticle;
+
 
 
 
