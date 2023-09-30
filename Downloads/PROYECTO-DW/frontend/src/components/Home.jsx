@@ -21,22 +21,7 @@ const Home = ({ articles }) => {
     <div className="container my-5">
       <div className="row justify-content-center">
         <div className="col-12 col-md-8">
-          {/* Cuadro de texto estático */}
 
-          
-          {data.map(function(article) {
-            return (
-              <div>
-                <div>{article.image_url}</div>
-                <div>{article.link_url}</div>
-              </div>
-            )
-          })}
-
-          <div className="static-text-box">
-            <h3>Título del Cuadro Estático</h3>
-            <p>Contenido del cuadro estático.</p>
-          </div>
           
           {/* Sección de Artículos */}
           <h2 className="text-center mb-4">Artículos Recientes</h2>
