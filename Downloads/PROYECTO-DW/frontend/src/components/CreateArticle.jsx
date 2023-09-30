@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Template1 from './Template1';  // Importa las plantillas aquí
+import Template1 from './Template1';  
 import Template2 from './Template2';
 import Template3 from './Template3';
 
@@ -11,7 +11,7 @@ const CreateArticle = () => {
     category_id: '',
     sub_category_id: '',
     author_id: '',
-    templateType: 'Template1',  // Selecciona una plantilla por defecto
+    templateType: 'Template2',  
     image: null
   });
 

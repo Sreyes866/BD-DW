@@ -41,7 +41,10 @@ const imageStyle = {
   marginLeft: '10px'
 };
 
-const Template1 = ({ article, isEditing, handleChange }) => {
+const Template1 = ({ article, isEditing, handleChange, categories, subcategories }) => {
+  // Filtrar subcategorías basadas en la categoría seleccionada
+  const filteredSubcategories = subcategories.filter(sub => sub.category_id === article.category_id);
+
   if (!article) {
     return <p>Cargando artículo...</p>;
   }
@@ -57,14 +60,33 @@ const Template1 = ({ article, isEditing, handleChange }) => {
           article.title
         )}
       </h1>
+
       <p style={categoryStyle}>
         <strong>Categoría:</strong>{' '}
-        {isEditing ? <input type="text" value={article.category} name="category" onChange={handleChange} /> : article.category}
+        {isEditing ? (
+          <select name="category_id" value={article.category_id} onChange={handleChange}>
+            {categories.map((category, index) => (
+              <option key={index} value={category.id}>{category.name}</option>
+            ))}
+          </select>
+        ) : (
+          article.category
+        )}
       </p>
+
       <p style={categoryStyle}>
         <strong>Subcategoría:</strong>{' '}
-        {isEditing ? <input type="text" value={article.subCategory} name="subCategory" onChange={handleChange} /> : article.subCategory}
+        {isEditing ? (
+          <select name="sub_category_id" value={article.sub_category_id} onChange={handleChange}>
+            {filteredSubcategories.map((subcategory, index) => (
+              <option key={index} value={subcategory.id}>{subcategory.name}</option>
+            ))}
+          </select>
+        ) : (
+          article.subCategory
+        )}
       </p>
+
       <p style={authorStyle}>
         <strong>Autor:</strong>{' '}
         {isEditing ? <input type="text" value={article.author} name="author" onChange={handleChange} /> : article.author}
@@ -83,9 +105,11 @@ const Template1 = ({ article, isEditing, handleChange }) => {
           article.content
         )}
       </div>
+
       {article.image && <img src={URL.createObjectURL(article.image)} alt={article.title} style={imageStyle} />}
     </div>
   );
 };
 
 export default Template1;
+
