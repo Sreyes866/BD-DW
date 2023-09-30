@@ -17,6 +17,8 @@ import Announcements from './components/Announcements.jsx';
 import ArticlesByCategory from './components/ArticlesByCategory.jsx';
 import Subscription from './components/Subscription';  // Asegúrate de que esta ruta sea la correcta
 import ManageCategories from './components/Managecategories.jsx';  // Importa el componente
+import ManageSubcategories from './components/ManageSubcategories.jsx';
+import CreatePage from './components/CreatePage';
 
 
 const App = () => {
@@ -147,6 +149,8 @@ const App = () => {
       </Route>
         <Route path="/subscription" component={Subscription} /> {/* Nueva ruta */}
         <Route path="/Managecategories" component={ManageCategories} />
+        <Route path="/Managesubcategories" component={ManageSubcategories} />
+        <Route path="/CreatePage" component={CreatePage} />
       
           </Switch>
         </div>
