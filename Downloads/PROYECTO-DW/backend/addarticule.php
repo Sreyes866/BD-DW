@@ -23,7 +23,7 @@ $sql = "INSERT INTO Articles (title, content, category_id, sub_category_id, auth
 $stmt = $conn->prepare($sql);
 
 // Vincula los parámetros de la consulta SQL con los valores obtenidos del arreglo.
-$stmt->bind_param("sssii", $data['title'], $data['content'], $data['category_id'], $data['sub_category_id'], $data['author_id']);
+$stmt->bind_param("sssss", $data['title'], $data['content'], $data['category_id'], $data['sub_category_id'], $data['author_id']);
 
 // Ejecuta la consulta SQL preparada.
 if ($stmt->execute()) {
