@@ -11,10 +11,9 @@ const CreateArticle = () => {
     category_id: '',
     sub_category_id: '',
     author_id: '',
-    // templateType: 'Template1',
-    // image: null
+    templateType: 'Template1', // Valor predeterminado de la plantilla
+    image: null
   });
-  console.log(JSON.stringify(article))  
 
   const [articleCreated, setArticleCreated] = useState(false);
   const [articleLink, setArticleLink] = useState(null);
@@ -116,6 +115,14 @@ const CreateArticle = () => {
           <label htmlFor="image">Imagen</label>
           <input type="file" id="image" onChange={handleImageChange} className="form-control-file" />
         </div>
+        <div className="form-group">
+          <label htmlFor="templateType">Plantilla</label>
+          <select id="templateType" name="templateType" value={article.templateType} onChange={handleChange} className="form-control">
+            <option value="Template1">Plantilla 1</option>
+            <option value="Template2">Plantilla 2</option>
+            <option value="Template3">Plantilla 3</option>
+          </select>
+        </div>
         <button type="submit" className="btn btn-primary">Crear</button>
       </form>
       {articleCreated && (
@@ -129,6 +136,7 @@ const CreateArticle = () => {
 };
 
 export default CreateArticle;
+
 
 
 
