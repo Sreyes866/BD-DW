@@ -8,20 +8,6 @@ const Home = ({ articles }) => {
 
   const sortedArticles = [...articles].sort((a, b) => b.id - a.id);
 
-  useEffect(() => {
-    // Fetch recent articles from backend
-    axios.get('http://localhost/RecentArticles.php')  // Corregido aquí
-      .then(response => setRecentArticles(response.data))  // Corregido aquí
-      .catch(error => console.error('Error fetching recent articles:', error));
-  }, []);
-
-  useEffect(() => {
-    // Fetch data for prueba function
-    axios.get('http://localhost/api.php')
-      .then(response => setData(response.data))
-      .catch(error => console.error('Error fetching data:', error));
-  }, []);
-
   return (
     <div className="container my-5">
       <div className="row justify-content-center">
