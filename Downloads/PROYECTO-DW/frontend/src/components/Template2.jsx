@@ -5,40 +5,40 @@ const blogStyle = {
   fontFamily: 'Arial, sans-serif',
   padding: '20px',
   border: '1px solid #ccc',
-  boxShadow: '0px 0px 10px #aaa'
+  boxShadow: '0px 0px 10px #aaa',
 };
 
 const titleStyle = {
   fontSize: '2em',
   marginBottom: '20px',
-  textAlign: 'right'
+  textAlign: 'left',
 };
 
 const categoryStyle = {
   color: '#777',
   marginBottom: '10px',
-  textAlign: 'right'
+  textAlign: 'left',
 };
 
 const contentStyle = {
   fontSize: '1.2em',
-  textAlign: 'right',
+  textAlign: 'left', // Cambiado a 'left'
   display: 'inline-block',
   verticalAlign: 'top',
-  width: '50%'
+  width: '50%',
 };
 
 const authorStyle = {
   color: '#555',
   marginBottom: '10px',
-  textAlign: 'right'
+  textAlign: 'left',
 };
 
 const imageStyle = {
   maxWidth: '40%',
   maxHeight: '40%',
-  float: 'left',
-  marginLeft: '10px'
+  float: 'right', // Cambiado a 'right'
+  marginRight: '10px', // Espacio a la izquierda de la imagen
 };
 
 const Template2 = ({ article, isEditing, handleChange }) => {
@@ -59,15 +59,15 @@ const Template2 = ({ article, isEditing, handleChange }) => {
       </h1>
       <p style={categoryStyle}>
         <strong>Categoría:</strong>{' '}
-        {isEditing ? <input type="text" value={article.category} name="category" onChange={handleChange} /> : article.category}
+        {isEditing ? <input type="text" value={article.category_id} name="category" onChange={handleChange} /> : article.category_id}
       </p>
       <p style={categoryStyle}>
         <strong>Subcategoría:</strong>{' '}
-        {isEditing ? <input type="text" value={article.subCategory} name="subCategory" onChange={handleChange} /> : article.subCategory}
+        {isEditing ? <input type="text" value={article.sub_category_id} name="subCategory" onChange={handleChange} /> : article.sub_category_id}
       </p>
       <p style={authorStyle}>
         <strong>Autor:</strong>{' '}
-        {isEditing ? <input type="text" value={article.author} name="author" onChange={handleChange} /> : article.author}
+        {isEditing ? <input type="text" value={article.author_id} name="author" onChange={handleChange} /> : article.author_id}
       </p>
 
       <div className="content" style={contentStyle}>

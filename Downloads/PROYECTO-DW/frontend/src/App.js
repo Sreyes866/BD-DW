@@ -28,6 +28,8 @@ const App = () => {
   const [articles, setArticles] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
+  const [fetchedArticles, setFetchedArticles] = useState([]);
+
 
 
   useEffect(() => {
@@ -49,6 +51,16 @@ const App = () => {
       }
     };
 
+    const fetchArticles = async () => {
+      try {
+        const response = await axios.get('http://localhost/Articles.php');
+        setFetchedArticles(response.data);
+      } catch (error) {
+        console.error('Error fetching articles:', error);
+      }
+    };
+
+    fetchArticles();
     fetchCategories();
     fetchSubcategories();
   }, []);
@@ -157,10 +169,9 @@ const App = () => {
               <FAQ />
             </Route>
             <Route path="/articles/:category/:subCategory">
-            <ArticlesByCategory articles={articles} />
-
-
+              <ArticlesByCategory fetchedArticles={fetchedArticles} />
             </Route>
+
             <Route path="/announcements">
               <Announcements />
             </Route>
@@ -170,9 +181,8 @@ const App = () => {
             <Route path="/article/:id">
               {isLoggedIn ? <ArticleDetail articles={articles} deleteArticle={deleteArticle} updateArticle={updateArticle} /> : <Redirect to="/login" />}
             </Route>
-            <Route path="/articles/:category/:subCategory">
-        <ArticlesByCategory articles={articles} />
-      </Route>
+            
+      
         <Route path="/subscription" component={Subscription} /> {/* Nueva ruta */}
         <Route path="/Managecategories" component={ManageCategories} />
         <Route path="/Managesubcategories" component={ManageSubcategories} />
