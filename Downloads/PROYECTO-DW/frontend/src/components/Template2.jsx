@@ -1,6 +1,5 @@
 import React from 'react';
 
-// Estilos para el blog
 const blogStyle = {
   fontFamily: 'Arial, sans-serif',
   padding: '20px',
@@ -22,7 +21,7 @@ const categoryStyle = {
 
 const contentStyle = {
   fontSize: '1.2em',
-  textAlign: 'left', // Cambiado a 'left'
+  textAlign: 'left',
   display: 'inline-block',
   verticalAlign: 'top',
   width: '50%',
@@ -37,11 +36,14 @@ const authorStyle = {
 const imageStyle = {
   maxWidth: '40%',
   maxHeight: '40%',
-  float: 'right', // Cambiado a 'right'
-  marginRight: '10px', // Espacio a la izquierda de la imagen
+  float: 'right',
+  marginRight: '10px',
 };
 
-const Template2 = ({ article, isEditing, handleChange }) => {
+const Template2 = ({ article, categories, subcategories, isEditing, handleChange }) => {
+  const categoryName = categories.find(cat => cat.id === article.category_id)?.name || 'No especificada';
+  const subcategoryName = subcategories.find(sub => sub.id === article.sub_category_id)?.name || 'No especificada';
+
   if (!article) {
     return <p>Cargando artículo...</p>;
   }
@@ -58,18 +60,22 @@ const Template2 = ({ article, isEditing, handleChange }) => {
         )}
       </h1>
       <p style={categoryStyle}>
-        <strong>Categoría:</strong>{' '}
-        {isEditing ? <input type="text" value={article.category_id} name="category" onChange={handleChange} /> : article.category_id}
+        <strong>Categoría:</strong> {isEditing ? (
+          <input type="text" value={categoryName} name="category" onChange={handleChange} />
+        ) : (
+          categoryName
+        )}
       </p>
       <p style={categoryStyle}>
-        <strong>Subcategoría:</strong>{' '}
-        {isEditing ? <input type="text" value={article.sub_category_id} name="subCategory" onChange={handleChange} /> : article.sub_category_id}
+        <strong>Subcategoría:</strong> {isEditing ? (
+          <input type="text" value={subcategoryName} name="subCategory" onChange={handleChange} />
+        ) : (
+          subcategoryName
+        )}
       </p>
       <p style={authorStyle}>
-        <strong>Autor:</strong>{' '}
-        {isEditing ? <input type="text" value={article.author_id} name="author" onChange={handleChange} /> : article.author_id}
+        <strong>Autor:</strong> {isEditing ? <input type="text" value={article.author_id} name="author" onChange={handleChange} /> : article.author_id}
       </p>
-
       <div className="content" style={contentStyle}>
         {isEditing ? (
           <textarea

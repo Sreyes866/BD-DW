@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import Template3 from './Template2';  // Asegúrate de que la ruta sea correcta
+import Template2 from './Template2';
 
 const ArticlesByCategory = () => {
   const { category, subCategory } = useParams();
@@ -41,7 +41,7 @@ const ArticlesByCategory = () => {
       <h1>Artículos en {category} - {subCategory}</h1>
       <ul>
         {filteredArticles.map((article, index) => (
-          <Template3 key={index} article={article} />
+          <Template2 key={index} article={article} categories={categories} subcategories={subcategories} />
         ))}
       </ul>
     </div>
@@ -49,6 +49,8 @@ const ArticlesByCategory = () => {
 };
 
 export default ArticlesByCategory;
+
+
 
 
 
