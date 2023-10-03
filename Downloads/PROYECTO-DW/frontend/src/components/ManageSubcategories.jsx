@@ -4,6 +4,7 @@ import axios from 'axios';
 const ManageSubcategories = () => {
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
+  const [filteredSubcategories, setFilteredSubcategories] = useState([]);
   const [newSubcategory, setNewSubcategory] = useState('');
   const [newSubcategoryName, setNewSubcategoryName] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -14,6 +15,11 @@ const ManageSubcategories = () => {
     fetchCategories();
     fetchSubcategories();
   }, []);
+
+  useEffect(() => {
+    const relevantSubcategories = subcategories.filter(sub => sub.category_id === selectedCategory);
+    setFilteredSubcategories(relevantSubcategories);
+  }, [selectedCategory, subcategories]);
 
   const fetchCategories = async () => {
     try {
@@ -70,7 +76,7 @@ const ManageSubcategories = () => {
     <div className="container">
       <h1>Manage Subcategories</h1>
       <p>{message}</p>
-      
+
       <div>
         <h2>Create New Subcategory</h2>
         <select onChange={(e) => setSelectedCategory(e.target.value)}>
@@ -94,7 +100,7 @@ const ManageSubcategories = () => {
         <h2>Update Subcategory</h2>
         <select onChange={(e) => setSelectedSubcategory(e.target.value)}>
           <option value="">Select Subcategory</option>
-          {subcategories.map((subcategory) => (
+          {filteredSubcategories.map((subcategory) => (
             <option key={subcategory.id} value={subcategory.id}>
               {subcategory.name}
             </option>

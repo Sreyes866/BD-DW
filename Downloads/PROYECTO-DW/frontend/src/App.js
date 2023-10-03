@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect, Link } from 'react-router-dom';
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './index.css';
@@ -25,14 +26,32 @@ const App = () => {
   
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [articles, setArticles] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
 
-  const categories = {
-    'Tecnologia': ['Programación', 'Inteligencia Artificial', 'Ciberseguridad', 'IoT', 'Blockchain'],
-    'Ciencia': ['Biología', 'Física', 'Química', 'Astronomía', 'Geología'],
-    'Salud': ['Nutrición', 'Salud Mental', 'Cardiología', 'Pediatría', 'Neurología'],
-    'Arte y cultura': ['Historia del Arte', 'Literatura Clásica', 'Música', 'Teatro', 'Cine'],
-    'Negocios y finanzas': ['Inversión en Criptomonedas', 'Marketing Digital', 'Gestión de Proyectos', 'Finanzas Personales', 'Emprendimiento']
-  };
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get('http://localhost/Categories.php');
+        setCategories(response.data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    const fetchSubcategories = async () => {
+      try {
+        const response = await axios.get('http://localhost/Subcategories.php');
+        setSubcategories(response.data);
+      } catch (error) {
+        console.error('Error fetching subcategories:', error);
+      }
+    };
+
+    fetchCategories();
+    fetchSubcategories();
+  }, []);
 
   const addArticle = (newArticle) => {
     newArticle.id = articles.length + 1;
@@ -64,23 +83,23 @@ const App = () => {
                 <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                   <li className="nav-item"><Link className="nav-link" to="/home">Home</Link></li>
                   <li className="nav-item dropdown">
-                    <a className="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Categorías
-                    </a>
-                    <ul className="dropdown-menu" aria-labelledby="categoriesDropdown">
-  {Object.keys(categories).map((category, index) => (
-    <li key={index} className="dropdown-submenu">
-      <a className="dropdown-item dropdown-toggle" href="#">{category}</a>
-      <ul className="dropdown-menu">
-        {categories[category].map((subCategory, subIndex) => (
-          <li key={subIndex}>
-            <Link className="dropdown-item" to={`/articles/${category}/${subCategory}`}>{subCategory}</Link>
-          </li>
-        ))}
-      </ul>
-    </li>
-  ))}
-</ul>
+        <button className="nav-link dropdown-toggle" id="categoriesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Categorías
+        </button>
+        <ul className="dropdown-menu" aria-labelledby="categoriesDropdown">
+          {categories.map((category, index) => (
+            <li key={index} className="dropdown-submenu">
+              <button className="dropdown-item dropdown-toggle">{category.name}</button>
+              <ul className="dropdown-menu">
+                {subcategories.filter(sub => sub.category_id === category.id).map((subCategory, subIndex) => (
+                  <li key={subIndex}>
+                    <Link className="dropdown-item" to={`/articles/${category.name}/${subCategory.name}`}>{subCategory.name}</Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </li>
+                  ))}
+                </ul>
                   </li>
                   <li className="nav-item"><Link className="nav-link" to="/contact">Contacto</Link></li>
                   <li className="nav-item"><Link className="nav-link" to="/history">Historia</Link></li>
@@ -91,6 +110,11 @@ const App = () => {
                       <li className="nav-item"><Link className="nav-link" to="/create-article">Crear Artículo</Link></li>
                       <li className="nav-item"><Link className="nav-link" to="/list-articles">Artículos Publicados</Link></li>
                       <li className="nav-item"><Link className="nav-link" to="/profile">Perfil</Link></li>
+                      <li className="nav-item"><Link className="nav-link" to="/ManageCategories">Gestionar Categorías</Link></li>
+                      <li className="nav-item"><Link className="nav-link" to="/ManageSubcategories">Gestionar Subcategorías</Link></li>
+                  
+
+                  
                     </>
                   ) : (
                     <li className="nav-item dropdown">
@@ -132,9 +156,11 @@ const App = () => {
             <Route path="/faq">
               <FAQ />
             </Route>
-              <Route path="/articles/:category/:subCategory">
-    <ArticlesByCategory articles={articles} />
-  </Route>
+            <Route path="/articles/:category/:subCategory">
+            <ArticlesByCategory articles={articles} />
+
+
+            </Route>
             <Route path="/announcements">
               <Announcements />
             </Route>
