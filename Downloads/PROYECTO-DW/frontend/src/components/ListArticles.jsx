@@ -4,26 +4,24 @@ import Template1 from './Template1';
 
 const ListArticles = () => {
   const [articles, setArticles] = useState([]);
+  const [filteredArticles, setFilteredArticles] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
+  const [filteredSubcategories, setFilteredSubcategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedSubcategory, setSelectedSubcategory] = useState('');
+  const [selectedAuthor, setSelectedAuthor] = useState('');
+  const [sortOrder, setSortOrder] = useState('');
+  const [editingArticle, setEditingArticle] = useState(null);
 
-  const fetchData = (category = '', subcategory = '') => {
-    let url = 'http://localhost/Articles.php';
-    const params = [];
-    if (category) params.push(`category_id=${category}`);
-    if (subcategory) params.push(`sub_category_id=${subcategory}`);
-    if (params.length) url += '?' + params.join('&');
-    axios.get(url)
-      .then(response => setArticles(response.data))
+  const fetchData = () => {
+    axios.get('http://localhost/Articles.php')
+      .then(response => {
+        setArticles(response.data);
+        setFilteredArticles(response.data);
+      })
       .catch(error => console.error('Error fetching articles:', error));
-  };
 
-  useEffect(() => {
-    fetchData();
-    // Suponemos que tienes funciones similares para obtener categorías y subcategorías.
-    // Si no es así, puedes adaptar este código según tus necesidades.
     axios.get('http://localhost/Categories.php')
       .then(response => setCategories(response.data))
       .catch(error => console.error('Error fetching categories:', error));
@@ -31,20 +29,69 @@ const ListArticles = () => {
     axios.get('http://localhost/Subcategories.php')
       .then(response => setSubcategories(response.data))
       .catch(error => console.error('Error fetching subcategories:', error));
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
-  const applyFilter = () => {
-    let filteredArticles = articles;
-    
+  useEffect(() => {
     if (selectedCategory) {
-      filteredArticles = filteredArticles.filter(article => article.category_id === selectedCategory);
+      const relevantSubcategories = subcategories.filter(sub => sub.category_id === selectedCategory);
+      setFilteredSubcategories(relevantSubcategories);
+    } else {
+      setFilteredSubcategories([]);
     }
-  
+  }, [selectedCategory, subcategories]);
+
+  const handleDelete = (id) => {
+    axios.post('http://localhost/deleteArticle.php', { id: id })
+      .then(response => {
+        fetchData();
+      })
+      .catch(error => console.error('Error deleting article:', error));
+  };
+
+  const handleEdit = (article) => {
+    setEditingArticle(article);
+  };
+
+  const handleSave = () => {
+    axios.post('http://localhost/updateArticle.php', editingArticle)
+      .then(response => {
+        setEditingArticle(null);
+        fetchData();
+      })
+      .catch(error => console.error('Error updating article:', error));
+  };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setEditingArticle({ ...editingArticle, [name]: value });
+  };
+
+  const applyFilter = () => {
+    let newFilteredArticles = [...articles];
+
+    if (selectedCategory) {
+      newFilteredArticles = newFilteredArticles.filter(article => article.category_id === selectedCategory);
+    }
+
     if (selectedSubcategory) {
-      filteredArticles = filteredArticles.filter(article => article.sub_category_id === selectedSubcategory);
+      newFilteredArticles = newFilteredArticles.filter(article => article.sub_category_id === selectedSubcategory);
     }
-  
-    setArticles(filteredArticles);
+
+    if (selectedAuthor) {
+      newFilteredArticles = newFilteredArticles.filter(article => article.author_id === selectedAuthor);
+    }
+
+    if (sortOrder === 'asc') {
+      newFilteredArticles.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (sortOrder === 'desc') {
+      newFilteredArticles.sort((a, b) => b.title.localeCompare(a.title));
+    }
+
+    setFilteredArticles(newFilteredArticles);
   };
 
   return (
@@ -61,29 +108,66 @@ const ListArticles = () => {
 
         <select onChange={(e) => setSelectedSubcategory(e.target.value)}>
           <option value="">Select Subcategory</option>
-          {subcategories.map((subcategory) => (
+          {filteredSubcategories.map((subcategory) => (
             <option key={subcategory.id} value={subcategory.id}>
               {subcategory.name}
             </option>
           ))}
         </select>
 
+        <select onChange={(e) => setSelectedAuthor(e.target.value)}>
+          <option value="">Select Author</option>
+          {Array.from(new Set(articles.map(article => article.author_id))).map((author, index) => (
+            <option key={index} value={author}>
+              {author}
+            </option>
+          ))}
+        </select>
+
+        <select onChange={(e) => setSortOrder(e.target.value)}>
+          <option value="">Select Sort Order</option>
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
+
         <button onClick={applyFilter}>Apply Filter</button>
       </div>
 
-      {articles.map((article, index) => (
-        <Template1 
-          key={index} 
-          article={article}
-          categories={categories}
-          subcategories={subcategories}
-        />
+      {filteredArticles.map((article, index) => (
+        <div key={index} style={{border: '1px solid #ccc', margin: '20px', padding: '15px'}}>
+          {editingArticle && editingArticle.id === article.id ? (
+            <>
+              <Template1 
+                article={editingArticle} 
+                isEditing={true} 
+                handleChange={handleInputChange}
+                categories={categories}
+                subcategories={subcategories}
+              />
+              <button onClick={handleSave}>Guardar</button>
+            </>
+          ) : (
+            <>
+              <Template1 
+                article={article}
+                categories={categories}
+                subcategories={subcategories}
+              />
+              <button onClick={() => handleDelete(article.id)}>Eliminar</button>
+              <button onClick={() => handleEdit(article)}>Editar</button>
+            </>
+          )}
+        </div>
       ))}
     </div>
   );
 };
 
 export default ListArticles;
+
+
+
+
 
 
 
