@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const history = useHistory();
-  const { setIsLoggedIn, setUserRole } = useAuth(); // Usar el contexto
+  const { setIsLoggedIn, setUserRole } = useAuth(); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,12 +17,11 @@ const Login = () => {
       password,
     });
     
-    // Imprimir la respuesta del servidor para depuración
     console.log("Respuesta del servidor: ", response.data);
 
     if (response.data.message === 'Usuario autenticado') {
       setIsLoggedIn(true);
-      setUserRole(response.data.user.role); // Asumiendo que el backend devuelve el rol
+      setUserRole(response.data.user.role);
       history.push('/home');
     } else {
       alert('Usuario o contraseña incorrectos');

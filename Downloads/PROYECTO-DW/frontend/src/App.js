@@ -21,11 +21,10 @@ import ManageCategories from './components/Managecategories.jsx';
 import ManageSubcategories from './components/ManageSubcategories.jsx';
 import CreatePage from './components/CreatePage';
 import Register from './components/Register.jsx'; 
-import { AuthProvider, useAuth } from './context/AuthContext';  // Importación agrupada
+import { AuthProvider, useAuth } from './context/AuthContext';  
 
 const App = () => {
-  const { isLoggedIn, setIsLoggedIn } = useAuth(); // Usar el contexto para obtener y modificar isLoggedIn
-  // ... el resto del código
+  const { isLoggedIn, setIsLoggedIn } = useAuth(); 
 
   const [articles, setArticles] = useState([]);
   const [categories, setCategories] = useState([]);
