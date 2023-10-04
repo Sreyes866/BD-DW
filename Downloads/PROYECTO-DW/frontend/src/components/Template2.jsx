@@ -39,11 +39,10 @@ const imageStyle = {
   float: 'right',
   marginRight: '10px',
 };
-
 const Template2 = ({ article, categories, subcategories, isEditing, handleChange }) => {
-  const categoryName = categories.find(cat => cat.id === article.category_id)?.name || 'No especificada';
-  const subcategoryName = subcategories.find(sub => sub.id === article.sub_category_id)?.name || 'No especificada';
-
+  const categoryName = categories?.find(cat => cat.id === article.category_id)?.name || 'No especificada';
+  const subcategoryName = subcategories?.find(sub => sub.id === article.sub_category_id)?.name || 'No especificada';
+  
   if (!article) {
     return <p>Cargando artículo...</p>;
   }

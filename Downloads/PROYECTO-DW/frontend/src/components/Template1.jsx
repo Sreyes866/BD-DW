@@ -114,6 +114,3 @@ const Template1 = ({ article, isEditing, handleChange, categories, subcategories
 };
 
 export default Template1;
-
-
-

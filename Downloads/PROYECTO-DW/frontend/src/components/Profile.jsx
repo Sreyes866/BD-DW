@@ -1,42 +1,45 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useHistory } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';  // Asegúrate de que esta ruta sea correcta
 
 const Profile = () => {
   const history = useHistory();
+  const { username } = useAuth();  // Asumimos que username se obtiene del contexto de autenticación
 
   const [showPassword, setShowPassword] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [name, setName] = useState('Pablo Morales');
-  const [username, setUsername] = useState('pablo');
-  const [email, setEmail] = useState('pablo.m@example.com');
-  const [password, setPassword] = useState('db00');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState('');
   const [showArticles, setShowArticles] = useState({ published: false, drafts: false, review: false });
-  const [subscriptionActive, setSubscriptionActive] = useState(false);
-  const [showSubscription, setShowSubscription] = useState(false);
-  
+
   const publishedArticles = ['Articulo 1', 'Articulo 2'];
   const draftArticles = ['Draft 1', 'Draft 2'];
   const reviewArticles = ['Review 1', 'Review 2'];
 
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await axios.post('http://localhost/GetUserProfile.php', { username });
+        if (response.data) {
+          setName(response.data.name || '');
+          setRole(response.data.role || '');
+          setEmail(response.data.email || '');
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    };
 
+    fetchUserProfile();
+  }, [username]);
 
-  
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const toggleEditMode = () => {
-    setEditMode(!editMode);
-  };
-
-  const toggleShowArticles = (type) => {
-    setShowArticles({ ...showArticles, [type]: !showArticles[type] });
-  };
-
-  const handleSubscription = () => {
-    history.push('/subscription'); // Añade esta línea
-  };
-
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const toggleEditMode = () => setEditMode(!editMode);
+  const toggleShowArticles = (type) => setShowArticles({ ...showArticles, [type]: !showArticles[type] });
+  const handleSubscription = () => history.push('/subscription');
   const saveChanges = () => {
     if (name && username && email && password) {
       toggleEditMode();
@@ -54,7 +57,7 @@ const Profile = () => {
             <label>Nombre:</label>
             <input type="text" value={name} onChange={e => setName(e.target.value)} />
             <label>Usuario:</label>
-            <input type="text" value={username} onChange={e => setUsername(e.target.value)} />
+            <input type="text" value={username} readOnly />
             <label>Correo:</label>
             <input type="email" value={email} onChange={e => setEmail(e.target.value)} />
             <label>Contraseña:</label>
@@ -63,14 +66,14 @@ const Profile = () => {
               value={password} 
               onChange={e => setPassword(e.target.value)} 
             />
-          <button onClick={togglePasswordVisibility}>{showPassword ? 'Ocultar' : 'Ver'}</button>
-          <button className="btn btn-primary" onClick={saveChanges}>Guardar Cambios</button> {}
-          <button className="btn btn-primary" onClick={handleSubscription}>Administrar Suscripción</button>
-        </div>
+            <button onClick={togglePasswordVisibility}>{showPassword ? 'Ocultar' : 'Ver'}</button>
+            <button className="btn btn-primary" onClick={saveChanges}>Guardar Cambios</button>
+            <button className="btn btn-primary" onClick={handleSubscription}>Administrar Suscripción</button>
+          </div>
         ) : (
           <div className="left-section">
             <h2>{name}</h2>
-            <p>Visitante logueado</p>
+            <p>{role}</p>
             <div className="article-section">
               <h3 onClick={() => toggleShowArticles('published')}>Artículos Publicados</h3>
               <div className={`article-list ${showArticles.published ? 'show' : ''}`}>
@@ -94,7 +97,7 @@ const Profile = () => {
         )}
       </div>
     </div>
-  );  
+  );
 };
 
 export default Profile;
