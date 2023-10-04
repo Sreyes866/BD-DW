@@ -5,6 +5,7 @@ $password = "";
 $dbname = "Revista";
 
 // Crear conexión
+
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Verificar conexión

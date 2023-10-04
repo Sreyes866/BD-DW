@@ -16,21 +16,21 @@ import History from './components/History.jsx';
 import FAQ from './components/FAQ.jsx';
 import Announcements from './components/Announcements.jsx';
 import ArticlesByCategory from './components/ArticlesByCategory.jsx';
-import Subscription from './components/Subscription';  // Asegúrate de que esta ruta sea la correcta
-import ManageCategories from './components/Managecategories.jsx';  // Importa el componente
+import Subscription from './components/Subscription';  
+import ManageCategories from './components/Managecategories.jsx';  
 import ManageSubcategories from './components/ManageSubcategories.jsx';
 import CreatePage from './components/CreatePage';
-
+import Register from './components/Register.jsx'; 
+import { AuthProvider, useAuth } from './context/AuthContext';  // Importación agrupada
 
 const App = () => {
-  
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn, setIsLoggedIn } = useAuth(); // Usar el contexto para obtener y modificar isLoggedIn
+  // ... el resto del código
+
   const [articles, setArticles] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [fetchedArticles, setFetchedArticles] = useState([]);
-
-
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -95,53 +95,50 @@ const App = () => {
                 <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                   <li className="nav-item"><Link className="nav-link" to="/home">Home</Link></li>
                   <li className="nav-item dropdown">
-        <button className="nav-link dropdown-toggle" id="categoriesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Categorías
-        </button>
-        <ul className="dropdown-menu" aria-labelledby="categoriesDropdown">
-          {categories.map((category, index) => (
-            <li key={index} className="dropdown-submenu">
-              <button className="dropdown-item dropdown-toggle">{category.name}</button>
-              <ul className="dropdown-menu">
-                {subcategories.filter(sub => sub.category_id === category.id).map((subCategory, subIndex) => (
-                  <li key={subIndex}>
-                    <Link className="dropdown-item" to={`/articles/${category.name}/${subCategory.name}`}>{subCategory.name}</Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </li>
-                  ))}
-                </ul>
+                    <button className="nav-link dropdown-toggle" id="categoriesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Categorías
+                      </button>
+                  <ul className="dropdown-menu" aria-labelledby="categoriesDropdown">
+                    {categories.map((category, index) => (
+                      <li key={index} className="dropdown-submenu">
+                        <button className="dropdown-item dropdown-toggle">{category.name}</button>
+                        <ul className="dropdown-menu">
+                          {subcategories.filter(sub => sub.category_id === category.id).map((subCategory, subIndex) => (
+                            <li key={subIndex}>
+                              <Link className="dropdown-item" to={`/articles/${category.name}/${subCategory.name}`}>{subCategory.name}</Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+                <li className="nav-item"><Link className="nav-link" to="/contact">Contacto</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/history">Historia</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/faq">Preguntas frecuentes</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/announcements">Anuncios</Link></li>
+                {isLoggedIn ? (
+                  <>
+                    <li className="nav-item"><Link className="nav-link" to="/create-article">Crear Artículo</Link></li>
+                    <li className="nav-item"><Link className="nav-link" to="/list-articles">Artículos Publicados</Link></li>
+                    <li className="nav-item"><Link className="nav-link" to="/profile">Perfil</Link></li>
+                    <li className="nav-item"><Link className="nav-link" to="/ManageCategories">Gestionar Categorías</Link></li>
+                    <li className="nav-item"><Link className="nav-link" to="/ManageSubcategories">Gestionar Subcategorías</Link></li>
+                  </>
+                ) : (
+                  <li className="nav-item dropdown">
+                    <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Ingresar
+                    </a>
+                    <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li><Link className="dropdown-item" to="/login">Iniciar sesión</Link></li>
+                      <li><Link className="dropdown-item" to="/register">Registrarse</Link></li>
+                    </ul>
                   </li>
-                  <li className="nav-item"><Link className="nav-link" to="/contact">Contacto</Link></li>
-                  <li className="nav-item"><Link className="nav-link" to="/history">Historia</Link></li>
-                  <li className="nav-item"><Link className="nav-link" to="/faq">Preguntas frecuentes</Link></li>
-                  <li className="nav-item"><Link className="nav-link" to="/announcements">Anuncios</Link></li>
-                  {isLoggedIn ? (
-                    <>
-                      <li className="nav-item"><Link className="nav-link" to="/create-article">Crear Artículo</Link></li>
-                      <li className="nav-item"><Link className="nav-link" to="/list-articles">Artículos Publicados</Link></li>
-                      <li className="nav-item"><Link className="nav-link" to="/profile">Perfil</Link></li>
-                      <li className="nav-item"><Link className="nav-link" to="/ManageCategories">Gestionar Categorías</Link></li>
-                      <li className="nav-item"><Link className="nav-link" to="/ManageSubcategories">Gestionar Subcategorías</Link></li>
-                  
-
-                  
-                    </>
-                  ) : (
-                    <li className="nav-item dropdown">
-                      <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Ingresar
-                      </a>
-                      <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><Link className="dropdown-item" to="/login">Iniciar sesión</Link></li>
-                        <li><a className="dropdown-item" href="#">Registrarse</a></li>
-                      </ul>
-                    </li>
-                  )}
-                </ul>
-              </div>
+                )}
+              </ul>
             </div>
+<<<<<<< HEAD
           </nav>
           <Switch>
             <Route path="/login">
@@ -192,8 +189,59 @@ const App = () => {
       
           </Switch>
         </div>
+=======
+          </div>
+        </nav>
+        <Switch>
+        <Route path="/register">
+            <Register />
+          </Route>
+          <Route path="/login">
+          <Login /> 
+        </Route>
+          <Route exact path="/">
+            <Home articles={articles} />
+          </Route>
+          <Route path="/home">
+            <Home articles={articles} />
+          </Route>
+          <Route path="/create-article">
+            {isLoggedIn ? <CreateArticle addArticle={addArticle} /> : <Redirect to="/login" />}
+          </Route>
+          <Route path="/list-articles">
+            {isLoggedIn ? <ListArticles articles={articles} /> : <Redirect to="/login" />}
+          </Route>
+          <Route path="/contact">
+            <Contact />
+          </Route>
+          <Route path="/history">
+            <History />
+          </Route>
+          <Route path="/faq">
+            <FAQ />
+          </Route>
+          <Route path="/articles/:category/:subCategory">
+            <ArticlesByCategory fetchedArticles={fetchedArticles} />
+          </Route>
+          <Route path="/announcements">
+            <Announcements />
+          </Route>
+          <Route path="/profile">
+            {isLoggedIn ? <Profile /> : <Redirect to="/login" />}
+          </Route>
+          <Route path="/article/:id">
+            {isLoggedIn ? <ArticleDetail articles={articles} deleteArticle={deleteArticle} updateArticle={updateArticle} /> : <Redirect to="/login" />}
+          </Route>
+          <Route path="/subscription" component={Subscription} />
+          <Route path="/Managecategories" component={ManageCategories} />
+          <Route path="/Managesubcategories" component={ManageSubcategories} />
+          <Route path="/CreatePage" component={CreatePage} />
+        </Switch>
+          </div>
+>>>>>>> 6cec12a (Registro con frontend y backend para la base de datos)
       </Router>
   );
 };
+
 
 export default App;

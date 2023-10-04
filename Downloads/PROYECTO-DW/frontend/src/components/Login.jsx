@@ -1,16 +1,28 @@
 import React from 'react';
+import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
-const Login = ({ setIsLoggedIn }) => {
+const Login = () => {
   const history = useHistory();
+  const { setIsLoggedIn, setUserRole } = useAuth(); // Usar el contexto
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const username = e.target.username.value;
     const password = e.target.password.value;
 
-    if (username === 'pablo' && password === 'db00') {
+    const response = await axios.post('http://localhost/login.php', {
+      username,
+      password,
+    });
+    
+    // Imprimir la respuesta del servidor para depuración
+    console.log("Respuesta del servidor: ", response.data);
+
+    if (response.data.message === 'Usuario autenticado') {
       setIsLoggedIn(true);
+      setUserRole(response.data.user.role); // Asumiendo que el backend devuelve el rol
       history.push('/home');
     } else {
       alert('Usuario o contraseña incorrectos');
