@@ -16,15 +16,15 @@ import History from './components/History.jsx';
 import FAQ from './components/FAQ.jsx';
 import Announcements from './components/Announcements.jsx';
 import ArticlesByCategory from './components/ArticlesByCategory.jsx';
-import Subscription from './components/Subscription';  
-import ManageCategories from './components/Managecategories.jsx';  
+import Subscription from './components/Subscription';
+import ManageCategories from './components/Managecategories.jsx';
 import ManageSubcategories from './components/ManageSubcategories.jsx';
 import CreatePage from './components/CreatePage';
-import Register from './components/Register.jsx'; 
-import { AuthProvider, useAuth } from './context/AuthContext';  
+import Register from './components/Register.jsx';
+import { AuthProvider, useAuth } from './context/AuthContext';
 
 const App = () => {
-  const { isLoggedIn, setIsLoggedIn } = useAuth(); 
+  const { isLoggedIn, setIsLoggedIn } = useAuth();
 
   const [articles, setArticles] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -75,28 +75,28 @@ const App = () => {
   };
 
   const updateArticle = (updatedArticle) => {
-    const newArticles = articles.map(article =>
+    const newArticles = articles.map(article => 
       article.id === updatedArticle.id ? updatedArticle : article
     );
     setArticles(newArticles);
   };
 
   return (
-      <Router>
-        <div className="App">
-          <nav className="navbar navbar-expand-lg navbar-light bg-light">
-            <div className="container-fluid">
-              <Link className="navbar-brand" to="/home">ThinkSphere</Link>
-              <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
-              </button>
-              <div className="collapse navbar-collapse" id="navbarNav">
-                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li className="nav-item"><Link className="nav-link" to="/home">Home</Link></li>
-                  <li className="nav-item dropdown">
-                    <button className="nav-link dropdown-toggle" id="categoriesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Categorías
-                      </button>
+    <Router>
+      <div className="App">
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+          <div className="container-fluid">
+            <Link className="navbar-brand" to="/home">ThinkSphere</Link>
+            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span className="navbar-toggler-icon"></span>
+            </button>
+            <div className="collapse navbar-collapse" id="navbarNav">
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                <li className="nav-item"><Link className="nav-link" to="/home">Home</Link></li>
+                <li className="nav-item dropdown">
+                  <button className="nav-link dropdown-toggle" id="categoriesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Categorías
+                  </button>
                   <ul className="dropdown-menu" aria-labelledby="categoriesDropdown">
                     {categories.map((category, index) => (
                       <li key={index} className="dropdown-submenu">
@@ -192,12 +192,12 @@ const App = () => {
           </div>
         </nav>
         <Switch>
-        <Route path="/register">
+          <Route path="/register">
             <Register />
           </Route>
           <Route path="/login">
-          <Login /> 
-        </Route>
+            <Login />
+          </Route>
           <Route exact path="/">
             <Home articles={articles} />
           </Route>
@@ -236,11 +236,15 @@ const App = () => {
           <Route path="/Managesubcategories" component={ManageSubcategories} />
           <Route path="/CreatePage" component={CreatePage} />
         </Switch>
+<<<<<<< HEAD
           </div>
 >>>>>>> 6cec12a (Registro con frontend y backend para la base de datos)
       </Router>
+=======
+      </div>
+    </Router>
+>>>>>>> 9317497 (updates)
   );
 };
-
 
 export default App;
