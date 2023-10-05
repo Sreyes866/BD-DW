@@ -5,26 +5,32 @@ import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const history = useHistory();
-  const { setIsLoggedIn, setUserRole } = useAuth(); 
+  const { setIsLoggedIn, setUserRole, setUserName } = useAuth();  // Añadido setUserName
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const username = e.target.username.value;
     const password = e.target.password.value;
 
-    const response = await axios.post('http://localhost/login.php', {
-      username,
-      password,
-    });
-    
-    console.log("Respuesta del servidor: ", response.data);
+    try {
+      const response = await axios.post('http://localhost/login.php', {
+        username,
+        password,
+      });
 
-    if (response.data.message === 'Usuario autenticado') {
-      setIsLoggedIn(true);
-      setUserRole(response.data.user.role);
-      history.push('/home');
-    } else {
-      alert('Usuario o contraseña incorrectos');
+      console.log("Respuesta del servidor: ", response.data);
+
+      if (response.data.message === 'Usuario autenticado') {
+        setIsLoggedIn(true);
+        setUserRole(response.data.user.role);
+        setUserName(response.data.user.name);  // Nuevo - establece el nombre del usuario
+        history.push('/home');
+      } else {
+        alert('Usuario o contraseña incorrectos');
+      }
+    } catch (error) {
+      console.error("Error al realizar la petición:", error);
+      alert('Error al realizar la petición');
     }
   };
 

@@ -137,58 +137,6 @@ const App = () => {
                 )}
               </ul>
             </div>
-<<<<<<< HEAD
-          </nav>
-          <Switch>
-            <Route path="/login">
-              <Login setIsLoggedIn={setIsLoggedIn} />
-            </Route>
-            <Route exact path="/">
-              <Home articles={articles} />
-            </Route>
-            <Route path="/home">
-              <Home articles={articles} />
-            </Route>
-            <Route path="/create-article">
-              {isLoggedIn ? <CreateArticle addArticle={addArticle} /> : <Redirect to="/login" />}
-            </Route>
-            <Route path="/list-articles">
-              {isLoggedIn ? <ListArticles articles={articles} /> : <Redirect to="/login" />}
-            </Route>
-            <Route path="/contact">
-              <Contact />
-            </Route>
-            <Route path="/history">
-              <History />
-            </Route>
-            <Route path="/faq">
-              <FAQ />
-            </Route>
-            <Route path="/articles/:category/:subCategory">
-              <ArticlesByCategory fetchedArticles={fetchedArticles} />
-            </Route>
-
-            <Route path="/announcements">
-              <Announcements />
-            </Route>
-            <Route path="/profile">
-              {isLoggedIn ? <Profile /> : <Redirect to="/login" />}
-            </Route>
-            <Route path="/article/:id">
-              {isLoggedIn ? <ArticleDetail articles={articles} deleteArticle={deleteArticle} updateArticle={updateArticle} /> : <Redirect to="/login" />}
-            </Route>
-            <Route path="/article/:id">
-            {isLoggedIn ? <ArticleDetail /> : <Redirect to="/login" />}
-            </Route>
-      
-        <Route path="/subscription" component={Subscription} /> {/* Nueva ruta */}
-        <Route path="/Managecategories" component={ManageCategories} />
-        <Route path="/Managesubcategories" component={ManageSubcategories} />
-        <Route path="/CreatePage" component={CreatePage} />
-      
-          </Switch>
-        </div>
-=======
           </div>
         </nav>
         <Switch>
@@ -236,14 +184,8 @@ const App = () => {
           <Route path="/Managesubcategories" component={ManageSubcategories} />
           <Route path="/CreatePage" component={CreatePage} />
         </Switch>
-<<<<<<< HEAD
-          </div>
->>>>>>> 6cec12a (Registro con frontend y backend para la base de datos)
-      </Router>
-=======
       </div>
     </Router>
->>>>>>> 9317497 (updates)
   );
 };
 

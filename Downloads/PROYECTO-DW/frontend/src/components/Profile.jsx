@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';  // Asegúrate de que esta rut
 
 const Profile = () => {
   const history = useHistory();
-  const { username } = useAuth();  // Asumimos que username se obtiene del contexto de autenticación
+  const { username, userName } = useAuth();  // Asegúrate de que userName se añade aquí
 
   const [showPassword, setShowPassword] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -50,6 +50,7 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
+    <h1>Bienvenido, {userName}</h1>
       <div className="profile-card">
         {editMode ? (
           <div className="right-section">
