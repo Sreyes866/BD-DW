@@ -1,25 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useHistory } from 'react-router-dom';
+import Template2 from './Template2';  // Asegúrate de que la ruta sea correcta
 
 const ArticleDetail = () => {
   const { id } = useParams();
   const history = useHistory();
-  const [article, setArticle] = useState(null);
+  const [articles, setArticles] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
+  const [article, setArticle] = useState(null);
+
 
   useEffect(() => {
+    // Cargar todos los artículos
+    axios.get('http://localhost/Articles.php')
+      .then(response => {
+        setArticles(response.data);
+      })
+      .catch(error => console.error('Error fetching articles:', error));
+
     // Cargar categorías y subcategorías
-    axios.get('http://localhost/getCategories.php')
+    axios.get('http://localhost/Categories.php')
       .then(response => setCategories(response.data))
       .catch(error => console.error('Error fetching categories:', error));
 
-    axios.get('http://localhost/getSubcategories.php')
+    axios.get('http://localhost/Subcategories.php')
       .then(response => setSubcategories(response.data))
       .catch(error => console.error('Error fetching subcategories:', error));
 
   }, [id]);
+
+  // Buscar el artículo específico por ID
+  useEffect(() => {
+    const foundArticle = articles.find(a => a.id === parseInt(id, 10));
+    setArticle(foundArticle);
+  }, [articles, id]);
 
   const handleDelete = () => {
     axios.post('http://localhost/deleteArticle.php', { id })
@@ -49,21 +65,7 @@ const ArticleDetail = () => {
 
   return (
     <div className="container">
-      <h1>{article.title}</h1>
-      <p>{article.content}</p>
-      
-      <select name="category_id" value={article.category_id} onChange={handleChange}>
-        {categories.map((category, index) => (
-          <option key={index} value={category.id}>{category.name}</option>
-        ))}
-      </select>
-
-      <select name="sub_category_id" value={article.sub_category_id} onChange={handleChange}>
-        {subcategories.map((subcategory, index) => (
-          <option key={index} value={subcategory.id}>{subcategory.name}</option>
-        ))}
-      </select>
-
+      <Template2 article={article} isEditing={false} handleChange={handleChange} categories={categories} subcategories={subcategories} />
       <button onClick={handleSave}>Guardar cambios</button>
       <button onClick={handleDelete}>Eliminar artículo</button>
     </div>
@@ -71,4 +73,5 @@ const ArticleDetail = () => {
 };
 
 export default ArticleDetail;
+
 

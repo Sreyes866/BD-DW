@@ -181,7 +181,9 @@ const App = () => {
             <Route path="/article/:id">
               {isLoggedIn ? <ArticleDetail articles={articles} deleteArticle={deleteArticle} updateArticle={updateArticle} /> : <Redirect to="/login" />}
             </Route>
-            
+            <Route path="/article/:id">
+            {isLoggedIn ? <ArticleDetail /> : <Redirect to="/login" />}
+            </Route>
       
         <Route path="/subscription" component={Subscription} /> {/* Nueva ruta */}
         <Route path="/Managecategories" component={ManageCategories} />

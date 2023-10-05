@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Template2 from './Template2';
+import { Link } from 'react-router-dom';
+
 
 const ArticlesByCategory = () => {
   const { category, subCategory } = useParams();
@@ -41,7 +43,13 @@ const ArticlesByCategory = () => {
       <h1>Artículos en {category} - {subCategory}</h1>
       <ul>
         {filteredArticles.map((article, index) => (
-          <Template2 key={index} article={article} categories={categories} subcategories={subcategories} />
+          
+          <li key={index}>
+            {/* Envuelve cada artículo en un enlace que redireccione al detalle del artículo */}
+            <Link to={`/article/${article.id}`}>
+              {article.title}
+            </Link>
+          </li>
         ))}
       </ul>
     </div>
