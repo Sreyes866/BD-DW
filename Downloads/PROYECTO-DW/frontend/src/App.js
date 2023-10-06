@@ -22,9 +22,12 @@ import ManageSubcategories from './components/ManageSubcategories.jsx';
 import CreatePage from './components/CreatePage';
 import Register from './components/Register.jsx';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import ManageUsers from './ManageUser';
+
 
 const App = () => {
-  const { isLoggedIn, setIsLoggedIn } = useAuth();
+  const { isLoggedIn, userRole } = useAuth();
+
 
   const [articles, setArticles] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -177,8 +180,12 @@ const App = () => {
             <Announcements />
           </Route>
           <Route path="/profile">
-            {isLoggedIn ? <Profile /> : <Redirect to="/login" />}
-          </Route>
+    {isLoggedIn ? <Profile /> : <Redirect to="/login" />}
+  </Route>
+  <Route path="/manage-users">
+  {isLoggedIn && userRole === 'admin' ? <ManageUsers /> : <Redirect to="/login" />}
+</Route>
+  
           <Route path="/article/:id">
             {isLoggedIn ? <ArticleDetail articles={articles} deleteArticle={deleteArticle} updateArticle={updateArticle} /> : <Redirect to="/login" />}
           </Route>

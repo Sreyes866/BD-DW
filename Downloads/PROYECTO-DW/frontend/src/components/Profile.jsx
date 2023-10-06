@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';  
+import { useAuth } from '../context/AuthContext';
 
 const Profile = () => {
-  const history = useHistory(); 
-  const { username, userName } = useAuth(); 
-
+  const history = useHistory();
+  const { username, userName } = useAuth();
+  
   const [showPassword, setShowPassword] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [name, setName] = useState('');
@@ -40,6 +40,8 @@ const Profile = () => {
   const toggleEditMode = () => setEditMode(!editMode);
   const toggleShowArticles = (type) => setShowArticles({ ...showArticles, [type]: !showArticles[type] });
   const handleSubscription = () => history.push('/subscription');
+  const manageUsers = () => history.push('/manage-users'); // Función para manejar los usuarios
+
   const saveChanges = () => {
     if (name && username && email && password) {
       toggleEditMode();
@@ -50,7 +52,7 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
-    <h1>Bienvenido, {userName}</h1>
+      <h1>Bienvenido, {userName}</h1>
       <div className="profile-card">
         {editMode ? (
           <div className="right-section">
@@ -70,6 +72,7 @@ const Profile = () => {
             <button onClick={togglePasswordVisibility}>{showPassword ? 'Ocultar' : 'Ver'}</button>
             <button className="btn btn-primary" onClick={saveChanges}>Guardar Cambios</button>
             <button className="btn btn-primary" onClick={handleSubscription}>Administrar Suscripción</button>
+            <button className="btn btn-primary" onClick={manageUsers}>Administrar Usuarios</button> {/* Botón para administrar usuarios */}
           </div>
         ) : (
           <div className="left-section">
