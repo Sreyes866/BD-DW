@@ -102,6 +102,9 @@ const App = () => {
                       <li key={index} className="dropdown-submenu">
                         <button className="dropdown-item dropdown-toggle">{category.name}</button>
                         <ul className="dropdown-menu">
+                          <li>
+                            <Link className="dropdown-item" to={`/articles/${category.name}/all`}>Todas las Subcategorías</Link>
+                          </li>
                           {subcategories.filter(sub => sub.category_id === category.id).map((subCategory, subIndex) => (
                             <li key={subIndex}>
                               <Link className="dropdown-item" to={`/articles/${category.name}/${subCategory.name}`}>{subCategory.name}</Link>
