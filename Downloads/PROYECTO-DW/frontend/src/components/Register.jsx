@@ -12,8 +12,6 @@ const Register = () => {
       const email = e.target.email.value;
       const password = e.target.password.value;
   
-      console.log({ name, username, email, password });  // Para depuración
-  
       const response = await axios.post('http://localhost/register.php', {
         name,
         username,
@@ -22,12 +20,13 @@ const Register = () => {
       });
 
       if (response.status === 200 && response.data.message === 'Usuario registrado') {
+        alert('Se ha enviado un correo electrónico de confirmación. Por favor, confirma tu registro.');
         history.push('/login');
       } else {
         alert('Error al registrar usuario');
       }
     } catch (error) {
-      console.error("Error al realizar la petición:", error);
+      console.error("Error en la petición:", error);
       alert('Error al realizar la petición');
     }
   };

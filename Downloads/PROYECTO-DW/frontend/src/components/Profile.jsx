@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';  // Asegúrate de que esta ruta sea correcta
+import { useAuth } from '../context/AuthContext';  
 
 const Profile = () => {
-  const history = useHistory();
-  const { username, userName } = useAuth();  // Asegúrate de que userName se añade aquí
+  const history = useHistory(); 
+  const { username, userName } = useAuth(); 
 
   const [showPassword, setShowPassword] = useState(false);
   const [editMode, setEditMode] = useState(false);
