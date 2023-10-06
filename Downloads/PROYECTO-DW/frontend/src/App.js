@@ -22,8 +22,7 @@ import ManageSubcategories from './components/ManageSubcategories.jsx';
 import CreatePage from './components/CreatePage';
 import Register from './components/Register.jsx';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import ManageUsers from './ManageUser';
-
+import ManageUsers from './components/ManageUsers';
 
 const App = () => {
   const { isLoggedIn, userRole } = useAuth();
