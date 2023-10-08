@@ -13,27 +13,27 @@ const Profile = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
-
   const [showArticles, setShowArticles] = useState({ published: false, drafts: false, review: false });
+
   const publishedArticles = ['Articulo 1', 'Articulo 2'];
   const draftArticles = ['Draft 1', 'Draft 2'];
   const reviewArticles = ['Review 1', 'Review 2'];
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const response = await axios.post('http://localhost/GetUserProfile.php', { username });
-        if (response.data) {
-          setName(response.data.name || '');
-          setEmail(response.data.email || '');
-          setPassword(response.data.password || '');
-          setRole(response.data.role || '');
-        }
-      } catch (error) {
-        console.error('Error fetching user profile:', error);
+  const fetchUserProfile = async () => {
+    try {
+      const response = await axios.post('http://localhost/GetUserProfile.php', { username });
+      if (response.data) {
+        setName(response.data.name || '');
+        setEmail(response.data.email || '');
+        setPassword(response.data.password || '');
+        setRole(response.data.role || '');
       }
-    };
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+    }
+  };
 
+  useEffect(() => {
     fetchUserProfile();
   }, [username]);
 
@@ -42,6 +42,24 @@ const Profile = () => {
   const toggleShowArticles = (type) => setShowArticles({ ...showArticles, [type]: !showArticles[type] });
   const handleSubscription = () => history.push('/subscription');
   const manageUsers = () => history.push('/manage-users');
+
+  const saveChanges = async () => {
+    try {
+      const response = await axios.post('http://localhost/UpdateUserProfile.php', { username, name, email, password });
+      if (response.data.message === 'Perfil actualizado exitosamente') {
+        alert('Perfil actualizado exitosamente');
+        fetchUserProfile();
+        toggleEditMode();
+      } else {
+        alert('No se pudo actualizar el perfil');
+        console.log('Error:', response.data.error);
+      }
+    } catch (error) {
+      alert('Error al actualizar el perfil');
+    }
+  };
+
+  // ... (otras funciones y estados que podrías tener)
 
   return (
     <div className="profile-container">
@@ -52,8 +70,6 @@ const Profile = () => {
             <h2>Editar Perfil</h2>
             <label>Nombre:</label>
             <input type="text" value={name} onChange={e => setName(e.target.value)} />
-            <label>Usuario:</label>
-            <input type="text" value={username} readOnly />
             <label>Correo:</label>
             <input type="email" value={email} onChange={e => setEmail(e.target.value)} />
             <label>Contraseña:</label>
@@ -63,7 +79,9 @@ const Profile = () => {
               onChange={e => setPassword(e.target.value)} 
             />
             <button onClick={togglePasswordVisibility}>{showPassword ? 'Ocultar' : 'Ver'}</button>
-            <button className="btn btn-primary" onClick={toggleEditMode}>Cancelar</button>
+            <button className="btn btn-primary" onClick={saveChanges}>Guardar Cambios</button>
+            <button className="btn btn-primary" onClick={handleSubscription}>Administrar Suscripción</button>
+            <button className="btn btn-primary" onClick={manageUsers}>Administrar Usuarios</button>
           </div>
         ) : (
           <div className="left-section">
