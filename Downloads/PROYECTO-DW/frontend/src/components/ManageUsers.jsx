@@ -14,6 +14,19 @@ const ManageUsers = () => {
     }
   };
 
+  const [newUser, setNewUser] = useState({username: '', name: '', email: '', role: '', password: ''});
+
+const handleCreateUser = async () => {
+  try {
+    const response = await axios.post('http://localhost/UpdateUserProfile.php', { action: 'createUser', ...newUser });
+    if (response.data.message === 'Usuario creado exitosamente') {
+      fetchUsers();
+      setNewUser({username: '', name: '', email: '', role: '', password: ''});
+    }
+  } catch (error) {
+    console.error('Error creating user:', error);
+  }
+};
   const handleSave = async (user) => {
     try {
       const response = await axios.post('http://localhost/UpdateUserProfile.php', { action: 'updateUser', ...user });
@@ -67,6 +80,12 @@ const ManageUsers = () => {
           ))}
         </tbody>
       </table>
+      <input placeholder="Nombre" value={newUser.name} onChange={(e) => setNewUser({...newUser, name: e.target.value})} />
+      <input placeholder="Usuario" value={newUser.username} onChange={(e) => setNewUser({...newUser, username: e.target.value})} />
+      <input placeholder="Correo" value={newUser.email} onChange={(e) => setNewUser({...newUser, email: e.target.value})} />
+      <input placeholder="Rol" value={newUser.role} onChange={(e) => setNewUser({...newUser, role: e.target.value})} />
+      <input placeholder="Contraseña" type="password" value={newUser.password} onChange={(e) => setNewUser({...newUser, password: e.target.value})} />
+      <button onClick={handleCreateUser}>Crear Usuario</button>
     </div>
   );
 };
