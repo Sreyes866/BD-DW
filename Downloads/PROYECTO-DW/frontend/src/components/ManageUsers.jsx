@@ -16,29 +16,28 @@ const ManageUsers = () => {
 
   const [newUser, setNewUser] = useState({username: '', name: '', email: '', role: '', password: ''});
 
-const handleCreateUser = async () => {
-  try {
-    const response = await axios.post('http://localhost/UpdateUserProfile.php', { action: 'createUser', ...newUser });
-    if (response.data.message === 'Usuario creado exitosamente') {
-      fetchUsers();
-      setNewUser({username: '', name: '', email: '', role: '', password: ''});
+  const handleCreateUser = async () => {
+    try {
+      const response = await axios.post('http://localhost/UpdateUserProfile.php', { action: 'createUser', ...newUser });
+      if (response.data.message === 'Usuario creado exitosamente') {
+        fetchUsers();
+        setNewUser({username: '', name: '', email: '', role: '', password: ''});
+      }
+    } catch (error) {
+      console.error('Error creating user:', error);
     }
-  } catch (error) {
-    console.error('Error creating user:', error);
-  }
-};
+  };
 
-
-const handleDelete = async (username) => {
-  try {
-    const response = await axios.post('http://localhost/UpdateUserProfile.php', { action: 'deleteUser', username });
-    if (response.data.message === 'Usuario eliminado exitosamente') {
-      fetchUsers();
+  const handleDelete = async (username) => {
+    try {
+      const response = await axios.post('http://localhost/UpdateUserProfile.php', { action: 'deleteUser', username });
+      if (response.data.message === 'Usuario eliminado exitosamente') {
+        fetchUsers();
+      }
+    } catch (error) {
+      console.error('Error eliminando usuario:', error);
     }
-  } catch (error) {
-    console.error('Error eliminando usuario:', error);
-  }
-};
+  };
 
   const handleSave = async (user) => {
     try {
@@ -50,7 +49,7 @@ const handleDelete = async (username) => {
     } catch (error) {
       console.error('Error updating user:', error);
     }
-  };
+};
 
   useEffect(() => {
     fetchUsers();
@@ -58,55 +57,58 @@ const handleDelete = async (username) => {
 
   return (
     <div className="manage-users-container">
-        <h1>Administrar Usuarios</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Usuario</th>
-                    <th>Correo</th>
-                    <th>Rol</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {users.map((user, index) => (
-                    <tr key={index}>
-                        {editingIndex === index ? (
-                            <>
-                                <td><input defaultValue={user.name} onChange={(e) => user.name = e.target.value} /></td>
-                                <td><input defaultValue={user.username} onChange={(e) => user.username = e.target.value} /></td>
-                                <td><input defaultValue={user.email} onChange={(e) => user.email = e.target.value} /></td>
-                                <td><input defaultValue={user.role} onChange={(e) => user.role = e.target.value} /></td>
-                                <td>
-                                    <button onClick={() => handleSave(user)}>Guardar</button>
-                                    <button onClick={() => handleDelete(user.username)}>Eliminar</button>
-                                </td>
-                            </>
-                        ) : (
-                            <>
-                                <td>{user.name}</td>
-                                <td>{user.username}</td>
-                                <td>{user.email}</td>
-                                <td>{user.role}</td>
-                                <td>
-                                    <button onClick={() => setEditingIndex(index)}>Editar</button>
-                                    <button onClick={() => handleDelete(user.username)}>Eliminar</button>
-                                </td>
-                            </>
-                        )}
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-        <input placeholder="Nombre" value={newUser.name} onChange={(e) => setNewUser({...newUser, name: e.target.value})} />
-        <input placeholder="Usuario" value={newUser.username} onChange={(e) => setNewUser({...newUser, username: e.target.value})} />
-        <input placeholder="Correo" value={newUser.email} onChange={(e) => setNewUser({...newUser, email: e.target.value})} />
-        <input placeholder="Rol" value={newUser.role} onChange={(e) => setNewUser({...newUser, role: e.target.value})} />
-        <input placeholder="Contraseña" type="password" value={newUser.password} onChange={(e) => setNewUser({...newUser, password: e.target.value})} />
-        <button onClick={handleCreateUser}>Crear Usuario</button>
+      <h1>Administrar Usuarios</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Usuario</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th>Contraseña</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((user, index) => (
+            <tr key={index}>
+              {editingIndex === index ? (
+                <>
+                  <td><input defaultValue={user.name} onChange={(e) => user.name = e.target.value} /></td>
+                  <td><input defaultValue={user.username} onChange={(e) => user.username = e.target.value} /></td>
+                  <td><input defaultValue={user.email} onChange={(e) => user.email = e.target.value} /></td>
+                  <td><input defaultValue={user.role} onChange={(e) => user.role = e.target.value} /></td>
+                  <td><input defaultValue={user.password} onChange={(e) => user.password = e.target.value} /></td>
+                  <td>
+                    <button onClick={() => handleSave(user)}>Guardar</button>
+                    <button onClick={() => handleDelete(user.username)}>Eliminar</button>
+                  </td>
+                </>
+              ) : (
+                <>
+                  <td>{user.name}</td>
+                  <td>{user.username}</td>
+                  <td>{user.email}</td>
+                  <td>{user.role}</td>
+                  <td>{user.password}</td>
+                  <td>
+                    <button onClick={() => setEditingIndex(index)}>Editar</button>
+                    <button onClick={() => handleDelete(user.username)}>Eliminar</button>
+                  </td>
+                </>
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <input placeholder="Nombre" value={newUser.name} onChange={(e) => setNewUser({...newUser, name: e.target.value})} />
+      <input placeholder="Usuario" value={newUser.username} onChange={(e) => setNewUser({...newUser, username: e.target.value})} />
+      <input placeholder="Correo" value={newUser.email} onChange={(e) => setNewUser({...newUser, email: e.target.value})} />
+      <input placeholder="Rol" value={newUser.role} onChange={(e) => setNewUser({...newUser, role: e.target.value})} />
+      <input placeholder="Contraseña" value={newUser.password} onChange={(e) => setNewUser({...newUser, password: e.target.value})} />
+      <button onClick={handleCreateUser}>Crear Usuario</button>
     </div>
-);
+  );
 };
 
 export default ManageUsers;
