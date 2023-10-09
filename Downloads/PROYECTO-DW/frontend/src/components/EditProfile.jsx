@@ -5,8 +5,6 @@ const EditProfile = () => {
   const [users, setUsers] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
 
-
-
   const loggedInUsername = localStorage.getItem('username');
 
   const fetchUsers = async () => {
@@ -27,6 +25,17 @@ const EditProfile = () => {
       }
     } catch (error) {
       console.error('Error updating user:', error);
+    }
+  };
+
+  const handleDelete = async (username) => {
+    try {
+      const response = await axios.post('http://localhost/UpdateUserProfile.php', { action: 'deleteUser', username });
+      if (response.data.message === 'Usuario eliminado exitosamente') {
+        fetchUsers();
+      }
+    } catch (error) {
+      console.error('Error deleting user:', error);
     }
   };
 
@@ -61,6 +70,7 @@ const EditProfile = () => {
                   <td><input defaultValue={user.password} onChange={(e) => user.password = e.target.value} /></td>
                   <td>
                     <button onClick={() => handleSave(user)}>Guardar</button>
+                    <button onClick={() => handleDelete(user.username)}>Eliminar</button>
                   </td>
                 </>
               ) : (
@@ -72,6 +82,7 @@ const EditProfile = () => {
                   <td>{user.password}</td>
                   <td>
                     <button onClick={() => setEditingIndex(index)}>Editar</button>
+                    <button onClick={() => handleDelete(user.username)}>Eliminar</button>
                   </td>
                 </>
               )}
@@ -83,4 +94,4 @@ const EditProfile = () => {
   );
 };
 
-export default EditProfile; 
+export default EditProfile;

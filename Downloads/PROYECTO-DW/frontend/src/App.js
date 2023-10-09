@@ -23,6 +23,7 @@ import CreatePage from './components/CreatePage';
 import Register from './components/Register.jsx';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ManageUsers from './components/ManageUsers';
+import ProcessSubscription from './components/ProcessSubscription';
 
 const App = () => {
   const { isLoggedIn, userRole } = useAuth();
@@ -192,6 +193,7 @@ const App = () => {
           <Route path="/Managecategories" component={ManageCategories} />
           <Route path="/Managesubcategories" component={ManageSubcategories} />
           <Route path="/CreatePage" component={CreatePage} />
+          <Route path="/process-subscription" component={ProcessSubscription} />
         </Switch>
       </div>
     </Router>
