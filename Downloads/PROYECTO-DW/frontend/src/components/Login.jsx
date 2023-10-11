@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const history = useHistory();
-  const { setIsLoggedIn, setUserRole, setUserName } = useAuth();  // Añadido setUserName
+  const { setIsLoggedIn, setUserRole, setUserName, setUserEmail, setUserUsername, setUserPassword, setIsSubscribed, setExpiryDate } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,8 +23,14 @@ const Login = () => {
       if (response.data.message === 'Usuario autenticado') {
         setIsLoggedIn(true);
         setUserRole(response.data.user.role);
-        setUserName(response.data.user.name);  // Nuevo - establece el nombre del usuario
+        setUserName(response.data.user.name);  // Establece el nombre del usuario
+        setUserEmail(response.data.user.email); // Establece el correo del usuario
+        setUserPassword(response.data.user.password); // Establece la contraseña del usuario (Nuevo)
+        setIsSubscribed(response.data.user.is_subscribed); // Establece el estado de la membresía (Nuevo)
+        setExpiryDate(response.data.user.expiryDate); // Establece la fecha de expiración (Nuevo)
+        setUserUsername(username); // Establece el username con el que se inició sesión
         history.push('/home');
+    
       } else {
         alert('Usuario o contraseña incorrectos');
       }

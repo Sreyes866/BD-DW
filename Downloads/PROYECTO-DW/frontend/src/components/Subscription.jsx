@@ -1,9 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const Subscription = () => {
+  const [subscriptionStatus, setSubscriptionStatus] = useState('Inactiva');
+
+  // Obtener el nombre del usuario del mensaje de bienvenida
+  const welcomeMessage = document.querySelector('h1').textContent;
+  const userName = welcomeMessage.replace('Bienvenido, ', '');
+
+  useEffect(() => {
+    const fetchSubscriptionStatus = async () => {
+      try {
+        const response = await axios.post('http://localhost/GetSubscriptionStatus.php', { userName });
+        if (response.data.is_subscribed === 1) {
+          setSubscriptionStatus('Activa');
+        }
+      } catch (error) {
+        console.error('Error fetching subscription status:', error);
+      }
+    };
+
+    if (userName) {
+      fetchSubscriptionStatus();
+    }
+  }, [userName]);
+
   return (
     <div className="subscription-container">
-      <h1>Suscripción: Inactiva</h1>
+      <h1>Suscripción: {subscriptionStatus}</h1>
       <div className="plans">
         <div className="plan">
           <h2>Mensual</h2>

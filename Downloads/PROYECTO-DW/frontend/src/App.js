@@ -24,6 +24,7 @@ import Register from './components/Register.jsx';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ManageUsers from './components/ManageUsers';
 import ProcessSubscription from './components/ProcessSubscription';
+import EditProfile from './components/EditProfile';
 
 const App = () => {
   const { isLoggedIn, userRole } = useAuth();
@@ -194,6 +195,7 @@ const App = () => {
           <Route path="/Managesubcategories" component={ManageSubcategories} />
           <Route path="/CreatePage" component={CreatePage} />
           <Route path="/process-subscription" component={ProcessSubscription} />
+          <Route path= "/EditProfile" component={EditProfile} />
         </Switch>
       </div>
     </Router>
