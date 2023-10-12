@@ -1,7 +1,8 @@
 <?php
+
 // Configuración de encabezados para permitir solicitudes desde cualquier origen,
 // con los métodos POST y GET y el encabezado Content-Type permitido.
-header("Access-Control-Allow-Origin");
+header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET");
 header("Access-Control-Allow-Headers: Content-Type");
 
@@ -24,6 +25,7 @@ $stmt = $conn->prepare($sql);
 
 // Vincula los parámetros de la consulta SQL con los valores obtenidos del arreglo.
 $stmt->bind_param("sssss", $data['title'], $data['content'], $data['category_id'], $data['sub_category_id'], $data['author_id']);
+
 
 // Ejecuta la consulta SQL preparada.
 if ($stmt->execute()) {
