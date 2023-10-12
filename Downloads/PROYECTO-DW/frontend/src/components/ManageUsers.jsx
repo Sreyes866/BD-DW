@@ -4,6 +4,7 @@ import axios from 'axios';
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
+  const [newUser, setNewUser] = useState({username: '', name: '', email: '', role: '', password: ''});
 
   const fetchUsers = async () => {
     try {
@@ -13,8 +14,6 @@ const ManageUsers = () => {
       console.error('Error fetching users:', error);
     }
   };
-
-  const [newUser, setNewUser] = useState({username: '', name: '', email: '', role: '', password: ''});
 
   const handleCreateUser = async () => {
     try {
@@ -49,7 +48,7 @@ const ManageUsers = () => {
     } catch (error) {
       console.error('Error updating user:', error);
     }
-};
+  };
 
   useEffect(() => {
     fetchUsers();
@@ -66,6 +65,8 @@ const ManageUsers = () => {
             <th>Correo</th>
             <th>Rol</th>
             <th>Contraseña</th>
+            <th>Membresía</th>
+            <th>Fecha de expiración</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -78,7 +79,13 @@ const ManageUsers = () => {
                   <td><input defaultValue={user.username} onChange={(e) => user.username = e.target.value} /></td>
                   <td><input defaultValue={user.email} onChange={(e) => user.email = e.target.value} /></td>
                   <td><input defaultValue={user.role} onChange={(e) => user.role = e.target.value} /></td>
-                  <td><input defaultValue={user.password} onChange={(e) => user.password = e.target.value} /></td>
+                  <td>●●●●●●</td>
+                  <td>{user.is_subscribed === '1' ? 'Activa' : 'Inactiva'}</td>
+                  <td>
+                    {user.is_subscribed === '1' ? 
+                      <input type="date" defaultValue={user.expiryDate} onChange={(e) => user.expiryDate = e.target.value} /> 
+                      : 'N/A'}
+                  </td>
                   <td>
                     <button onClick={() => handleSave(user)}>Guardar</button>
                     <button onClick={() => handleDelete(user.username)}>Eliminar</button>
@@ -90,7 +97,9 @@ const ManageUsers = () => {
                   <td>{user.username}</td>
                   <td>{user.email}</td>
                   <td>{user.role}</td>
-                  <td>{user.password}</td>
+                  <td>●●●●●●</td>
+                  <td>{user.is_subscribed === '1' ? 'Activa' : 'Inactiva'}</td>
+                  <td>{user.expiryDate}</td>
                   <td>
                     <button onClick={() => setEditingIndex(index)}>Editar</button>
                     <button onClick={() => handleDelete(user.username)}>Eliminar</button>
@@ -111,4 +120,4 @@ const ManageUsers = () => {
   );
 };
 
-export default ManageUsers; 
+export default ManageUsers;
