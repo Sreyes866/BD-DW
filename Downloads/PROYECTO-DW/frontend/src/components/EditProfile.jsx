@@ -1,16 +1,17 @@
+// EditProfile.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
 const EditProfile = () => {
   const [user, setUser] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
   const { userName } = useAuth();
 
   const fetchUser = async () => {
     try {
       const response = await axios.post('http://localhost/GetSingleUser.php', { username: userName });
       if (response.data && response.data.message === 'Información del usuario') {
-        console.log(response.data.user);  // Debugging
         setUser(response.data.user);
       } else {
         console.error('Unexpected server response:', response.data);
@@ -54,7 +55,8 @@ const EditProfile = () => {
         </div>
         <div>
           <label>Password:</label>
-          <input type="password" defaultValue={user.password} onChange={(e) => setUser({ ...user, password: e.target.value })} />
+          <input type={showPassword ? 'text' : 'password'} defaultValue={user.password} onChange={(e) => setUser({ ...user, password: e.target.value })} />
+          <button onClick={() => setShowPassword(!showPassword)}>{showPassword ? 'Ocultar' : 'Ver'}</button>
         </div>
         <button onClick={handleSave}>Guardar</button>
       </div>
@@ -63,4 +65,3 @@ const EditProfile = () => {
 };
 
 export default EditProfile;
-      
