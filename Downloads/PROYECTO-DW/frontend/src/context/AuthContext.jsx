@@ -46,9 +46,9 @@ export const AuthProvider = ({ children }) => {
       userName, setUserName,
       userUsername, setUserUsername,
       userEmail, setUserEmail,
-      userPassword, setUserPassword, // Añadido
-      isSubscribed, setIsSubscribed, // Añadido
-      expiryDate, setExpiryDate // Añadido
+      userPassword, setUserPassword, 
+      isSubscribed, setIsSubscribed, 
+      expiryDate, setExpiryDate 
     }}>
       {children}
     </AuthContext.Provider>

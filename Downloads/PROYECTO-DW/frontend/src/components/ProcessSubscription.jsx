@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 const ProcessSubscription = () => {
-  const [username, setUsername] = useState(''); // Añadido para permitir la entrada manual del username
+  const { userUsername, setIsSubscribed, setExpiryDate } = useAuth(); // Obtener setIsSubscribed y setExpiryDate del contexto
   const [cardNumber, setCardNumber] = useState('');
   const [cvv, setCvv] = useState('');
   const [expiryMonth, setExpiryMonth] = useState('');
@@ -12,22 +13,24 @@ const ProcessSubscription = () => {
     const today = new Date();
     const expiryDate = new Date(today);
     expiryDate.setMonth(today.getMonth() + duration);
-    
-    if (!username) {
-      console.error("Username is missing");
-      return;
-    }
-  
+
+    console.log("Sending:", { username: userUsername, expiryDate: expiryDate.toISOString().split('T')[0] }); // Log para depuración
+
     try {
       const response = await axios.post('http://localhost/SubscribeUser.php', {
-        username,
+        username: userUsername,
         expiryDate: expiryDate.toISOString().split('T')[0]
       }, {
         headers: {
           'Content-Type': 'application/json'
         }
       });
+
+      console.log("Response data:", response.data); // Log para depuración
+
       if (response.data.message === 'User subscribed successfully') {
+        setIsSubscribed(1);
+        setExpiryDate(expiryDate.toISOString().split('T')[0]);
         alert(`Subscription successful. Expires on: ${expiryDate.toLocaleDateString()}`);
       }
     } catch (error) {
@@ -52,15 +55,6 @@ const ProcessSubscription = () => {
   return (
     <div className="subscription-process-container">
       <h1>Complete Your Subscription</h1>
-
-      {/* Añadido para permitir la entrada manual del username */}
-      <label>Username:</label>
-      <input 
-        type="text" 
-        value={username} 
-        onChange={(e) => setUsername(e.target.value)} 
-      />
-
       <label>Card Number:</label>
       <input 
         type="text" 
