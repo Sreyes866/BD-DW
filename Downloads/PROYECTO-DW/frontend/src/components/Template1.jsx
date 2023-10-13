@@ -41,7 +41,7 @@ const imageStyle = {
   marginLeft: '10px'
 };
 
-const Template1 = ({ article, isEditing, handleChange, categories, subcategories }) => {
+const Template1 = ({ article, isEditing, handleChange, handleImageChange, categories, subcategories }) => {
   // Filtrar subcategorías basadas en la categoría seleccionada
   const filteredSubcategories = subcategories.filter(sub => sub.category_id === article.category_id);
 
@@ -60,7 +60,7 @@ const Template1 = ({ article, isEditing, handleChange, categories, subcategories
           article.title
         )}
       </h1>
-
+  
       <p style={categoryStyle}>
         <strong>Categoría:</strong>{' '}
         {isEditing ? (
@@ -72,9 +72,8 @@ const Template1 = ({ article, isEditing, handleChange, categories, subcategories
         ) : (
           categories.find(cat => cat.id === article.category_id)?.name || 'No especificada'
         )}
-        
       </p>
-
+  
       <p style={categoryStyle}>
         <strong>Subcategoría:</strong>{' '}
         {isEditing ? (
@@ -86,14 +85,13 @@ const Template1 = ({ article, isEditing, handleChange, categories, subcategories
         ) : (
           subcategories.find(sub => sub.id === article.sub_category_id)?.name || 'No especificada'
         )}
-        
       </p>
-
+  
       <p style={authorStyle}>
         <strong>Autor:</strong>{' '}
         {isEditing ? <input type="text" value={article.author_id} name="author_id" onChange={handleChange} /> : article.author_id}
       </p>
-
+  
       <div className="content" style={contentStyle}>
         {isEditing ? (
           <textarea
@@ -107,10 +105,25 @@ const Template1 = ({ article, isEditing, handleChange, categories, subcategories
           article.content
         )}
       </div>
+  
+      {isEditing && (
+        <div>
+          <label htmlFor="image">Imagen:</label>
+          <input type="file" id="image" onChange={handleImageChange} />
+        </div>
+      )}
+  
+  {article.image && (
+  <img
+    src={isEditing && article.image instanceof Blob ? URL.createObjectURL(article.image) : article.image}
+    alt={article.title}
+    style={imageStyle}
+  />
+)}
 
-      {article.image && <img src={URL.createObjectURL(article.image)} alt={article.title} style={imageStyle} />}
     </div>
   );
+  
 };
 
 export default Template1;

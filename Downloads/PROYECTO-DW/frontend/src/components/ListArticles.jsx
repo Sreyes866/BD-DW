@@ -17,8 +17,20 @@ const ListArticles = () => {
   const fetchData = () => {
     axios.get('http://localhost/Articles.php')
       .then(response => {
-        setArticles(response.data);
-        setFilteredArticles(response.data);
+        console.log("Server Response:", response.data);
+        if (Array.isArray(response.data)) {
+          const updatedArticles = response.data.map(article => {
+            if (article.image) {
+              const blob = new Blob([article.image], { type: 'image/jpeg' });
+              article.imageURL = URL.createObjectURL(blob);
+            }
+            return article;
+          });
+          setArticles(updatedArticles);
+          setFilteredArticles(updatedArticles);
+        } else {
+          console.error('Data is not an array:', response.data);
+        }
       })
       .catch(error => console.error('Error fetching articles:', error));
 
@@ -135,7 +147,9 @@ const ListArticles = () => {
 
       {filteredArticles.map((article, index) => (
         <div key={index} style={{border: '1px solid #ccc', margin: '20px', padding: '15px'}}>
+          {article.imageURL && <img src={article.imageURL} alt={article.title} />}
           {editingArticle && editingArticle.id === article.id ? (
+            
             <>
               <Template1 
                 article={editingArticle} 
