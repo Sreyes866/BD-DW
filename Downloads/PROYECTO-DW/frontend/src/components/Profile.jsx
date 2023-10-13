@@ -105,6 +105,8 @@ const Profile = () => {
             <button onClick={() => setEditMode(true)}>Editar Perfil</button>
             <button onClick={() => history.push('/subscription')}>Administrar Suscripción</button>
             <button onClick={() => history.push('/manage-users')}>Administrar Usuarios</button>
+            <button onClick={() => history.push('/create-ad')}>Administrar Anuncios</button> 
+
           </div>
         )}
       </div>

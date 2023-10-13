@@ -25,6 +25,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import ManageUsers from './components/ManageUsers';
 import ProcessSubscription from './components/ProcessSubscription';
 import EditProfile from './components/EditProfile';
+import CreateAd from './components/CreateAd';
 
 const App = () => {
   const { isLoggedIn, userRole } = useAuth();
@@ -196,6 +197,7 @@ const App = () => {
           <Route path="/CreatePage" component={CreatePage} />
           <Route path="/process-subscription" component={ProcessSubscription} />
           <Route path= "/EditProfile" component={EditProfile} />
+          <Route path="/create-ad" component={CreateAd} />
         </Switch>
       </div>
     </Router>
