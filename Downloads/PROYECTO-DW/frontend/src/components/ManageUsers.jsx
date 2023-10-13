@@ -4,7 +4,15 @@ import axios from 'axios';
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
-  const [newUser, setNewUser] = useState({username: '', name: '', email: '', role: '', password: ''});
+  const [newUser, setNewUser] = useState({
+    username: '',
+    name: '',
+    email: '',
+    role: '',
+    password: '',
+    is_subscribed: '0',  // Valor predeterminado
+    expiryDate: 'N/A',  // Valor predeterminado
+});
 
   const fetchUsers = async () => {
     try {
@@ -17,30 +25,58 @@ const ManageUsers = () => {
 
   const handleCreateUser = async () => {
     try {
-      const response = await axios.post('http://localhost/UpdateUserProfile.php', { action: 'createUser', ...newUser });
+      console.log("Sending Data:", newUser);  // Log the data being sent
+      const response = await axios.post('http://localhost/UpdateUserProfile.php', { 
+        action: 'createUser', 
+        ...newUser
+      });
       if (response.data.message === 'Usuario creado exitosamente') {
         fetchUsers();
-        setNewUser({username: '', name: '', email: '', role: '', password: ''});
+        setNewUser({
+          username: '', 
+          name: '', 
+          email: '', 
+          role: '', 
+          password: '', 
+          is_subscribed: '', 
+          expiryDate: '',
+        });
       }
     } catch (error) {
       console.error('Error creating user:', error);
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        console.error('Data:', error.response.data);
+        console.error('Status:', error.response.status);
+      }
     }
   };
 
   const handleDelete = async (username) => {
     try {
-      const response = await axios.post('http://localhost/UpdateUserProfile.php', { action: 'deleteUser', username });
+      const response = await axios.post('http://localhost/UpdateUserProfile.php', {
+        action: 'deleteUser',
+        username,
+      });
       if (response.data.message === 'Usuario eliminado exitosamente') {
         fetchUsers();
       }
     } catch (error) {
-      console.error('Error eliminando usuario:', error);
+      console.error('Error deleting user:', error);
     }
   };
 
   const handleSave = async (user) => {
     try {
-      const response = await axios.post('http://localhost/UpdateUserProfile.php', { action: 'updateUser', ...user });
+      const { name, email, role, expiryDate } = user;
+      const response = await axios.post('http://localhost/UpdateUserProfile.php', {
+        action: 'updateUser',
+        username: user.username,
+        name,
+        email,
+        role,
+        expiryDate,
+      });
       if (response.data.message === 'Usuario actualizado exitosamente') {
         fetchUsers();
         setEditingIndex(null);
@@ -111,12 +147,17 @@ const ManageUsers = () => {
         </tbody>
       </table>
       <input placeholder="Nombre" value={newUser.name} onChange={(e) => setNewUser({...newUser, name: e.target.value})} />
-      <input placeholder="Usuario" value={newUser.username} onChange={(e) => setNewUser({...newUser, username: e.target.value})} />
-      <input placeholder="Correo" value={newUser.email} onChange={(e) => setNewUser({...newUser, email: e.target.value})} />
-      <input placeholder="Rol" value={newUser.role} onChange={(e) => setNewUser({...newUser, role: e.target.value})} />
-      <input placeholder="Contraseña" value={newUser.password} onChange={(e) => setNewUser({...newUser, password: e.target.value})} />
-      <button onClick={handleCreateUser}>Crear Usuario</button>
-    </div>
+    <input placeholder="Usuario" value={newUser.username} onChange={(e) => setNewUser({...newUser, username: e.target.value})} />
+    <input placeholder="Correo" value={newUser.email} onChange={(e) => setNewUser({...newUser, email: e.target.value})} />
+    <input placeholder="Rol" value={newUser.role} onChange={(e) => setNewUser({...newUser, role: e.target.value})} />
+    <input type="password" placeholder="Contraseña" value={newUser.password} onChange={(e) => setNewUser({...newUser, password: e.target.value})} />
+    <select value={newUser.is_subscribed} onChange={(e) => setNewUser({...newUser, is_subscribed: e.target.value})}>
+      <option value="0">Inactiva</option>
+      <option value="1">Activa</option>
+    </select>
+    <input type="date" placeholder="Fecha de expiración" value={newUser.expiryDate} onChange={(e) => setNewUser({...newUser, expiryDate: e.target.value})} />
+    <button onClick={handleCreateUser}>Crear Usuario</button>
+  </div>
   );
 };
 
