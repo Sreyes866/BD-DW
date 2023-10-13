@@ -11,8 +11,8 @@ const ManageUsers = () => {
     role: '',
     password: '',
     is_subscribed: '0',  // Valor predeterminado
-    expiryDate: 'N/A',  // Valor predeterminado
-});
+    expiryDate: null,  // Valor predeterminado para inactivos
+  });
 
   const fetchUsers = async () => {
     try {
@@ -25,11 +25,13 @@ const ManageUsers = () => {
 
   const handleCreateUser = async () => {
     try {
-      console.log("Sending Data:", newUser);  // Log the data being sent
-      const response = await axios.post('http://localhost/UpdateUserProfile.php', { 
+      const sendData = { 
         action: 'createUser', 
-        ...newUser
-      });
+        ...newUser,
+        expiryDate: newUser.is_subscribed === "1" ? newUser.expiryDate : null
+      };
+      console.log("Sending Data:", sendData);  // Log the data being sent
+      const response = await axios.post('http://localhost/UpdateUserProfileAdmin.php', sendData);
       if (response.data.message === 'Usuario creado exitosamente') {
         fetchUsers();
         setNewUser({
@@ -38,23 +40,18 @@ const ManageUsers = () => {
           email: '', 
           role: '', 
           password: '', 
-          is_subscribed: '', 
-          expiryDate: '',
+          is_subscribed: '0', 
+          expiryDate: null,
         });
       }
     } catch (error) {
       console.error('Error creating user:', error);
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        console.error('Data:', error.response.data);
-        console.error('Status:', error.response.status);
-      }
     }
   };
 
   const handleDelete = async (username) => {
     try {
-      const response = await axios.post('http://localhost/UpdateUserProfile.php', {
+      const response = await axios.post('http://localhost/UpdateUserProfileAdmin.php', {
         action: 'deleteUser',
         username,
       });
@@ -69,7 +66,7 @@ const ManageUsers = () => {
   const handleSave = async (user) => {
     try {
       const { name, email, role, expiryDate } = user;
-      const response = await axios.post('http://localhost/UpdateUserProfile.php', {
+      const response = await axios.post('http://localhost/UpdateUserProfileAdmin.php', {
         action: 'updateUser',
         username: user.username,
         name,
@@ -147,17 +144,21 @@ const ManageUsers = () => {
         </tbody>
       </table>
       <input placeholder="Nombre" value={newUser.name} onChange={(e) => setNewUser({...newUser, name: e.target.value})} />
-    <input placeholder="Usuario" value={newUser.username} onChange={(e) => setNewUser({...newUser, username: e.target.value})} />
-    <input placeholder="Correo" value={newUser.email} onChange={(e) => setNewUser({...newUser, email: e.target.value})} />
-    <input placeholder="Rol" value={newUser.role} onChange={(e) => setNewUser({...newUser, role: e.target.value})} />
-    <input type="password" placeholder="Contraseña" value={newUser.password} onChange={(e) => setNewUser({...newUser, password: e.target.value})} />
-    <select value={newUser.is_subscribed} onChange={(e) => setNewUser({...newUser, is_subscribed: e.target.value})}>
-      <option value="0">Inactiva</option>
-      <option value="1">Activa</option>
-    </select>
-    <input type="date" placeholder="Fecha de expiración" value={newUser.expiryDate} onChange={(e) => setNewUser({...newUser, expiryDate: e.target.value})} />
-    <button onClick={handleCreateUser}>Crear Usuario</button>
-  </div>
+      <input placeholder="Usuario" value={newUser.username} onChange={(e) => setNewUser({...newUser, username: e.target.value})} />
+      <input placeholder="Correo" value={newUser.email} onChange={(e) => setNewUser({...newUser, email: e.target.value})} />
+      <input placeholder="Rol" value={newUser.role} onChange={(e) => setNewUser({...newUser, role: e.target.value})} />
+      <input type="password" placeholder="Contraseña" value={newUser.password} onChange={(e) => setNewUser({...newUser, password: e.target.value})} />
+      <select value={newUser.is_subscribed} onChange={(e) => setNewUser({...newUser, is_subscribed: e.target.value, expiryDate: e.target.value === "0" ? null : newUser.expiryDate})}>
+        <option value="0">Inactiva</option>
+        <option value="1">Activa</option>
+      </select>
+      
+      {newUser.is_subscribed === "1" && (
+        <input type="date" placeholder="Fecha de expiración" value={newUser.expiryDate || ''} onChange={(e) => setNewUser({...newUser, expiryDate: e.target.value})} />
+      )}
+      
+      <button onClick={handleCreateUser}>Crear Usuario</button>
+    </div>
   );
 };
 

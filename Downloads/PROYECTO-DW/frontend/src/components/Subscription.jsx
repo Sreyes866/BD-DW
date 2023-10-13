@@ -37,22 +37,21 @@ const Subscription = () => {
       <h1>Suscripción: {subscriptionStatus}</h1>
       <div className="plans">
         <div className="plan">
-        <h2>Mensual</h2>
+          <h2>Mensual</h2>
           <ul>
-            <li>Libre de Anuncios: Disfrutarás de una experiencia de lectura sin interrupciones publicitarias.</li>
+          <li>Libre de Anuncios: Disfrutarás de una experiencia de lectura sin interrupciones publicitarias.</li>
             <li>Interacción con Autores: Posibilidad de participar en discusiones y preguntas directas a los autores.</li>
             <li>Múltiples Dispositivos: Puedes tener hasta 4 dispositivos activos con una sola membresía, lo que brinda flexibilidad.</li>
             <li>Descargas de Artículos: La capacidad de descargar artículos para leer sin conexión en tus dispositivos.</li>
             <li>Anticipación: Serás uno de los primeros en leer los últimos artículos e investigaciones.</li>
-
           </ul>
           <p>Q289.99/6 meses</p>
-          <button className="btn btn-primary" onClick={() => window.location.href="/process-subscription"}>Comprar</button>
+          <button className="btn btn-primary" onClick={handlePurchaseClick}>Comprar</button>
         </div>
         <div className="plan">
           <h2>Anual</h2>
           <ul>
-            <li>Libre de Anuncios: Disfrutarás de una experiencia de lectura sin interrupciones publicitarias.</li>
+          <li>Libre de Anuncios: Disfrutarás de una experiencia de lectura sin interrupciones publicitarias.</li>
             <li>Interacción con Autores: Posibilidad de participar en discusiones y preguntas directas a los autores.</li>
             <li>Múltiples Dispositivos: Puedes tener hasta 4 dispositivos activos con una sola membresía, lo que brinda flexibilidad.</li>
             <li>Descargas de Artículos: La capacidad de descargar artículos para leer sin conexión en tus dispositivos.</li>
