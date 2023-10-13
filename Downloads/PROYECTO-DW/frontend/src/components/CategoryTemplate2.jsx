@@ -1,22 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
+import videoFile from './tecnologia1.mp4';  
+import bgImage from './Tecnologia1.jpg';  
+
 
 const CategoryTemplate2 = () => {
+  const { category, subCategory } = useParams();
   const [articles, setArticles] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
-
-  const centeredContent = {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center'
-  };
-
-  const justifiedText = {
-    textAlign: 'justify'
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,22 +31,39 @@ const CategoryTemplate2 = () => {
     fetchData();
   }, []);
 
+  let filteredArticles = articles;
+
+  if (category) {
+    const categoryId = categories.find(cat => cat.name === category)?.id;
+    filteredArticles = filteredArticles.filter(article => article.category_id === categoryId);
+  }
+
+  if (subCategory && subCategory !== 'all') {
+    const subcategoryId = subcategories.find(sub => sub.name === subCategory)?.id;
+    filteredArticles = filteredArticles.filter(article => article.sub_category_id === subcategoryId);
+  }
+
   return (
-    <div style={{ textAlign: 'center' }}>
-      <h2>Artículos Más Recientes (Carrusel)</h2>
-      <div id="carouselExample" className="carousel slide" data-bs-ride="carousel">
+    <div style={{ 
+      textAlign: 'center',
+      backgroundImage: `url(${bgImage})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+    }}>
+      <div style={{ padding: '20px', backgroundColor: 'rgba(255, 255, 255, 0.6)' }}></div>
+      <h2 style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }} >Artículos Más Populares</h2>
+      <div id="carouselExample" className="carousel slide" data-bs-ride="carousel" style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
+
         <div className="carousel-inner">
-          {articles.slice(0, 10).map((article, index) => (
+          {filteredArticles.slice(0, 10).map((article, index) => (
             <div className={`carousel-item ${index === 0 ? 'active' : ''}`} key={index}>
-              <div style={centeredContent}>
-                <Link to={`/article/${article.id}`}>
-                  <h3>{article.title}</h3>
-                </Link>
-                <p>Autor: {article.author_id}</p>
-                <p>Categoría: {categories.find(cat => cat.id === article.category_id)?.name}</p>
-                <p>Subcategoría: {subcategories.find(sub => sub.id === article.sub_category_id)?.name}</p>
-                <p style={justifiedText}>{article.content}</p>
-              </div>
+              <Link to={`/article/${article.id}`}>
+                <h3>{article.title}</h3>
+              </Link>
+              <p>Autor: {article.author_id}</p>
+              <p>Categoría: {categories.find(cat => cat.id === article.category_id)?.name}</p>
+              <p>Subcategoría: {subcategories.find(sub => sub.id === article.sub_category_id)?.name}</p>
             </div>
           ))}
         </div>
@@ -64,11 +74,38 @@ const CategoryTemplate2 = () => {
           <span className="carousel-control-next-icon" aria-hidden="true"></span>
         </button>
       </div>
+      
+      <div style={{ padding: '20px', backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
+      <h2>Datos Innovadores de la Tecnología</h2>
+        <p>
+          1. Computación cuántica: Se están desarrollando computadoras cuánticas que tienen el potencial de resolver problemas complejos mucho más rápido que las computadoras tradicionales. Esto podría revolucionar la criptografía, la simulación de materiales y la inteligencia artificial.
+        </p>
+        <p>
+          2. Inteligencia Artificial (IA) en atención médica: La IA se está utilizando para mejorar el diagnóstico y el tratamiento médico. Los algoritmos de IA pueden analizar grandes conjuntos de datos de pacientes y ayudar a los médicos a tomar decisiones más precisas.
+        </p>
+        <p>
+          3. Vehículos autónomos: La tecnología de vehículos autónomos está avanzando rápidamente. Empresas como Tesla, Waymo y Uber están desarrollando vehículos que pueden conducir de forma autónoma. Esto podría cambiar la forma en que nos desplazamos y reducir los accidentes de tráfico.
+        </p>
+        <p>
+          Estos son solo algunos ejemplos de cómo la tecnología está evolucionando y transformando diversos campos en la actualidad.
+        </p>
+      </div>
+  
+      {/* Video de Tecnología */}
+      <div style={{ padding: '20px', backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
+        <video width="640" height="360" controls>
+          <source src={videoFile} type="video/mp4" />
+          Tu navegador no soporta el elemento de video.
+        </video>
+      </div>
     </div>
   );
+  
 };
 
 export default CategoryTemplate2;
+
+
 
 
 

@@ -50,15 +50,15 @@ const ArticlesByCategory = () => {
   }
 
   return (
-    <div>
+    <div style={{ backgroundColor: 'lightblue' }}>  
       <h1>Artículos en {category} - {subCategory}</h1>
-
+  
       <label htmlFor="templateSelector">Elegir plantilla: </label>
       <select id="templateSelector" onChange={handleChangeTemplate}>
         <option value="Template1">Plantilla 1</option>
         <option value="Template2">Plantilla 2</option>
       </select>
-
+  
       {selectedTemplate === 'Template1' ? (
         <CategoryTemplate1 articles={filteredArticles} />
       ) : (
@@ -66,6 +66,7 @@ const ArticlesByCategory = () => {
       )}
     </div>
   );
+  
 };
 
 export default ArticlesByCategory;
