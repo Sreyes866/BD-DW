@@ -45,17 +45,25 @@ const CreateArticle = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+  
+    const formData = new FormData();
+    formData.append('title', article.title);
+    formData.append('author_id', article.author_id);
+    formData.append('category_id', article.category_id);
+    formData.append('sub_category_id', article.sub_category_id);
+    formData.append('content', article.content);
+    formData.append('image', article.image);  // Asegúrate de que 'image' sea un objeto File
+    
     fetch('http://localhost/addarticule.php', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(article)
+      body: formData  // Enviamos formData en lugar de JSON
     })
     .then(response => response.json())
     .then(data => {
       if (data.message === 'Artículo añadido') {
         setArticleCreated(true);
+      } else {
+        console.error('Error al crear el artículo:', data.message);
       }
     })
     .catch(error => console.error('Fetch Error:', error));
@@ -106,6 +114,11 @@ const CreateArticle = () => {
             <option value="Template2">Plantilla 2</option>
             <option value="Template3">Plantilla 3</option>
           </select>
+        </div>
+        
+        <div className="form-group">
+          <label htmlFor="image">Imagen</label>
+          <input type="file" id="image" onChange={(e) => setArticle({ ...article, image: e.target.files[0] })} className="form-control-file" />
         </div>
 
         <div className="form-group">
