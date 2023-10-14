@@ -26,6 +26,8 @@ import ManageUsers from './components/ManageUsers';
 import ProcessSubscription from './components/ProcessSubscription';
 import EditProfile from './components/EditProfile';
 import CreateAd from './components/CreateAd';
+import ModerateArticles from './components/ModerateArticles';
+
 
 const App = () => {
   const { isLoggedIn, userRole } = useAuth();
@@ -131,6 +133,7 @@ const App = () => {
                     <li className="nav-item"><Link className="nav-link" to="/profile">Perfil</Link></li>
                     <li className="nav-item"><Link className="nav-link" to="/ManageCategories">Gestionar Categorías</Link></li>
                     <li className="nav-item"><Link className="nav-link" to="/ManageSubcategories">Gestionar Subcategorías</Link></li>
+                    <li className="nav-item">{userRole === 'admin' && <Link className="nav-link" to="/moderate-articles">Moderar Artículos</Link>}</li>
                   </>
                 ) : (
                   <li className="nav-item dropdown">
@@ -198,6 +201,10 @@ const App = () => {
           <Route path="/process-subscription" component={ProcessSubscription} />
           <Route path= "/EditProfile" component={EditProfile} />
           <Route path="/create-ad" component={CreateAd} />
+          <Route path="/moderate-articles">
+  {isLoggedIn && userRole === 'admin' ? <ModerateArticles /> : <Redirect to="/login" />}
+</Route>
+
         </Switch>
       </div>
     </Router>
