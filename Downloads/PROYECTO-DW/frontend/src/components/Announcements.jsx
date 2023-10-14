@@ -29,12 +29,19 @@ const Announcements = () => {
     <div className="announcements-container">
       <h1>Anuncios</h1>
       {ads.map((ad, index) => (
-        <div key={index} onClick={() => handleAdClick(ad.id)}>
-<img 
-  src={ad.image_url} 
-  alt="Ad" 
-  style={{ width: '150px', height: '125px', cursor: 'pointer' }} 
-/>
+        <div key={index}>
+          <a 
+            href={ad.link_url} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            onClick={() => handleAdClick(ad.id)}
+          >
+            <img 
+              src={ad.image_url} 
+              alt="Ad" 
+              style={{ width: '150px', height: '125px', cursor: 'pointer' }} 
+            />
+          </a>
         </div>
       ))}
     </div>

@@ -44,7 +44,6 @@ const Home = () => {
     <div className="container my-5">
       <div className="row justify-content-center">
         <div className="col-12 col-md-8">
-
           <h2 className="text-center mb-4">Artículos Recientes</h2>
           <div className="list-group">
             {recentArticles.map((article, index) => (
@@ -56,19 +55,25 @@ const Home = () => {
               </Link>
             ))}
           </div>
-
+  
           {/* Sección de anuncios */}
           <h2 className="text-center mt-4">Anuncios</h2>
           {ads.map((ad, index) => (
-            <div key={index} onClick={() => handleAdClick(ad.id)}>
-              <img
-                src={ad.image_url}
-                alt="Ad"
-                style={{ width: '150px', height: '125px', cursor: 'pointer' }}
-              />
+            <div key={index}>
+              <a 
+                href={ad.link_url} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                onClick={() => handleAdClick(ad.id)}
+              >
+                <img 
+                  src={ad.image_url} 
+                  alt="Ad" 
+                  style={{ width: '150px', height: '125px', cursor: 'pointer' }} 
+                />
+              </a>
             </div>
           ))}
-
         </div>
       </div>
     </div>
