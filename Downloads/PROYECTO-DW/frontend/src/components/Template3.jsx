@@ -11,18 +11,18 @@ const blogStyle = {
 const titleStyle = {
   fontSize: '2em',
   marginBottom: '20px',
-  textAlign: 'center'
+  textAlign: 'left'
 };
 
 const categoryStyle = {
   color: '#777',
   marginBottom: '10px',
-  textAlign: 'center'
+  textAlign: 'left'
 };
 
 const contentStyle = {
   fontSize: '1.2em',
-  textAlign: 'center',
+  textAlign: 'left',
   display: 'inline-block',
   verticalAlign: 'top',
   width: '50%'
@@ -31,17 +31,20 @@ const contentStyle = {
 const authorStyle = {
   color: '#555',
   marginBottom: '10px',
-  textAlign: 'center'
+  textAlign: 'left'
 };
 
 const imageStyle = {
   maxWidth: '40%',
   maxHeight: '40%',
-  float: 'center',
+  float: 'right',
   marginLeft: '10px'
 };
 
-const Template3 = ({ article, isEditing, handleChange }) => {
+const Template3 = ({ article, isEditing, handleChange, handleImageChange, categories = [], subcategories = [] }) => {
+  // Filtrar subcategorías basadas en la categoría seleccionada
+  const filteredSubcategories = subcategories.filter(sub => sub.category_id === article.category_id);
+
   if (!article) {
     return <p>Cargando artículo...</p>;
   }
@@ -57,19 +60,38 @@ const Template3 = ({ article, isEditing, handleChange }) => {
           article.title
         )}
       </h1>
+  
       <p style={categoryStyle}>
         <strong>Categoría:</strong>{' '}
-        {isEditing ? <input type="text" value={article.category} name="category" onChange={handleChange} /> : article.category}
+        {isEditing ? (
+          <select name="category_id" value={article.category_id} onChange={handleChange}>
+            {categories.map((category, index) => (
+              <option key={index} value={category.id}>{category.name}</option>
+            ))}
+          </select>
+        ) : (
+          categories.find(cat => cat.id === article.category_id)?.name || 'No especificada'
+        )}
       </p>
+  
       <p style={categoryStyle}>
         <strong>Subcategoría:</strong>{' '}
-        {isEditing ? <input type="text" value={article.subCategory} name="subCategory" onChange={handleChange} /> : article.subCategory}
+        {isEditing ? (
+          <select name="sub_category_id" value={article.sub_category_id} onChange={handleChange}>
+            {filteredSubcategories.map((subcategory, index) => (
+              <option key={index} value={subcategory.id}>{subcategory.name}</option>
+            ))}
+          </select>
+        ) : (
+          subcategories.find(sub => sub.id === article.sub_category_id)?.name || 'No especificada'
+        )}
       </p>
+  
       <p style={authorStyle}>
         <strong>Autor:</strong>{' '}
-        {isEditing ? <input type="text" value={article.author} name="author" onChange={handleChange} /> : article.author}
+        {isEditing ? <input type="text" value={article.author_id} name="author_id" onChange={handleChange} /> : article.author_id}
       </p>
-
+  
       <div className="content" style={contentStyle}>
         {isEditing ? (
           <textarea
@@ -83,9 +105,22 @@ const Template3 = ({ article, isEditing, handleChange }) => {
           article.content
         )}
       </div>
-      {article.image && <img src={URL.createObjectURL(article.image)} alt={article.title} style={imageStyle} />}
+  
+      {isEditing && (
+        <div>
+          <label htmlFor="image">Imagen:</label>
+          <input type="file" id="image" onChange={handleImageChange} />
+        </div>
+      )}
+  
+      {console.log("Debugging article.image:", article.image)}
+      {article.image ? <img src={`data:image/jpeg;base64,${article.image}`} alt={article.title} /> : "Imagen no disponible"}
+
+
+
     </div>
   );
+  
 };
 
 export default Template3;
