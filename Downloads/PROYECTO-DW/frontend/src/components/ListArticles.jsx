@@ -41,6 +41,16 @@ const ListArticles = () => {
     axios.get('http://localhost/Subcategories.php')
       .then(response => setSubcategories(response.data))
       .catch(error => console.error('Error fetching subcategories:', error));
+
+      axios.get('http://localhost/ServicioJSON.php')
+      .then(response => {
+          console.log(response.data);  // Aquí tendrías tu artículo, categorías y subcategorías
+      })
+      .catch(error => {
+          console.error('Hubo un error al obtener los datos:', error);
+      });
+  
+
   };
 
   useEffect(() => {

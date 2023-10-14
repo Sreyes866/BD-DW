@@ -88,7 +88,20 @@ const Template2 = ({ article, categories, subcategories, isEditing, handleChange
           article.content
         )}
       </div>
-      {article.image && <img src={URL.createObjectURL(article.image)} alt={article.title} style={imageStyle} />}
+      {article.image && (
+  <img
+    src={
+      isEditing && article.image instanceof Blob
+        ? URL.createObjectURL(article.image)
+        : typeof article.image === "string"
+        ? article.image
+        : null // Puedes poner aquí una imagen por defecto
+    }
+    alt={article.title}
+    style={imageStyle}
+  />
+)}
+
     </div>
   );
 };

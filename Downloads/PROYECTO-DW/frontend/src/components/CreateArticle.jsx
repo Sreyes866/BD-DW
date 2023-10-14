@@ -52,11 +52,11 @@ const CreateArticle = () => {
     formData.append('category_id', article.category_id);
     formData.append('sub_category_id', article.sub_category_id);
     formData.append('content', article.content);
-    formData.append('image', article.image);  // Asegúrate de que 'image' sea un objeto File
+    formData.append('image', article.image);  
     
     fetch('http://localhost/addarticule.php', {
       method: 'POST',
-      body: formData  // Enviamos formData en lugar de JSON
+      body: formData  
     })
     .then(response => response.json())
     .then(data => {
@@ -126,9 +126,10 @@ const CreateArticle = () => {
           <input type="file" id="image" onChange={handleImageChange} className="form-control-file" />
         </div>
 
-        {article.templateType === 'Template1' && <Template1 article={article} />}
-        {article.templateType === 'Template2' && <Template2 article={article} />}
-        {article.templateType === 'Template3' && <Template3 article={article} />}
+        {article.templateType === 'Template1' && <Template1 article={article} categories={categories} subcategories={subcategories} />}
+        {article.templateType === 'Template2' && <Template2 article={article} categories={categories} subcategories={subcategories} />}
+        {article.templateType === 'Template3' && <Template3 article={article} categories={categories} subcategories={subcategories} />}
+
 
         <button type="submit" className="btn btn-primary">Crear</button>
       </form>

@@ -41,7 +41,7 @@ const imageStyle = {
   marginLeft: '10px'
 };
 
-const Template1 = ({ article, isEditing, handleChange, handleImageChange, categories, subcategories }) => {
+const Template1 = ({ article, isEditing, handleChange, handleImageChange, categories = [], subcategories = [] }) => {
   // Filtrar subcategorías basadas en la categoría seleccionada
   const filteredSubcategories = subcategories.filter(sub => sub.category_id === article.category_id);
 
@@ -115,11 +115,18 @@ const Template1 = ({ article, isEditing, handleChange, handleImageChange, catego
   
   {article.image && (
   <img
-    src={isEditing && article.image instanceof Blob ? URL.createObjectURL(article.image) : article.image}
+    src={
+      isEditing && article.image instanceof Blob
+        ? URL.createObjectURL(article.image)
+        : typeof article.image === "string"
+        ? article.image
+        : null // Puedes poner aquí una imagen por defecto
+    }
     alt={article.title}
     style={imageStyle}
   />
 )}
+
 
     </div>
   );
