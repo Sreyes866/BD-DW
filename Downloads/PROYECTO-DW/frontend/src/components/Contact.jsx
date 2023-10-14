@@ -7,12 +7,13 @@ const Contact = () => {
   const fetchAds = async () => {
     try {
         const response = await axios.get('http://localhost/GetAllAds.php');
-        setAds(response.data.filter(ad => ad.page_name === 'contact'));        
+        setAds(response.data.filter(ad => ad.page_name === 'announcements'));
     } catch (error) {
       console.error('Error fetching ads:', error);
     }
   };
 
+  
   const handleAdClick = async (adId) => {
     try {
       await axios.post('http://localhost/TrackClick.php', { adId });

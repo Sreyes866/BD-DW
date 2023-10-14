@@ -44,16 +44,30 @@ const CreateAd = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    try {
-      const response = await axios.post('http://localhost/DeleteAds.php', { id });
-      if (response.data.message === 'Anuncio eliminado exitosamente') {
-        fetchAds();
-      }
-    } catch (error) {
-      console.error('Error deleting ad:', error);
+const handleDelete = async (id) => {
+  try {
+    const shouldDelete = window.confirm('¿Estás seguro de que quieres eliminar este anuncio?');
+    if (!shouldDelete) return;
+
+    const response = await axios.post('http://localhost/DeleteAds.php', { id });
+
+    if (response.data.message === 'Anuncio eliminado exitosamente') {
+      alert('Anuncio eliminado exitosamente');
+      fetchAds();
+    } else {
+      console.log('Server Response:', response.data);
+      alert('No se pudo eliminar el anuncio');
     }
-  };
+  } catch (error) {
+    console.error('Error deleting ad:', error);
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.log('Server Error Response:', error.response.data);
+    }
+    alert('Ha ocurrido un error al eliminar el anuncio.');
+  }
+};
 
   const handleAdClick = async (adId, pageName) => {
     try {

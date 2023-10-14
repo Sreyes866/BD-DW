@@ -34,7 +34,6 @@ const Announcements = () => {
   src={ad.image_url} 
   alt="Ad" 
   style={{ width: '150px', height: '125px', cursor: 'pointer' }} 
-  onClick={(event) => handleAdClick(event, ad.id)}
 />
         </div>
       ))}
