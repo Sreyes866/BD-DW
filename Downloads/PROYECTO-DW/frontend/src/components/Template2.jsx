@@ -93,19 +93,60 @@ const Template2 = ({ article, isEditing, handleChange, handleImageChange, catego
       </p>
   
       <div className="content" style={contentStyle}>
-        {isEditing ? (
-          <textarea
-            value={article.content}
-            name="content"
-            onChange={handleChange}
-            rows={textAreaRows}
-            style={{ width: '100%', height: 'auto' }}
-          ></textarea>
+        {isEditing && article.templateType === 'Template1' ? (
+          <>
+            {/* Contenido principal */}
+            <label htmlFor="content">Contenido principal:</label>
+            <textarea
+              id="content"
+              value={article.content}
+              name="content"
+              onChange={handleChange}
+              rows="5"
+              style={{ width: '100%', height: 'auto' }}
+            ></textarea>
+
+            {/* Contenido 1 */}
+            <label htmlFor="content1">Contenido 1:</label>
+            <textarea
+              id="content1"
+              value={article.content1}
+              name="content1"
+              onChange={handleChange}
+              rows="5"
+              style={{ width: '100%', height: 'auto' }}
+            ></textarea>
+
+            <label htmlFor="content2">Contenido 2:</label>
+            <textarea
+              id="content2"
+              value={article.content2}
+              name="content2"
+              onChange={handleChange}
+              rows="5"
+              style={{ width: '100%', height: 'auto' }}
+            ></textarea>
+
+            <label htmlFor="content3">Contenido 3:</label>
+            <textarea
+              id="content3"
+              value={article.content3}
+              name="content3"
+              onChange={handleChange}
+              rows="5"
+              style={{ width: '100%', height: 'auto' }}
+            ></textarea>
+          </>
         ) : (
-          article.content
+          <>
+            <div>{article.content}</div>
+            <div>{article.content1}</div>
+            <div>{article.content2}</div>
+            <div>{article.content3}</div>
+          </>
         )}
       </div>
-  
+
       {isEditing && (
         <div>
           <label htmlFor="image">Imagen:</label>
