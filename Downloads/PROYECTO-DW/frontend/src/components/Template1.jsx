@@ -31,8 +31,8 @@ const contentLeftStyle = {
   textAlign: 'center', // Centrar el texto
   display: 'inline-block',
   verticalAlign: 'top',
-  width: '49%', // Ajustar el ancho para dar espacio para el margen
-  marginRight: '1%' // Agregar un pequeño margen a la derecha
+  width: '48%', // Ajustar el ancho para dar espacio para el margen
+  marginRight: '2%' // Agregar un pequeño margen a la derecha
 };
 
 const contentRightStyle = {
@@ -40,7 +40,8 @@ const contentRightStyle = {
   textAlign: 'center', // Centrar el texto
   display: 'inline-block',
   verticalAlign: 'top',
-  width: '50%'
+  width: '48%',
+  marginLeft: '2%' // Agregar un pequeño margen a la derecha
 };
 
 

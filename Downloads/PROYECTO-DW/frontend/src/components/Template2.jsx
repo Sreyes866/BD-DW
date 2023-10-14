@@ -22,11 +22,11 @@ const categoryStyle = {
 
 const contentLeftStyle = {
   fontSize: '1.2em',
-  textAlign: 'center', // Centrar el texto
+  textAlign: 'center', 
   display: 'inline-block',
   verticalAlign: 'top',
-  width: '47%', // Ajustar el ancho para dar espacio para el margen
-  marginRight: '3%' // Agregar un pequeño margen a la derecha
+  width: '48%', 
+  marginRight: '2%' 
 };
 
 const contentRightStyle = {
@@ -34,7 +34,8 @@ const contentRightStyle = {
   textAlign: 'center',
   display: 'inline-block',
   verticalAlign: 'top',
-  width: '50%'
+  width: '48%',
+  marginLeft: '2%' 
 };
 
 const authorStyle = {
@@ -49,7 +50,7 @@ const imageStyle = {
 };
 
 const Template2 = ({ article, isEditing, handleChange, handleImageChange, categories = [], subcategories = [] }) => {
-  // Filtrar subcategorías basadas en la categoría seleccionada
+  
   const filteredSubcategories = subcategories.filter(sub => sub.category_id === article.category_id);
 
   if (!article) {

@@ -10,10 +10,10 @@ const blogStyle = {
 
 
 const Template3 = ({ article, isEditing, handleChange, handleImageChange, categories = [], subcategories = [] }) => {
-  // Filtrar subcategorías basadas en la categoría seleccionada
+  
   const filteredSubcategories = subcategories.filter(sub => sub.category_id === article.category_id);
 
-  // Estilos centrales para Template3
+ 
   const centralStyle = {
     textAlign: 'center',
     width: '100%'
@@ -71,7 +71,7 @@ const Template3 = ({ article, isEditing, handleChange, handleImageChange, catego
         {isEditing ? <input type="text" value={article.author_id} name="author_id" onChange={handleChange} /> : article.author_id}
       </p>
 
-      {/* Contenido */}
+      
       <div style={centralStyle}>
         {isEditing ? (
           <>
@@ -103,7 +103,7 @@ const Template3 = ({ article, isEditing, handleChange, handleImageChange, catego
         )}
       </div>
 
-      {/* Imagen */}
+      
       {article.image ? <img src={`data:image/jpeg;base64,${article.image}`} alt={article.title} style={centralImageStyle} /> : "Imagen no disponible"}
     </div>
   );

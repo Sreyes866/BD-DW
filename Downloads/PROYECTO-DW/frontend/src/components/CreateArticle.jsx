@@ -85,7 +85,7 @@ const CreateArticle = () => {
     if (article.templateType === 'Template1' || article.templateType === 'Template2') {
       return (
         <>
-          {/* Aquí puedes mantener los campos adicionales para las plantillas 1 y 2 */}
+          
           <div className="form-group">
             <label htmlFor="content1">Contenido Adicional 1</label>
             <textarea id="content1" name="content1" value={article.content1} onChange={handleChange} className="form-control" rows="5"></textarea>
@@ -95,7 +95,7 @@ const CreateArticle = () => {
             <textarea id="content2" name="content2" value={article.content2} onChange={handleChange} className="form-control" rows="5"></textarea>
           </div>
           <div className="form-group">
-            <label htmlFor="content3">Contenido Adicional 3</label>
+            <label htmlFor="content3">Contenido Final</label>
             <textarea id="content3" name="content3" value={article.content3} onChange={handleChange} className="form-control" rows="5"></textarea>
           </div>
         </>
@@ -129,7 +129,7 @@ const CreateArticle = () => {
         </div>
         
         <div className="form-group">
-          <label htmlFor="content">Contenido</label>
+          <label htmlFor="content">Contenido de Inicio</label>
           <textarea id="content" name="content" value={article.content} onChange={handleChange} className="form-control" rows="5"></textarea>
         </div>
 
