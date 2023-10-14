@@ -291,3 +291,105 @@ select {
 .card-text {
   font-size: 1rem;
 }
+
+
+:root {
+  /* Definiendo variables para colores y bordes */
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --background-color: rgb(225, 229, 238);
+  --border-radius: 8px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Fondo y tipografía */
+html, body {
+  background-color: var(--background-color);
+  height: 100%;
+  font-family: 'Georgia', serif;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Navegación y Botones */
+nav ul {
+  display: flex;
+  list-style: none;
+  padding: 1rem;
+  justify-content: space-between;
+  background-color: var(--primary-color);
+}
+
+nav ul li {
+  margin: 0 1.5rem;
+}
+
+.btn-custom {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-custom:hover {
+  background-color: darken(var(--primary-color), 15%);
+}
+
+/* Responsividad y mejoras generales */
+@media (max-width: 768px) {
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  nav ul li {
+    margin: 0.5rem 0;
+  }
+}
+
+/* Estilos de formulario */
+.form-group {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 0.5rem;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+button[type="submit"] {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+}
+
+button[type="submit"] {
+  background-color: var(--primary-color);
+  color: white;
+  cursor: pointer;
+}
+
+/* Mejoras en contenedores */
+.container,
+.profile-card,
+.login-container {
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+/* Estilos adicionales */
+/* Aquí puedes agregar más estilos específicos para tus otros componentes */
