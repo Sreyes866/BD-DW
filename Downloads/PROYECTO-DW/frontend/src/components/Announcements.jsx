@@ -7,7 +7,6 @@ const Announcements = () => {
   const handleAdClick = async (adId) => {
     try {
       await axios.post('http://localhost/TrackClick.php', { adId });
-      // Puedes volver a buscar los detalles del anuncio para actualizar la UI si es necesario.
     } catch (error) {
       console.error('Error tracking click:', error);
     }

@@ -1,18 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import AddDetails from './AddDetails';  // Importing AddDetails component
+import AddDetails from './AddDetails';  // Asegúrate de importar este componente
 
 const CreateAd = () => {
-  const [ad, setAd] = useState({
-    image_url: '',
-    link_url: ''
-  });
-
+  const [ad, setAd] = useState({ image_url: '', link_url: '', page_name: 'home'});
   const [ads, setAds] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
-
-  const [showDetails, setShowDetails] = useState(false);
   const [currentAdId, setCurrentAdId] = useState(null);
+  const [showDetails, setShowDetails] = useState(false);
   const [adDetails, setAdDetails] = useState(null);
 
   const handleCreateAd = async () => {
@@ -20,7 +15,7 @@ const CreateAd = () => {
       const response = await axios.post('http://localhost/CreateAd.php', ad);
       if (response.data.message === 'Ad created successfully') {
         alert('Anuncio creado exitosamente');
-        setAd({ image_url: '', link_url: '' });
+        setAd({ image_url: '', link_url: '', page_name: 'home' });
         fetchAds();
       }
     } catch (error) {
@@ -60,15 +55,11 @@ const CreateAd = () => {
     }
   };
 
-  const handleAdClick = async (adId) => {
+  const handleAdClick = async (adId, pageName) => {
     try {
-      console.log("Registrando clic para el anuncio con ID:", adId);  // Para depuración
-      const response = await axios.post('http://localhost/TrackClick.php', { adId });
-      if (response.data.message === 'Click registrado') {
-        // Aquí podrías actualizar tu estado o hacer algo más
-      }
+      await axios.post('http://localhost/TrackClick.php', { adId, pageName });
     } catch (error) {
-      console.error('Error registrando clic:', error);
+      console.error('Error tracking click:', error);
     }
   };
 
@@ -102,6 +93,17 @@ const CreateAd = () => {
         value={ad.link_url}
         onChange={(e) => setAd({ ...ad, link_url: e.target.value })}
       />
+<select
+  value={ad.page_name}
+  onChange={(e) => setAd({ ...ad, page_name: e.target.value })}
+>
+  <option value="" disabled>Seleccione una página</option>
+  <option value="home">Home</option>
+  <option value="contact">Contacto</option>
+        <option value="history">Historia</option>
+        <option value="faq">Preguntas Frecuentes</option>
+        <option value="announcements">Anuncios</option>
+      </select>
       <button onClick={handleCreateAd}>Crear Anuncio</button>
 
       <h2>Anuncios existentes</h2>
@@ -121,19 +123,18 @@ const CreateAd = () => {
             </>
           ) : (
             <>
-<a 
-  href={ad.link_url} 
-  target="_blank" 
-  rel="noopener noreferrer" 
-  onClick={() => handleAdClick(ad.id, 'http://localhost:3000/announcements')}
->
-  <img 
-    src={ad.image_url} 
-    alt="Ad" 
-    style={{ width: '150px', height: '125px', cursor: 'pointer' }} 
-    onClick={(e) => { e.stopPropagation(); handleAdClick(ad.id); }}
-  />
-</a>
+              <a 
+                href={ad.link_url} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                onClick={() => handleAdClick(ad.id, ad.page_name)}
+              >
+                <img 
+                  src={ad.image_url} 
+                  alt="Ad" 
+                  style={{ width: '150px', height: '125px', cursor: 'pointer' }} 
+                />
+              </a>
               <button onClick={() => setEditingIndex(index)}>Editar</button>
               <button onClick={() => handleDelete(ad.id)}>Eliminar</button>
               <button onClick={() => handleShowDetails(ad.id)}>Detalles</button>
