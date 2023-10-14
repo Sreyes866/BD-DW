@@ -44,7 +44,7 @@ const ListArticles = () => {
 
       axios.get('http://localhost/ServicioJSON.php')
       .then(response => {
-          console.log(response.data);  // Aquí tendrías tu artículo, categorías y subcategorías
+          console.log(response.data);  
       })
       .catch(error => {
           console.error('Hubo un error al obtener los datos:', error);

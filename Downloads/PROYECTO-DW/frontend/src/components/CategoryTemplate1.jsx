@@ -4,7 +4,11 @@ import axios from 'axios';
 import techBackground from './Tecnologia.jpg';  
 import scienceBackground from './ciencia.jpg';  
 import tecnologiaVideo from './tecnologia.mp4';
-// import cienciaVideo from './ciencia.mp4';
+import cienciaVideo from './ciencia.mp4';
+import saludVideo from './salud.mp4';
+import arteVideo from './arte.mp4';
+import negociosVideo from './negocios.mp4';
+import deportesVideo from './deportes.mp4';
 import image1 from './image1.jpg';
 import image2 from './image2.jpg';
 
@@ -16,13 +20,17 @@ const categoryBackgrounds = {
 
 const categoryVideos = {
   'Tecnologia': tecnologiaVideo, 
-  //'Ciencia': 'ciencia.mp4',
+  'Ciencia': cienciaVideo,
+  'Salud': saludVideo,
+  'Arte y cultura': arteVideo,
+  'Negocios y finanzas': negociosVideo,
+  'Deportes': deportesVideo,
   // añade más categorías y sus respectivos videos aquí
 };
 
 const categoryDescriptions = {
   'Tecnologia': 'Esta categoría se dedica a explorar las últimas tendencias, innovaciones y avances en el campo de la tecnología. Desde inteligencia artificial hasta computación en la nube, pasando por desarrollo de software y ciberseguridad, aquí encontrarás artículos detallados que te mantendrán al día en este mundo en constante evolución.',
-  'Ciencia': 'Explora el mundo de la ciencia a través de nuestros artículos.',
+  'Ciencia': 'Las Ciencias engloban un conjunto diverso de disciplinas que estudian la naturaleza y el mundo que nos rodea. Esto incluye la biología, la química, la física, la geología y la astronomía, entre otras. Estas ciencias se centran en comprender los fenómenos naturales y las leyes que rigen el universo, sin limitarse a un tema específico.',
   // añade más categorías y sus respectivas descripciones aquí
 };
 
