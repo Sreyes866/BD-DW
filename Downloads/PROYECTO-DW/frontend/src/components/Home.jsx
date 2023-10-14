@@ -86,13 +86,15 @@ const Home = () => {
               </a>
             </div>
           ))}
-           <h2 className="text-center mt-4">Autores Más Visitados</h2>
+          <h2 className="text-center mt-4">Autores Más Visitados</h2>
       
-        {mostVisitedAuthors.map((author, index) => (
-          <li key={index}>
-            {author.author_id} - {author.total_visits} visitas
-          </li>
-        ))}
+      {mostVisitedAuthors.map((author, index) => (
+        <li key={index}>
+          {author.author_id} - {author.total_visits} visitas
+        </li>
+      ))}
+          
+           
 
         </div>
       </div>
