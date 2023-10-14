@@ -11,35 +11,46 @@ const blogStyle = {
 const titleStyle = {
   fontSize: '2em',
   marginBottom: '20px',
-  textAlign: 'left'
+  textAlign: 'center'  // Cambiado a center
 };
 
 const categoryStyle = {
   color: '#777',
   marginBottom: '10px',
-  textAlign: 'left'
-};
-
-const contentStyle = {
-  fontSize: '1.2em',
-  textAlign: 'left',
-  display: 'inline-block',
-  verticalAlign: 'top',
-  width: '50%'
+  textAlign: 'center'  // Cambiado a center
 };
 
 const authorStyle = {
   color: '#555',
   marginBottom: '10px',
-  textAlign: 'left'
+  textAlign: 'center'  // Cambiado a center
 };
 
-const imageStyle = {
-  maxWidth: '40%',
-  maxHeight: '40%',
-  float: 'right',
-  marginLeft: '10px'
+const contentLeftStyle = {
+  fontSize: '1.2em',
+  textAlign: 'center', // Centrar el texto
+  display: 'inline-block',
+  verticalAlign: 'top',
+  width: '49%', // Ajustar el ancho para dar espacio para el margen
+  marginRight: '1%' // Agregar un pequeño margen a la derecha
 };
+
+const contentRightStyle = {
+  fontSize: '1.2em',
+  textAlign: 'center', // Centrar el texto
+  display: 'inline-block',
+  verticalAlign: 'top',
+  width: '50%'
+};
+
+
+
+
+const imageStyle = {
+  width: '100%',  // Ajustar el ancho al 100% del contenedor
+  height: 'auto'  // Altura automática para mantener las proporciones
+};
+
 
 const Template1 = ({ article, isEditing, handleChange, handleImageChange, categories = [], subcategories = [] }) => {
   // Filtrar subcategorías basadas en la categoría seleccionada
@@ -92,21 +103,25 @@ const Template1 = ({ article, isEditing, handleChange, handleImageChange, catego
         {isEditing ? <input type="text" value={article.author_id} name="author_id" onChange={handleChange} /> : article.author_id}
       </p>
   
-      <div className="content" style={contentStyle}>
-        {isEditing && article.templateType === 'Template1' ? (
-          <>
-            {/* Contenido principal */}
-            <label htmlFor="content">Contenido principal:</label>
-            <textarea
-              id="content"
-              value={article.content}
-              name="content"
-              onChange={handleChange}
-              rows="5"
-              style={{ width: '100%', height: 'auto' }}
-            ></textarea>
+      <div style={contentLeftStyle}>
+        {isEditing ? (
+          <textarea
+            value={article.content}
+            name="content"
+            onChange={handleChange}
+            rows={textAreaRows}
+            style={{ width: '100%', height: 'auto' }}
+          ></textarea>
+        ) : (
+          article.content
+        )}
+        <div style={{width: '100%', textAlign: 'center'}}></div>
+        {article.image ? <img src={`data:image/jpeg;base64,${article.image}`} alt={article.title} style={imageStyle} /> : "Imagen no disponible"}
+      </div>
 
-            {/* Contenido 1 */}
+      <div style={contentRightStyle}>
+        {isEditing ? (
+          <>
             <label htmlFor="content1">Contenido 1:</label>
             <textarea
               id="content1"
@@ -139,29 +154,21 @@ const Template1 = ({ article, isEditing, handleChange, handleImageChange, catego
           </>
         ) : (
           <>
-            <div>{article.content}</div>
             <div>{article.content1}</div>
             <div>{article.content2}</div>
             <div>{article.content3}</div>
           </>
         )}
       </div>
-
+  
       {isEditing && (
         <div>
           <label htmlFor="image">Imagen:</label>
           <input type="file" id="image" onChange={handleImageChange} />
         </div>
       )}
-  
-      {console.log("Debugging article.image:", article.image)}
-      {article.image ? <img src={`data:image/jpeg;base64,${article.image}`} alt={article.title} /> : "Imagen no disponible"}
-
-
-
     </div>
   );
-  
 };
 
 export default Template1;

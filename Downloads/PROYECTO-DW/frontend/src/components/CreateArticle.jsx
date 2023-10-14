@@ -39,10 +39,15 @@ const CreateArticle = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setArticle({ ...article, [name]: value });
+    setArticle(prevArticle => ({
+      ...prevArticle,
+      [name]: value
+    }));
   };
+  
 
   const handleImageChange = (e) => {
+    
     setArticle({ ...article, image: e.target.files[0] });
   };
 
@@ -61,6 +66,7 @@ const CreateArticle = () => {
     formData.append('image', article.image);  
     
     fetch('http://localhost/addarticule.php', {
+      
       method: 'POST',
       body: formData  
     })
@@ -76,26 +82,38 @@ const CreateArticle = () => {
   };
 
   const AdditionalFields = () => {
-    if (article.templateType === 'Template1') {
+    if (article.templateType === 'Template1' || article.templateType === 'Template2') {
       return (
         <>
+          {/* Aquí puedes mantener los campos adicionales para las plantillas 1 y 2 */}
           <div className="form-group">
-            <label htmlFor="content1">Contenido 1</label>
+            <label htmlFor="content1">Contenido Adicional 1</label>
             <textarea id="content1" name="content1" value={article.content1} onChange={handleChange} className="form-control" rows="5"></textarea>
           </div>
           <div className="form-group">
-            <label htmlFor="content2">Contenido 2</label>
+            <label htmlFor="content2">Contenido Adicional 2</label>
             <textarea id="content2" name="content2" value={article.content2} onChange={handleChange} className="form-control" rows="5"></textarea>
           </div>
           <div className="form-group">
-            <label htmlFor="content3">Contenido 3</label>
+            <label htmlFor="content3">Contenido Adicional 3</label>
             <textarea id="content3" name="content3" value={article.content3} onChange={handleChange} className="form-control" rows="5"></textarea>
+          </div>
+        </>
+      );
+    } else if (article.templateType === 'Template3') {
+      return (
+        <>
+          <div className="form-group">
+            <label htmlFor="content1">Contenido Adicional 1</label>
+            <textarea id="content1" name="content1" value={article.content1} onChange={handleChange} className="form-control" rows="5"></textarea>
           </div>
         </>
       );
     }
     return null;
   };
+  
+  
 
   return (
     <div className="container my-5">
@@ -144,8 +162,11 @@ const CreateArticle = () => {
             <option value="Template3">Plantilla 3</option>
           </select>
         </div>
-        
+        {article.templateType === 'Template1' && <Template1 article={article} categories={categories} subcategories={subcategories} />}
+        {article.templateType === 'Template2' && <Template2 article={article} categories={categories} subcategories={subcategories} />}
+        {article.templateType === 'Template3' && <Template3 article={article} categories={categories} subcategories={subcategories} />}
         <AdditionalFields />
+        
         
         <div className="form-group">
           <label htmlFor="image">Imagen</label>
@@ -160,6 +181,7 @@ const CreateArticle = () => {
           Artículo creado con éxito.
         </div>
       )}
+      
     </div>
   );
 };

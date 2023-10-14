@@ -11,18 +11,27 @@ const blogStyle = {
 const titleStyle = {
   fontSize: '2em',
   marginBottom: '20px',
-  textAlign: 'left'
+  textAlign: 'center'
 };
 
 const categoryStyle = {
   color: '#777',
   marginBottom: '10px',
-  textAlign: 'left'
+  textAlign: 'center'
 };
 
-const contentStyle = {
+const contentLeftStyle = {
   fontSize: '1.2em',
-  textAlign: 'left',
+  textAlign: 'center', // Centrar el texto
+  display: 'inline-block',
+  verticalAlign: 'top',
+  width: '47%', // Ajustar el ancho para dar espacio para el margen
+  marginRight: '3%' // Agregar un pequeño margen a la derecha
+};
+
+const contentRightStyle = {
+  fontSize: '1.2em',
+  textAlign: 'center',
   display: 'inline-block',
   verticalAlign: 'top',
   width: '50%'
@@ -31,14 +40,12 @@ const contentStyle = {
 const authorStyle = {
   color: '#555',
   marginBottom: '10px',
-  textAlign: 'left'
+  textAlign: 'center'
 };
 
 const imageStyle = {
-  maxWidth: '40%',
-  maxHeight: '40%',
-  float: 'right',
-  marginLeft: '10px'
+  width: '100%',
+  height: 'auto'
 };
 
 const Template2 = ({ article, isEditing, handleChange, handleImageChange, categories = [], subcategories = [] }) => {
@@ -52,7 +59,7 @@ const Template2 = ({ article, isEditing, handleChange, handleImageChange, catego
   const textAreaRows = article.content ? article.content.split('\n').length : 1;
 
   return (
-    <div className="template1" style={blogStyle}>
+    <div className="template2" style={blogStyle}>
       <h1 style={titleStyle}>
         {isEditing ? (
           <input type="text" value={article.title} name="title" onChange={handleChange} style={{ width: '100%' }} />
@@ -92,76 +99,40 @@ const Template2 = ({ article, isEditing, handleChange, handleImageChange, catego
         {isEditing ? <input type="text" value={article.author_id} name="author_id" onChange={handleChange} /> : article.author_id}
       </p>
   
-      <div className="content" style={contentStyle}>
-        {isEditing && article.templateType === 'Template1' ? (
+      <div style={contentLeftStyle}>
+        {isEditing ? (
           <>
-            {/* Contenido principal */}
-            <label htmlFor="content">Contenido principal:</label>
-            <textarea
-              id="content"
-              value={article.content}
-              name="content"
-              onChange={handleChange}
-              rows="5"
-              style={{ width: '100%', height: 'auto' }}
-            ></textarea>
-
-            {/* Contenido 1 */}
-            <label htmlFor="content1">Contenido 1:</label>
-            <textarea
-              id="content1"
-              value={article.content1}
-              name="content1"
-              onChange={handleChange}
-              rows="5"
-              style={{ width: '100%', height: 'auto' }}
-            ></textarea>
-
-            <label htmlFor="content2">Contenido 2:</label>
-            <textarea
-              id="content2"
-              value={article.content2}
-              name="content2"
-              onChange={handleChange}
-              rows="5"
-              style={{ width: '100%', height: 'auto' }}
-            ></textarea>
-
-            <label htmlFor="content3">Contenido 3:</label>
-            <textarea
-              id="content3"
-              value={article.content3}
-              name="content3"
-              onChange={handleChange}
-              rows="5"
-              style={{ width: '100%', height: 'auto' }}
-            ></textarea>
+            <textarea value={article.content} name="content" onChange={handleChange} rows={textAreaRows} style={{ width: '100%', height: 'auto' }}></textarea>
+            <textarea value={article.content1} name="content1" onChange={handleChange} rows="5" style={{ width: '100%', height: 'auto' }}></textarea>
+            <textarea value={article.content2} name="content2" onChange={handleChange} rows="5" style={{ width: '100%', height: 'auto' }}></textarea>
           </>
         ) : (
           <>
             <div>{article.content}</div>
             <div>{article.content1}</div>
             <div>{article.content2}</div>
-            <div>{article.content3}</div>
           </>
         )}
       </div>
-
+  
+      <div style={contentRightStyle}>
+        {article.image ? <img src={`data:image/jpeg;base64,${article.image}`} alt={article.title} style={imageStyle} /> : "Imagen no disponible"}
+        {isEditing ? (
+          <textarea value={article.content3} name="content3" onChange={handleChange} rows="5" style={{ width: '100%', height: 'auto' }}></textarea>
+        ) : (
+          <div>{article.content3}</div>
+        )}
+      </div>
+  
       {isEditing && (
         <div>
           <label htmlFor="image">Imagen:</label>
           <input type="file" id="image" onChange={handleImageChange} />
         </div>
       )}
-  
-      {console.log("Debugging article.image:", article.image)}
-      {article.image ? <img src={`data:image/jpeg;base64,${article.image}`} alt={article.title} /> : "Imagen no disponible"}
-
-
 
     </div>
   );
-  
 };
 
 export default Template2;
