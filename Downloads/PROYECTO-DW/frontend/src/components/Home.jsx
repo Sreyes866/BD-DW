@@ -5,6 +5,7 @@ import axios from 'axios';
 const Home = () => {
   const [articles, setArticles] = useState([]);
   const [ads, setAds] = useState([]);
+  const [mostVisitedAuthors, setMostVisitedAuthors] = useState([]);  // NUEVO
 
   const fetchArticles = async () => {
     try {
@@ -24,6 +25,16 @@ const Home = () => {
     }
   };
 
+  // NUEVO
+  const fetchMostVisitedAuthors = async () => {
+    try {
+      const response = await axios.get('http://localhost/MostVisitedAuthors.php');
+      setMostVisitedAuthors(response.data);
+    } catch (error) {
+      console.error('Error fetching most visited authors:', error);
+    }
+  };
+
   const handleAdClick = async (adId) => {
     try {
       await axios.post('http://localhost/TrackClick.php', { adId });
@@ -35,6 +46,7 @@ const Home = () => {
   useEffect(() => {
     fetchArticles();
     fetchAds();
+    fetchMostVisitedAuthors();  // NUEVO
   }, []);
 
   const sortedArticles = [...articles].sort((a, b) => b.id - a.id);
@@ -74,6 +86,14 @@ const Home = () => {
               </a>
             </div>
           ))}
+           <h2 className="text-center mt-4">Autores Más Visitados</h2>
+      
+        {mostVisitedAuthors.map((author, index) => (
+          <li key={index}>
+            {author.author_id} - {author.total_visits} visitas
+          </li>
+        ))}
+
         </div>
       </div>
     </div>

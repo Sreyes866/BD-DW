@@ -12,6 +12,24 @@ const ArticlesByCategory = () => {
   const [subcategories, setSubcategories] = useState([]);
   const [selectedTemplate, setSelectedTemplate] = useState('Template1');
 
+  // Función que se llama cuando un artículo es visitado
+  const onArticleVisited = async (articleId) => {
+    const url = `http://localhost/AutoresVisitados.php?id=${articleId}`;
+    console.log(`URL: ${url}`);  // Añade esta línea aquí
+    try {
+      const response = await axios.get(url);
+      if (response.data.includes('Contador de visitas incrementado')) {
+        console.log(`El contador de visitas para el artículo ID: ${articleId} se incrementó exitosamente`);
+      } else {
+        console.log('No se pudo incrementar el contador de visitas:', response.data);
+      }
+    } catch (error) {
+      console.error('Hubo un error al incrementar el contador de visitas:', error);
+    }
+    
+  };
+  
+
   useEffect(() => {
     const fetchAllData = async () => {
       try {
@@ -31,6 +49,13 @@ const ArticlesByCategory = () => {
 
     fetchAllData();
   }, []);
+
+  useEffect(() => {
+    // Incrementa el contador de visitas para cada artículo visitado
+    articles.forEach(article => {
+      onArticleVisited(article.id);
+    });
+  }, [articles]);
 
   const handleChangeTemplate = (e) => {
     setSelectedTemplate(e.target.value);
@@ -66,7 +91,6 @@ const ArticlesByCategory = () => {
       )}
     </div>
   );
-  
 };
 
 export default ArticlesByCategory;
