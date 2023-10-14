@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Template1 from './Template1';
+import Template3 from './Template3';  // Asegúrate de importar la tercera plantilla
+import Template2 from './Template2';  // Asegúrate de importar la tercera plantilla
+
 
 const ListArticles = () => {
   const [articles, setArticles] = useState([]);
@@ -86,6 +89,11 @@ const ListArticles = () => {
       })
       .catch(error => console.error('Error updating article:', error));
   };
+  const [selectedTemplate, setSelectedTemplate] = useState('Template1');
+
+  const handleChangeTemplate = (e) => {
+    setSelectedTemplate(e.target.value);
+  };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -154,29 +162,70 @@ const ListArticles = () => {
 
         <button onClick={applyFilter}>Apply Filter</button>
       </div>
-
+      <div className="container">
+      <div>
+        {/* Selector de plantilla */}
+        <label htmlFor="templateSelector">Elegir plantilla: </label>
+        <select id="templateSelector" onChange={handleChangeTemplate}>
+          <option value="Template1">Plantilla 1</option>
+          <option value="Template2">Plantilla 2</option>
+          <option value="Template3">Plantilla 3</option>
+        </select>
+      </div>
+      </div>
       {filteredArticles.map((article, index) => (
         <div key={index} style={{border: '1px solid #ccc', margin: '20px', padding: '15px'}}>
-          {article.imageURL && <img src={article.imageURL} alt={article.title} />}
+          
           {editingArticle && editingArticle.id === article.id ? (
-            
             <>
-              <Template1 
-                article={editingArticle} 
-                isEditing={true} 
-                handleChange={handleInputChange}
-                categories={categories}
-                subcategories={subcategories}
-              />
+              {selectedTemplate === 'Template1' ? (
+                <Template1 
+                  article={editingArticle} 
+                  isEditing={true} 
+                  handleChange={handleInputChange}
+                  categories={categories}
+                  subcategories={subcategories}
+                />
+              ) : selectedTemplate === 'Template2' ? (
+                <Template2 
+                  article={editingArticle} 
+                  isEditing={true} 
+                  handleChange={handleInputChange}
+                  categories={categories}
+                  subcategories={subcategories}
+                />
+              ) : (
+                <Template3 
+                  article={editingArticle} 
+                  isEditing={true} 
+                  handleChange={handleInputChange}
+                  categories={categories}
+                  subcategories={subcategories}
+                />
+              )}
               <button onClick={handleSave}>Guardar</button>
             </>
           ) : (
             <>
-              <Template1 
-                article={article}
-                categories={categories}
-                subcategories={subcategories}
-              />
+              {selectedTemplate === 'Template1' ? (
+                <Template1 
+                  article={article}
+                  categories={categories}
+                  subcategories={subcategories}
+                />
+              ) : selectedTemplate === 'Template2' ? (
+                <Template2 
+                  article={article}
+                  categories={categories}
+                  subcategories={subcategories}
+                />
+              ) : (
+                <Template3 
+                  article={article}
+                  categories={categories}
+                  subcategories={subcategories}
+                />
+              )}
               <button onClick={() => handleDelete(article.id)}>Eliminar</button>
               <button onClick={() => handleEdit(article)}>Editar</button>
             </>

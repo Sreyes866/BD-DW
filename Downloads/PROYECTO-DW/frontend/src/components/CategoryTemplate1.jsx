@@ -60,7 +60,7 @@ const CategoryTemplate1 = () => {
     const fetchData = async () => {
       try {
         const [articlesRes, categoriesRes, subcategoriesRes] = await Promise.all([
-          axios.get('http://localhost/Articles.php'),
+          axios.get('http://localhost/RecentArticles.php'),
           axios.get('http://localhost/Categories.php'),
           axios.get('http://localhost/Subcategories.php')
         ]);

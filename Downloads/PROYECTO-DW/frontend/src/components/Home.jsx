@@ -9,7 +9,7 @@ const Home = () => {
 
   const fetchArticles = async () => {
     try {
-      const response = await axios.get('http://localhost/Articles.php');
+      const response = await axios.get('http://localhost/RecentArticles.php');
       setArticles(response.data);
     } catch (error) {
       console.error('Error fetching articles:', error);
