@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import AddDetails from './AddDetails';  // Importing AddDetails component
 
 const CreateAd = () => {
   const [ad, setAd] = useState({
@@ -9,6 +10,10 @@ const CreateAd = () => {
 
   const [ads, setAds] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
+
+  const [showDetails, setShowDetails] = useState(false);
+  const [currentAdId, setCurrentAdId] = useState(null);
+  const [adDetails, setAdDetails] = useState(null);
 
   const handleCreateAd = async () => {
     try {
@@ -35,7 +40,6 @@ const CreateAd = () => {
   const handleSave = async (updatedAd) => {
     try {
       const response = await axios.post('http://localhost/UpdateAds.php', updatedAd);
-      console.log('Respuesta del servidor al actualizar:', response.data);  // Debugging line
       if (response.data.message === 'Anuncio actualizado exitosamente') {
         fetchAds();
         setEditingIndex(null);
@@ -44,16 +48,38 @@ const CreateAd = () => {
       console.error('Error updating ad:', error);
     }
   };
-  
+
   const handleDelete = async (id) => {
     try {
       const response = await axios.post('http://localhost/DeleteAds.php', { id });
-      console.log('Respuesta del servidor al eliminar:', response.data);  // Debugging line
       if (response.data.message === 'Anuncio eliminado exitosamente') {
         fetchAds();
       }
     } catch (error) {
       console.error('Error deleting ad:', error);
+    }
+  };
+
+  const handleAdClick = async (adId) => {
+    try {
+      console.log("Registrando clic para el anuncio con ID:", adId);  // Para depuración
+      const response = await axios.post('http://localhost/TrackClick.php', { adId });
+      if (response.data.message === 'Click registrado') {
+        // Aquí podrías actualizar tu estado o hacer algo más
+      }
+    } catch (error) {
+      console.error('Error registrando clic:', error);
+    }
+  };
+
+  const handleShowDetails = async (adId) => {
+    setCurrentAdId(adId);
+    setShowDetails(true);
+    try {
+      const response = await axios.post('http://localhost/GetAdDetails.php', { adId });
+      setAdDetails(response.data);
+    } catch (error) {
+      console.error('Error fetching ad details:', error);
     }
   };
 
@@ -95,9 +121,23 @@ const CreateAd = () => {
             </>
           ) : (
             <>
-              <img src={ad.image_url} alt="Ad" style={{ width: '300px', height: '250px' }} />
+<a 
+  href={ad.link_url} 
+  target="_blank" 
+  rel="noopener noreferrer" 
+  onClick={() => handleAdClick(ad.id, 'http://localhost:3000/announcements')}
+>
+  <img 
+    src={ad.image_url} 
+    alt="Ad" 
+    style={{ width: '150px', height: '125px', cursor: 'pointer' }} 
+    onClick={(e) => { e.stopPropagation(); handleAdClick(ad.id); }}
+  />
+</a>
               <button onClick={() => setEditingIndex(index)}>Editar</button>
               <button onClick={() => handleDelete(ad.id)}>Eliminar</button>
+              <button onClick={() => handleShowDetails(ad.id)}>Detalles</button>
+              {showDetails && currentAdId === ad.id && <AddDetails adId={currentAdId} />}
             </>
           )}
         </div>

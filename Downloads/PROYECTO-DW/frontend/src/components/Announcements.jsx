@@ -4,6 +4,15 @@ import axios from 'axios';
 const Announcements = () => {
   const [ads, setAds] = useState([]);
 
+  const handleAdClick = async (adId) => {
+    try {
+      await axios.post('http://localhost/TrackClick.php', { adId });
+      // Puedes volver a buscar los detalles del anuncio para actualizar la UI si es necesario.
+    } catch (error) {
+      console.error('Error tracking click:', error);
+    }
+  };
+
   useEffect(() => {
     const fetchAds = async () => {
       try {
@@ -21,9 +30,13 @@ const Announcements = () => {
     <div className="announcements-container">
       <h1>Anuncios</h1>
       {ads.map((ad, index) => (
-        <div key={index}>
-          <img src={ad.image_url} alt="Ad" />
-          <a href={ad.link_url} target="_blank" rel="noopener noreferrer">Ver más</a>
+        <div key={index} onClick={() => handleAdClick(ad.id)}>
+<img 
+  src={ad.image_url} 
+  alt="Ad" 
+  style={{ width: '150px', height: '125px', cursor: 'pointer' }} 
+  onClick={(event) => handleAdClick(event, ad.id)}
+/>
         </div>
       ))}
     </div>
