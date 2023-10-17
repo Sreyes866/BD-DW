@@ -91,6 +91,7 @@ label {
   color: white;
 }
 
+/* Dropdowns y submenús */
 .dropdown-submenu {
   position: relative;
 }
@@ -117,42 +118,9 @@ label {
   display: block;
 }
 
-.profile-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
 
-.profile-card {
-  display: flex;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  width: 80%;
-}
 
-.left-section, .right-section {
-  flex: 1;
-  padding: 20px;
-}
-
-.btn-primary {
-  background-color: blue;
-  color: white;
-  padding: 10px;
-  border-radius: 5px;
-  margin-top: 10px;
-}
-
-.article-section h3 {
-  cursor: pointer;
-}
-
-.article-list {
-  padding-left: 20px;
-}
-
+/* Artículos y listas */
 .article-section h3 {
   cursor: pointer;
   padding: 10px;
@@ -174,6 +142,7 @@ label {
   display: block; /* Cuando se hace click */
 }
 
+/* Subscripciones y planes */
 .subscription-container {
   padding: 2rem;
   text-align: center;
@@ -220,21 +189,7 @@ h1 {
   margin-bottom: 0.5rem;
 }
 
-.plan p {
-  font-size: 1.2rem;
-  margin: 1rem 0;
-}
-
-.btn-primary {
-  background-color: blue;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-
+/* Contenedores generales */
 .container {
   margin-top: 2rem;
   padding: 1rem;
@@ -244,7 +199,7 @@ h1 {
   background-color: #fff;
 }
 
-/* Estilos para los inputs de búsqueda y selects de categorías */
+/* Estilos para inputs y selects */
 input[type="text"],
 select {
   margin: 0.5rem 0;
@@ -254,7 +209,7 @@ select {
   width: 100%;
 }
 
-/* Estilos para los botones de ordenación */
+/* Estilos para botones de ordenación */
 .btn-primary,
 .btn-secondary {
   margin: 0.5rem;
@@ -271,7 +226,7 @@ select {
   background-color: #6c757d;
 }
 
-/* Estilos para los cards de los artículos */
+/* Estilos para cards de artículos */
 .card {
   margin: 1rem;
   border: 1px solid #ccc;
@@ -293,103 +248,187 @@ select {
 }
 
 
-:root {
-  /* Definiendo variables para colores y bordes */
-  --primary-color: #007bff;
-  --secondary-color: #6c757d;
-  --background-color: rgb(225, 229, 238);
-  --border-radius: 8px;
+
+/* Estilos generales */
+.form-group {
+  margin-bottom: 1rem;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-/* Fondo y tipografía */
-html, body {
-  background-color: var(--background-color);
-  height: 100%;
-  font-family: 'Georgia', serif;
-  color: #333;
-  line-height: 1.6;
-}
-
-/* Navegación y Botones */
-nav ul {
-  display: flex;
-  list-style: none;
-  padding: 1rem;
-  justify-content: space-between;
-  background-color: var(--primary-color);
-}
-
-nav ul li {
-  margin: 0 1.5rem;
-}
-
-.btn-custom {
-  background-color: var(--primary-color);
+.btn-primary {
+  background-color: #007bff;
   color: white;
+  padding: 10px 20px;
   border: none;
-  border-radius: var(--border-radius);
-  padding: 0.5rem 1rem;
+  border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-.btn-custom:hover {
-  background-color: darken(var(--primary-color), 15%);
+.btn-primary:hover {
+  background-color: #0056b3;
 }
 
-/* Responsividad y mejoras generales */
-@media (max-width: 768px) {
-  nav ul {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  nav ul li {
-    margin: 0.5rem 0;
-  }
+/* Estilos para Register */
+.register-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilos de formulario */
-.form-group {
-  margin-bottom: 1rem;
+/* Estilos para Profile */
+.profile-container {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f4f4f4;  /* Fondo ligeramente gris */
 }
 
-label {
-  margin-bottom: 0.5rem;
-}
-
-input[type="text"],
-input[type="password"],
-input[type="email"],
-button[type="submit"] {
-  padding: 0.5rem;
+.profile-card {
+  width: 80%;
+  padding: 20px;
   border: 1px solid #ccc;
-  border-radius: var(--border-radius);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para la tarjeta */
 }
 
-button[type="submit"] {
-  background-color: var(--primary-color);
+/* Estilos para los botones dentro del perfil */
+.profile-card button {
+  padding: 10px 20px;
+  font-size: 16px;
   color: white;
+  background-color: #26486e; /* Color de fondo */
+  border: none;
+  border-radius: 5px; /* Bordes redondeados */
+  cursor: pointer; /* Cambia el cursor */
+  margin-right: 10px; /* Margen a la derecha */
+  transition: background-color 0.3s ease; /* Transición suave */
+}
+
+.profile-card button:hover {
+  background-color: #45a049; /* Cambio de color al pasar el ratón */
+}
+
+
+/* Estilos para ProcessSubscription */
+.subscription-process-container {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 12px; /* Bordes más redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para más profundidad */
+}
+
+.subscription-process-container button {
+  padding: 12px 24px;
+  background-color: #3498db; /* Color azul */
+  color: white;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-/* Mejoras en contenedores */
-.container,
-.profile-card,
-.login-container {
-  padding: 1rem;
-  border-radius: var(--border-radius);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+.subscription-process-container button:hover {
+  background-color: #2980b9; /* Color azul más oscuro al pasar el ratón */
 }
 
-/* Estilos adicionales */
-/* Aquí puedes agregar más estilos específicos para tus otros componentes */
+
+/* Estilos para ManageUsers */
+/* Contenedor de usuarios */
+.manage-users-container {
+  max-width: 100%;
+  margin: auto;
+  padding: 20px;
+  overflow-x: auto; /* Habilita el desplazamiento horizontal */
+  font-family: 'Arial', sans-serif; /* Cambio de fuente para todo el contenedor */
+}
+
+/* Estilos para la tabla */
+.manage-users-table {
+  width: 100%;
+  border-collapse: collapse;
+  white-space: nowrap;  /* Asegura que el texto no se envuelva y la tabla pueda desplazarse */
+}
+
+/* Cabeza de tabla */
+.manage-users-table thead th {
+  padding: 20px;
+  border-bottom: 1px solid #ccc;
+  font-weight: bold; /* Texto en negrita para encabezados */
+}
+
+/* Cuerpo de tabla */
+.manage-users-table tbody td {
+  padding: 20px;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+}
+
+/* Botones en la tabla */
+.manage-users-table button {
+  padding: 8px 16px; /* Tamaño reducido del botón */
+  background-color: #4CAF50; /* Color de fondo del botón */
+  color: white; /* Color de texto del botón */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 16px; /* Tamaño de fuente más grande para el texto del botón */
+}
+
+.manage-users-table button:hover {
+  background-color: #45a049; /* Color de fondo al pasar el ratón */
+}
+
+/* Campos de entrada */
+.manage-users-table input[type="text"],
+.manage-users-table input[type="email"],
+.manage-users-table select {
+  padding: 12px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px; /* Tamaño de fuente más grande para la entrada de texto */
+}
+
+
+
+
+
+
+/* Estilos para CreateAd */
+.create-ad-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #c0d0f3;
+  border-radius: 12px; /* Bordes más redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para más profundidad */
+}
+
+.create-ad-container button {
+  padding: 12px 24px;
+  background-color: #2d1fa5; /* Color verde */
+  color: rgb(213, 214, 235);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.create-ad-container button:hover {
+  background-color: #260b8a; /* Color verde más oscuro al pasar el ratón */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .subscription-process-container,
+  .manage-users-container,
+  .create-ad-container {
+    padding: 15px;
+    box-shadow: none;
+  }
+}
