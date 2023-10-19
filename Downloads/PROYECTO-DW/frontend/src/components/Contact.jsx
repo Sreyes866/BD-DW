@@ -1,3 +1,4 @@
+// Contact.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -6,17 +7,18 @@ const Contact = () => {
 
   const fetchAds = async () => {
     try {
-        const response = await axios.get('http://localhost/GetAllAds.php');
-        setAds(response.data.filter(ad => ad.page_name === 'announcements'));
+      const response = await axios.get('http://localhost/GetAllAds.php');
+      setAds(response.data.filter(ad => ad.page_name === 'contact'));
     } catch (error) {
       console.error('Error fetching ads:', error);
     }
   };
 
-  
-  const handleAdClick = async (adId) => {
+  const handleAdClick = async (adId, link_url) => {
     try {
-      await axios.post('http://localhost/TrackClick.php', { adId });
+      await axios.post('http://localhost/TrackClick.php', { adId, pageName: 'contact' });
+      // Redireccionar al URL del anuncio
+      window.location.href = link_url;
     } catch (error) {
       console.error('Error tracking click:', error);
     }
@@ -25,17 +27,13 @@ const Contact = () => {
   useEffect(() => {
     fetchAds();
   }, []);
-
+  
   return (
     <div className="contact-container">
       <h1>Contacto</h1>
-
-      {/* Aquí va el contenido principal de la página de contacto */}
-
-      {/* Sección de anuncios */}
       <h2>Anuncios</h2>
       {ads.map((ad, index) => (
-        <div key={index} onClick={() => handleAdClick(ad.id)}>
+        <div key={index} onClick={() => handleAdClick(ad.id, ad.link_url)}>
           <img 
             src={ad.image_url} 
             alt="Ad" 

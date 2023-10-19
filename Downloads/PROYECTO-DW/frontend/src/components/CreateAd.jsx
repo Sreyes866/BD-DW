@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import AddDetails from './AddDetails';  // Asegúrate de importar este componente
+import AddDetails from './AddDetails';
 
 const CreateAd = () => {
-  const [ad, setAd] = useState({ image_url: '', link_url: '', page_name: 'home'});
+  const [ad, setAd] = useState({ image_url: '', link_url: '', page_name: ''});
   const [ads, setAds] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
   const [currentAdId, setCurrentAdId] = useState(null);
@@ -11,11 +11,15 @@ const CreateAd = () => {
   const [adDetails, setAdDetails] = useState(null);
 
   const handleCreateAd = async () => {
+    if (!ad.page_name) {
+      alert('Por favor, seleccione una página.');
+      return;
+    }
     try {
       const response = await axios.post('http://localhost/CreateAd.php', ad);
       if (response.data.message === 'Ad created successfully') {
         alert('Anuncio creado exitosamente');
-        setAd({ image_url: '', link_url: '', page_name: 'home' });
+        setAd({ image_url: '', link_url: '', page_name: '' });
         fetchAds();
       }
     } catch (error) {
@@ -35,7 +39,7 @@ const CreateAd = () => {
   const handleSave = async (updatedAd) => {
     try {
       const response = await axios.post('http://localhost/UpdateAds.php', updatedAd);
-      if (response.data.message === 'Anuncio actualizado exitosamente') {
+      if (response.data.message === 'Ad updated successfully') {
         fetchAds();
         setEditingIndex(null);
       }
@@ -47,7 +51,9 @@ const CreateAd = () => {
   const handleDelete = async (id) => {
     try {
       const response = await axios.post('http://localhost/DeleteAds.php', { id });
-      // rest of the logic
+      if (response.data.message === 'Ad deleted successfully') {
+        fetchAds();
+      }
     } catch (error) {
       console.error('Error deleting ad:', error);
     }
@@ -91,16 +97,16 @@ const CreateAd = () => {
         value={ad.link_url}
         onChange={(e) => setAd({ ...ad, link_url: e.target.value })}
       />
-<select
-  value={ad.page_name}
-  onChange={(e) => setAd({ ...ad, page_name: e.target.value })}
->
-  <option value="" disabled>Seleccione una página</option>
-  <option value="home">Home</option>
-  <option value="contact">Contacto</option>
+      <label>Seleccione una página:</label>
+      <select
+        value={ad.page_name}
+        onChange={(e) => setAd({ ...ad, page_name: e.target.value })}
+      >
+        <option value="" disabled>Seleccione una página</option>
+        <option value="home">Home</option>
+        <option value="contact">Contacto</option>
         <option value="history">Historia</option>
         <option value="faq">Preguntas Frecuentes</option>
-        <option value="announcements">Anuncios</option>
       </select>
       <button onClick={handleCreateAd}>Crear Anuncio</button>
 

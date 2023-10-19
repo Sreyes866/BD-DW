@@ -4,9 +4,9 @@ import axios from 'axios';
 const FAQ = () => {
   const [ads, setAds] = useState([]);
 
-  const handleAdClick = async (adId) => {
+  const handleAdClick = async (adId, pageName) => {
     try {
-      await axios.post('http://localhost/TrackClick.php', { adId });
+      await axios.post('http://localhost/TrackClick.php', { adId, pageName });
     } catch (error) {
       console.error('Error tracking click:', error);
     }
@@ -16,15 +16,15 @@ const FAQ = () => {
     const fetchAds = async () => {
       try {
         const response = await axios.get('http://localhost/GetAllAds.php');
-        setAds(response.data);
+        setAds(response.data.filter(ad => ad.page_name === 'faq'));
       } catch (error) {
         console.error('Error fetching ads:', error);
       }
     };
-
+  
     fetchAds();
   }, []);
-
+  
   return (
     <div className="faq-container">
       <h1>Preguntas Frecuentes</h1>
@@ -38,7 +38,7 @@ const FAQ = () => {
             href={ad.link_url} 
             target="_blank" 
             rel="noopener noreferrer" 
-            onClick={() => handleAdClick(ad.id)}
+            onClick={() => handleAdClick(ad.id, 'faq')}  // Aquí pasamos 'faq' como pageName
           >
             <img 
               src={ad.image_url} 

@@ -16,14 +16,15 @@ const History = () => {
     const fetchAds = async () => {
       try {
         const response = await axios.get('http://localhost/GetAllAds.php');
-        setAds(response.data);
+        setAds(response.data.filter(ad => ad.page_name === 'history'));
       } catch (error) {
         console.error('Error fetching ads:', error);
       }
     };
-
+  
     fetchAds();
   }, []);
+  
 
   return (
     <div className="history-container">

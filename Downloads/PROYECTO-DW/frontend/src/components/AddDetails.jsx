@@ -2,16 +2,14 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const AddDetails = ({ adId }) => {
-  const [adDetails, setAdDetails] = useState(null);
+  const [adDetails, setAdDetails] = useState([]);
 
   const fetchDetails = async () => {
     try {
       const response = await axios.post('http://localhost/GetAdDetails.php', { adId });
+
       if (response.data.status === 'success') {
-        setAdDetails({
-          page_name: response.data.pageName,
-          clicked_at: response.data.totalClicks
-        });
+        setAdDetails(response.data.details);
       } else {
         console.error('Error fetching details:', response.data.message);
       }
@@ -27,8 +25,16 @@ const AddDetails = ({ adId }) => {
   return (
     <div className="add-details-container">
       <h3>Detalles del anuncio:</h3>
-      <p>Página: {adDetails?.page_name || 'Cargando...'}</p>
-      <p>Clics: {adDetails?.clicked_at || 'Cargando...'}</p>
+      {adDetails.length ? (
+        adDetails.map((detail, index) => (
+          <div key={index}>
+            <p>Página: {detail.page_name}</p>
+            <p>Clics: {detail.totalClicks}</p>
+          </div>
+        ))
+      ) : (
+        <p>Cargando...</p>
+      )}
     </div>
   );
 };
