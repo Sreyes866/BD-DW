@@ -25,9 +25,9 @@ const Login = () => {
         setUserRole(response.data.user.role);
         setUserName(response.data.user.name);  // Establece el nombre del usuario
         setUserEmail(response.data.user.email); // Establece el correo del usuario
-        setUserPassword(response.data.user.password); // Establece la contraseña del usuario (Nuevo)
-        setIsSubscribed(response.data.user.is_subscribed); // Establece el estado de la membresía (Nuevo)
-        setExpiryDate(response.data.user.expiryDate); // Establece la fecha de expiración (Nuevo)
+        setUserPassword(response.data.user.password); // Establece la contraseña del usuario 
+        setIsSubscribed(response.data.user.is_subscribed); // Establece el estado de la membresía 
+        setExpiryDate(response.data.user.expiryDate); // Establece la fecha de expiración 
         setUserUsername(username); // Establece el username con el que se inició sesión
         history.push('/home');
     
@@ -56,7 +56,10 @@ const Login = () => {
         </div>
         <button type="submit">Iniciar sesión</button>
       </form>
+      <div className="forgot-password-container">
+      <a href="/forgotPassword" className="forgot-password-link">¿Olvidaste la contraseña?</a>
     </div>
+  </div>
   );
 };
 

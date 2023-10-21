@@ -28,6 +28,8 @@ import EditProfile from './components/EditProfile';
 import CreateAd from './components/CreateAd';
 import ModerateArticles from './components/ModerateArticles';
 import ConfirmationPage from './components/ConfirmationPage';
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
 
 const App = () => {
   const { isLoggedIn, userRole } = useAuth();
@@ -202,7 +204,8 @@ const App = () => {
           <Route path= "/EditProfile" component={EditProfile} />
           <Route path="/create-ad" component={CreateAd} />
           <Route path="/confirm" component={ConfirmationPage} />
-
+          <Route path="/ForgotPassword" component={ForgotPassword} />
+          <Route path="/ResetPassword" component={ResetPassword} />
           <Route path="/moderate-articles">
   {isLoggedIn && userRole === 'admin' ? <ModerateArticles /> : <Redirect to="/login" />}
 </Route>
