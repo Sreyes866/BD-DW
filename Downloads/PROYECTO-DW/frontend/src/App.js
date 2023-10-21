@@ -27,7 +27,7 @@ import ProcessSubscription from './components/ProcessSubscription';
 import EditProfile from './components/EditProfile';
 import CreateAd from './components/CreateAd';
 import ModerateArticles from './components/ModerateArticles';
-
+import ConfirmationPage from './components/ConfirmationPage';
 
 const App = () => {
   const { isLoggedIn, userRole } = useAuth();
@@ -201,6 +201,8 @@ const App = () => {
           <Route path="/process-subscription" component={ProcessSubscription} />
           <Route path= "/EditProfile" component={EditProfile} />
           <Route path="/create-ad" component={CreateAd} />
+          <Route path="/confirm" component={ConfirmationPage} />
+
           <Route path="/moderate-articles">
   {isLoggedIn && userRole === 'admin' ? <ModerateArticles /> : <Redirect to="/login" />}
 </Route>

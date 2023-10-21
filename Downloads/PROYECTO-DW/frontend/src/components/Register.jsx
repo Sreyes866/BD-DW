@@ -1,6 +1,7 @@
 /* global Email */
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import emailjs from 'emailjs-com';
 
 const Register = () => {
   const history = useHistory();
@@ -21,20 +22,18 @@ const Register = () => {
       });
   
       if (response.status === 200 && response.data.message === 'Usuario registrado') {
-        // Enviar correo con SMTP.js
-        Email.send({
-          Host: "smtp.elasticemail.com",
-          Username: "pablo.moralesm355@gmail.com",
-          Password: "BEB68FA1F313F8F30AEFE0E730080185EF09",
-          Port: 2525,
-          To: email,
-          From: "pablo.moralesm355@gmail.com",
-          Subject: "Gracias por registrarte",
-          Body: `<p>Hola ${name},</p><p>Gracias por registrarte en nuestro sitio web.</p>`
-        }).then(
+        // Enviar correo con EmailJS
+        emailjs.send(
+          'service_db-dw', 
+          'template_nzi1pho', 
+          {
+            username: username,
+            to_email: email,
+          },
+          'BLyjSRydByFGcVhN6'
+        ).then(
           message => alert("Correo enviado con éxito")
         );
-        
         
         alert('Se ha enviado un correo electrónico de confirmación. Por favor, confirma tu registro.');
         history.push('/login');
@@ -43,7 +42,7 @@ const Register = () => {
       }
     } catch (error) {
       console.error("Error en la petición:", error);
-      alert('Error al realizar la petición');
+      alert('Usuario ya existente');
     }
   };
 
