@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import emailjs from 'emailjs-com';
 
 const Contact = () => {
   const [ads, setAds] = useState([]);
@@ -25,8 +26,16 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    alert("Mensaje enviado!");
+    const form = e.target;
+
+    emailjs.sendForm('service_db-dw', 'template_0idkwyf', form, 'BLyjSRydByFGcVhN6')
+      .then((result) => {
+          console.log(result.text);
+          alert("Mensaje enviado!");
+      }, (error) => {
+          console.log(error.text);
+          alert("Ocurrió un error al enviar el mensaje. Inténtalo de nuevo.");
+      });
   };
 
   useEffect(() => {
@@ -58,16 +67,16 @@ const Contact = () => {
         <div className="col-md-6">
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <input type="text" className="form-control" placeholder="Nombres" required />
+              <input type="text" className="form-control" name="user_name" placeholder="Nombres" required />
             </div>
             <div className="mb-3">
-              <input type="text" className="form-control" placeholder="Apellidos" required />
+              <input type="text" className="form-control" name="user_surname" placeholder="Apellidos" required />
             </div>
             <div className="mb-3">
-              <input type="email" className="form-control" placeholder="Correo electrónico" required />
+              <input type="email" className="form-control" name="user_email" placeholder="Correo electrónico" required />
             </div>
             <div className="mb-3">
-              <textarea className="form-control" rows="4" placeholder="Comentarios" required></textarea>
+              <textarea className="form-control" name="message" rows="4" placeholder="Comentarios" required></textarea>
             </div>
             <button type="submit" className="btn btn-primary">Enviar</button>
           </form>
