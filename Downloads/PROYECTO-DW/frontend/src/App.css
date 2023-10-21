@@ -396,39 +396,72 @@ select {
 
 
 
-
-
-
-/* Estilos para CreateAd */
+/* CreateAd Container */
 .create-ad-container {
   max-width: 800px;
   margin: auto;
   padding: 20px;
   border: 1px solid #c0d0f3;
-  border-radius: 12px; /* Bordes más redondeados */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para más profundidad */
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.create-ad-container button {
-  padding: 12px 24px;
-  background-color: #2d1fa5; /* Color verde */
+/* CreateAd Buttons */
+.btn-primary {
+  background-color: #2d1fa5;
   color: rgb(213, 214, 235);
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-.create-ad-container button:hover {
-  background-color: #260b8a; /* Color verde más oscuro al pasar el ratón */
+.btn-primary:hover {
+  background-color: #260b8a;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .subscription-process-container,
-  .manage-users-container,
-  .create-ad-container {
-    padding: 15px;
-    box-shadow: none;
-  }
+/* AddDetails Container */
+.add-details-container {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  margin-top: 1rem;
+}
+
+.add-details-container h3 {
+  color: #343a40;
+  margin-bottom: 0.5rem;
+}
+
+/* General Ad Styles */
+.ad-container {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.card-img-top {
+  max-height: 200px;
+  object-fit: cover;
+}
+
+.card-body {
+  text-align: center;
+}
+
+.btn-secondary.ml-2,
+.btn-danger.ml-2,
+.btn-info.ml-2 {
+  margin-top: 10px;
+}
+
+/* Custom spacing */
+.col-md-4 {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+/* Ad container links */
+.ad-container a {
+  text-decoration: none;
+  color: white;
 }

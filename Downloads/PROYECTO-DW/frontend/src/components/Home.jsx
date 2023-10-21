@@ -15,9 +15,11 @@ const Home = () => {
     }
   };
 
-  const handleAdClick = async (adId) => {
+  const handleAdClick = async (adId, link_url, event) => {
+    event.preventDefault();
     try {
-      await axios.post('http://localhost/TrackClick.php', { adId });
+      await axios.post('http://localhost/TrackClick.php', { adId, pageName: 'home' });
+      window.open(link_url, '_blank');
     } catch (error) {
       console.error('Error tracking click:', error);
     }
@@ -59,22 +61,53 @@ const Home = () => {
 
           {/* Sección de anuncios */}
           <h2 className="text-center mt-4">Anuncios</h2>
-          {ads.map((ad, index) => (
-            <div key={index}>
-              <a 
-                href={ad.link_url} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                onClick={() => handleAdClick(ad.id)}
-              >
-                <img 
-                  src={ad.image_url} 
-                  alt="Ad" 
-                  style={{ width: '150px', height: '125px', cursor: 'pointer' }} 
-                />
-              </a>
-            </div>
-          ))}
+          <div className="row justify-content-center">
+            {ads.map((ad, index) => (
+              <div key={index} className="col-md-4 mb-4">
+                <div className="card">
+                  <a 
+                    href={ad.link_url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    onClick={(event) => handleAdClick(ad.id, ad.link_url, event)}
+                  >
+                    <img
+                      className="card-img-top"
+                      src={ad.image_url}
+                      alt="Ad"
+                      style={{ cursor: 'pointer' }}
+                    />
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      
+      {/* Subhome */}
+      <div className="mt-5 p-4 rounded bg-light border">
+        <div className="text-center d-flex justify-content-center">
+          <Link to="/subscribe" className="btn btn-outline-dark mb-3 me-2">Suscríbase</Link>
+          <Link to="/contact" className="btn btn-outline-dark mb-3 me-2">Contáctanos</Link>
+          <Link to="/faq" className="btn btn-outline-dark mb-3 me-2">Preguntas Frecuentes</Link>
+          <Link to="/terms" className="btn btn-outline-dark mb-3">Términos y Condiciones</Link>
+        </div>
+        
+        <div className="d-flex justify-content-between">
+          <div>
+            © 2022-2023 ThinkSphere. Todos los derechos reservados DB-DW S.A.
+          </div>
+          <div className="text-end">
+            <i className="fab fa-facebook-f me-2"></i>
+            <i className="fab fa-twitter me-2"></i>
+            <i className="fab fa-instagram me-2"></i>
+            <i className="fab fa-linkedin-in"></i>
+          </div>
+        </div>
+
+        <div className="text-center mt-2" style={{fontSize: '0.8rem'}}>
+          El uso de ésta página está sujeta a nuestros Términos y Condiciones y Políticas de Privacidad
         </div>
       </div>
     </div>

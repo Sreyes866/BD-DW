@@ -4,9 +4,12 @@ import axios from 'axios';
 const Announcements = () => {
   const [ads, setAds] = useState([]);
 
-  const handleAdClick = async (adId) => {
+  const handleAdClick = async (adId, link_url, event) => {
+    event.preventDefault(); // Evita la recarga de la página
     try {
-      await axios.post('http://localhost/TrackClick.php', { adId });
+      await axios.post('http://localhost/TrackClick.php', { adId, pageName: 'announcements' });
+      // Abre el URL del anuncio en una nueva pestaña
+      window.open(link_url, '_blank');
     } catch (error) {
       console.error('Error tracking click:', error);
     }
@@ -26,24 +29,29 @@ const Announcements = () => {
   }, []);
 
   return (
-    <div className="announcements-container">
-      <h1>Anuncios</h1>
-      {ads.map((ad, index) => (
-        <div key={index}>
-          <a 
-            href={ad.link_url} 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            onClick={() => handleAdClick(ad.id)}
-          >
-            <img 
-              src={ad.image_url} 
-              alt="Ad" 
-              style={{ width: '150px', height: '125px', cursor: 'pointer' }} 
-            />
-          </a>
-        </div>
-      ))}
+    <div className="container text-center">
+      <h1 className="my-4">Anuncios</h1>
+      <div className="row justify-content-center">
+        {ads.map((ad, index) => (
+          <div key={index} className="col-md-4 mb-4">
+            <div className="card">
+              <a 
+                href={ad.link_url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                onClick={(event) => handleAdClick(ad.id, ad.link_url, event)}
+              >
+                <img
+                  className="card-img-top"
+                  src={ad.image_url}
+                  alt="Ad"
+                  style={{ cursor: 'pointer' }}
+                />
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
