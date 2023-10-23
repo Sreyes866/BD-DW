@@ -18,7 +18,7 @@ const Profile = () => {
   const [editDataMode, setEditDataMode] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [changePasswordMode, setChangePasswordMode] = useState(false); // Nuevo estado
+  const [changePasswordMode, setChangePasswordMode] = useState(false);
 
   const fetchUserProfile = async () => {
     try {
@@ -58,7 +58,7 @@ const Profile = () => {
       if (response.data.message === 'Usuario actualizado exitosamente') {
         setEditMode(false);
         setEditDataMode(false);
-        setChangePasswordMode(false); // Reset
+        setChangePasswordMode(false);
       }
     } catch (error) {
       console.error('Error updating user:', error);
@@ -75,7 +75,7 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
-      <h1>Bienvenido, {userName}</h1>
+      <h1>Bienvenido, {currentUser.name}</h1>
       <div className="profile-card">
         {editMode ? (
           <div>
@@ -84,11 +84,20 @@ const Profile = () => {
               <>
                 <div className="input-group">
                   <label>Nombre completo:</label>
-                  <input defaultValue={userName} onChange={(e) => handleInputChange(e, 'name')} />
+                  <input 
+                    readOnly={changePasswordMode}
+                    defaultValue={currentUser.name} 
+                    onChange={(e) => handleInputChange(e, 'name')} 
+                  />
                 </div>
                 <div className="input-group">
                   <label>Email:</label>
-                  <input defaultValue={userEmail} type="email" onChange={(e) => handleInputChange(e, 'email')} />
+                  <input 
+                    readOnly={changePasswordMode}
+                    defaultValue={currentUser.email} 
+                    type="email" 
+                    onChange={(e) => handleInputChange(e, 'email')} 
+                  />
                 </div>
                 {changePasswordMode && (
                   <>
@@ -96,7 +105,7 @@ const Profile = () => {
                       <label>Contraseña:</label>
                       <input 
                         type={showPassword ? "text" : "password"} 
-                        defaultValue={userPassword} 
+                        defaultValue={currentUser.password} 
                         onChange={(e) => handleInputChange(e, 'password')} 
                       />
                     </div>
@@ -113,15 +122,15 @@ const Profile = () => {
                     </button>
                   </>
                 )}
-                <button onClick={() => setChangePasswordMode(true)}>Cambiar Contraseña</button>
+                { !changePasswordMode && <button onClick={() => setChangePasswordMode(true)}>Cambiar Contraseña</button> }
                 <button onClick={handleSaveChanges}>Guardar</button>
                 <button onClick={() => setEditMode(false)}>Cerrar Edición</button>
               </>
             ) : (
               <>
-                <p>Nombre completo: {userName}</p>
-                <p>Nombre de usuario: {userUsername}</p>
-                <p>Email: {userEmail}</p>
+                <p>Nombre completo: {currentUser.name}</p>
+                <p>Nombre de usuario: {currentUser.username}</p>
+                <p>Email: {currentUser.email}</p>
                 <p>Rol: {userRole}</p>
                 <p>Contraseña: ******</p>
                 <p>Membresía: {Number(isSubscribed) === 1 ? "Activa" : "Inactiva"}</p>
@@ -132,7 +141,7 @@ const Profile = () => {
           </div>
         ) : (
           <div>
-            <h2>{userName}</h2>
+            <h2>{currentUser.name}</h2>
             <p>{userRole}</p>
             <button onClick={() => setEditMode(true)}>Editar Perfil</button>
             <button onClick={() => history.push('/subscription')}>Administrar Suscripción</button>
