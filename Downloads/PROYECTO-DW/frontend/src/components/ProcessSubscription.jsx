@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { useHistory } from 'react-router-dom'; 
 
 const ProcessSubscription = () => {
+  const history = useHistory(); // Inicializa useHistory
   const { userUsername, setIsSubscribed, setExpiryDate } = useAuth(); // Obtener setIsSubscribed y setExpiryDate del contexto
   const [cardNumber, setCardNumber] = useState('');
   const [cvv, setCvv] = useState('');
@@ -32,6 +34,7 @@ const ProcessSubscription = () => {
         setIsSubscribed(1);
         setExpiryDate(expiryDate.toISOString().split('T')[0]);
         alert(`Subscription successful. Expires on: ${expiryDate.toLocaleDateString()}`);
+        history.push('/subscription');
       }
     } catch (error) {
       console.error('Error:', error);
