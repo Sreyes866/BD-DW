@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
+  const [search, setSearch] = useState('');  // estado para la búsqueda
   const [editingIndex, setEditingIndex] = useState(null);
   const [newUser, setNewUser] = useState({
     username: '',
@@ -104,11 +105,26 @@ const ManageUsers = () => {
     fetchUsers();
   }, []);
   
+  const filteredUsers = users.filter(user => {
+    return user.username.toLowerCase().includes(search.toLowerCase());
+  });
 
-  return (
-    <div className="manage-users-container">
-      <h1>Administrar Usuarios</h1>
-      <table>
+
+return (
+  <div className="manage-users-container">
+    <h1>Administrar Usuarios</h1>
+    
+    {/* Filtro de búsqueda */}
+    <div className="search-bar">
+      <input
+        type="text"
+        placeholder="Buscar por Usuario"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+    </div>
+    
+    <table>
         <thead>
           <tr>
             <th>Nombre</th>
@@ -123,7 +139,7 @@ const ManageUsers = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user, index) => (
+        {filteredUsers.map((user, index) => (  
             <tr key={index}>
               {editingIndex === index ? (
                 <>
