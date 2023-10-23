@@ -18,6 +18,7 @@ const Profile = () => {
   const [editDataMode, setEditDataMode] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [changePasswordMode, setChangePasswordMode] = useState(false); // Nuevo estado
 
   const fetchUserProfile = async () => {
     try {
@@ -45,7 +46,7 @@ const Profile = () => {
   };
 
   const handleSaveChanges = async () => {
-    if (currentUser.password !== confirmPassword) {
+    if (changePasswordMode && currentUser.password !== confirmPassword) {
       alert('Las contraseñas no coinciden');
       return;
     }
@@ -57,6 +58,7 @@ const Profile = () => {
       if (response.data.message === 'Usuario actualizado exitosamente') {
         setEditMode(false);
         setEditDataMode(false);
+        setChangePasswordMode(false); // Reset
       }
     } catch (error) {
       console.error('Error updating user:', error);
@@ -88,27 +90,30 @@ const Profile = () => {
                   <label>Email:</label>
                   <input defaultValue={userEmail} type="email" onChange={(e) => handleInputChange(e, 'email')} />
                 </div>
-                <div className="input-group">
-                  <label>Contraseña:</label>
-                  <input 
-                    type={showPassword ? "text" : "password"} 
-                    defaultValue={userPassword} 
-                    onChange={(e) => handleInputChange(e, 'password')} 
-                  />
-                </div>
-                {currentUser.password && (
-                  <div className="input-group">
-                    <label>Confirmar Contraseña:</label>
-                    <input 
-                      type="password" 
-                      value={confirmPassword} 
-                      onChange={(e) => setConfirmPassword(e.target.value)} 
-                    />
-                  </div>
+                {changePasswordMode && (
+                  <>
+                    <div className="input-group">
+                      <label>Contraseña:</label>
+                      <input 
+                        type={showPassword ? "text" : "password"} 
+                        defaultValue={userPassword} 
+                        onChange={(e) => handleInputChange(e, 'password')} 
+                      />
+                    </div>
+                    <div className="input-group">
+                      <label>Confirmar Contraseña:</label>
+                      <input 
+                        type="password" 
+                        value={confirmPassword} 
+                        onChange={(e) => setConfirmPassword(e.target.value)} 
+                      />
+                    </div>
+                    <button onClick={togglePasswordVisibility}>
+                      {showPassword ? 'Ocultar' : 'Mostrar'}
+                    </button>
+                  </>
                 )}
-                <button onClick={togglePasswordVisibility}>
-                  {showPassword ? 'Ocultar' : 'Mostrar'}
-                </button>
+                <button onClick={() => setChangePasswordMode(true)}>Cambiar Contraseña</button>
                 <button onClick={handleSaveChanges}>Guardar</button>
                 <button onClick={() => setEditMode(false)}>Cerrar Edición</button>
               </>
@@ -140,4 +145,5 @@ const Profile = () => {
     </div>
   );
 };
+
 export default Profile;
