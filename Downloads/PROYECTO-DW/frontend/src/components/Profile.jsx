@@ -6,23 +6,24 @@ import { useAuth } from '../context/AuthContext';
 const Profile = () => {
   const history = useHistory();
   const { userName, userUsername, userEmail, userRole, userPassword, isSubscribed, expiryDate } = useAuth();
-  
+
   const [currentUser, setCurrentUser] = useState({
     username: userUsername,
     name: userName,
     email: userEmail,
     password: userPassword,
   });
-  
+
   const [editMode, setEditMode] = useState(false);
   const [editDataMode, setEditDataMode] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // Nuevo estado para mostrar/ocultar contraseña
+  const [showPassword, setShowPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const fetchUserProfile = async () => {
     try {
       const response = await axios.post('http://localhost/GetUserProfile.php', { username: userName });
       if (response.data) {
-        // Actualiza el estado según la respuesta del servidor
+        // Actualizar el estado según la respuesta del servidor
       }
     } catch (error) {
       console.error('Error fetching user profile:', error);
@@ -38,15 +39,21 @@ const Profile = () => {
       ...currentUser,
       [field]: e.target.value,
     });
+    if (field === 'password') {
+      setConfirmPassword('');
+    }
   };
 
   const handleSaveChanges = async () => {
+    if (currentUser.password !== confirmPassword) {
+      alert('Las contraseñas no coinciden');
+      return;
+    }
     try {
       const response = await axios.post('http://localhost/UpdateUserProfile.php', {
         action: 'updateUser',
         ...currentUser,
       });
-
       if (response.data.message === 'Usuario actualizado exitosamente') {
         setEditMode(false);
         setEditDataMode(false);
@@ -60,6 +67,10 @@ const Profile = () => {
     setShowPassword(!showPassword);
   };
 
+  const handleLogout = () => {
+    history.push('/login');
+  };
+
   return (
     <div className="profile-container">
       <h1>Bienvenido, {userName}</h1>
@@ -69,20 +80,37 @@ const Profile = () => {
             <h1>Perfil</h1>
             {editDataMode ? (
               <>
-                <label>Nombre completo:</label>
-                <input defaultValue={userName} onChange={(e) => handleInputChange(e, 'name')} />
-                <label>Email:</label>
-                <input defaultValue={userEmail} type="email" onChange={(e) => handleInputChange(e, 'email')} />
-                <label>Contraseña:</label>
-                <input 
-                  type={showPassword ? "text" : "password"} 
-                  defaultValue={userPassword} 
-                  onChange={(e) => handleInputChange(e, 'password')} 
-                />
+                <div className="input-group">
+                  <label>Nombre completo:</label>
+                  <input defaultValue={userName} onChange={(e) => handleInputChange(e, 'name')} />
+                </div>
+                <div className="input-group">
+                  <label>Email:</label>
+                  <input defaultValue={userEmail} type="email" onChange={(e) => handleInputChange(e, 'email')} />
+                </div>
+                <div className="input-group">
+                  <label>Contraseña:</label>
+                  <input 
+                    type={showPassword ? "text" : "password"} 
+                    defaultValue={userPassword} 
+                    onChange={(e) => handleInputChange(e, 'password')} 
+                  />
+                </div>
+                {currentUser.password && (
+                  <div className="input-group">
+                    <label>Confirmar Contraseña:</label>
+                    <input 
+                      type="password" 
+                      value={confirmPassword} 
+                      onChange={(e) => setConfirmPassword(e.target.value)} 
+                    />
+                  </div>
+                )}
                 <button onClick={togglePasswordVisibility}>
                   {showPassword ? 'Ocultar' : 'Mostrar'}
                 </button>
                 <button onClick={handleSaveChanges}>Guardar</button>
+                <button onClick={() => setEditMode(false)}>Cerrar Edición</button>
               </>
             ) : (
               <>
@@ -93,10 +121,9 @@ const Profile = () => {
                 <p>Contraseña: ******</p>
                 <p>Membresía: {Number(isSubscribed) === 1 ? "Activa" : "Inactiva"}</p>
                 {Number(isSubscribed) === 1 && <p>Fecha de expiración: {expiryDate}</p>}
+                <button onClick={() => setEditDataMode(true)}>Editar Datos</button>
               </>
             )}
-            <button onClick={() => setEditMode(false)}>Cerrar Edición</button>
-            <button onClick={() => setEditDataMode(true)}>Editar Datos</button>
           </div>
         ) : (
           <div>
@@ -106,10 +133,10 @@ const Profile = () => {
             <button onClick={() => history.push('/subscription')}>Administrar Suscripción</button>
             <button onClick={() => history.push('/manage-users')}>Administrar Usuarios</button>
             <button onClick={() => history.push('/create-ad')}>Administrar Anuncios</button> 
-
           </div>
         )}
       </div>
+      <button className="logout-button" onClick={handleLogout}>Cerrar sesión</button>
     </div>
   );
 };

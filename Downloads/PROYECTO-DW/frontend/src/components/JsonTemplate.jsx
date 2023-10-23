@@ -5,7 +5,6 @@ const JsonTemplate = () => {
   const [data, setData] = useState({});
 
   useEffect(() => {
-    // Supongamos que jsonData es tu objeto JSON
     const jsonData = {
       title: 'Título del artículo',
       content: 'Contenido aquí',
