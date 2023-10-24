@@ -66,7 +66,7 @@ const CreateArticle = () => {
   
     const formData = new FormData();
     formData.append('title', article.title);
-    formData.append('author_id', article.author_id);
+    formData.append('author_id', userName);
     formData.append('category_id', article.category_id);
     formData.append('sub_category_id', article.sub_category_id);
     formData.append('content', article.content);
