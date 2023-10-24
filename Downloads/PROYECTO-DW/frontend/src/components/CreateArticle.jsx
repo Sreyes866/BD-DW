@@ -22,6 +22,8 @@ const CreateArticle = () => {
   const [subcategories, setSubcategories] = useState([]);
   const [filteredSubcategories, setFilteredSubcategories] = useState([]);
   const [articleCreated, setArticleCreated] = useState(false);
+  const [authors, setAuthors] = useState([]);
+
 
   useEffect(() => {
     axios.get('http://localhost/Categories.php')
@@ -31,6 +33,10 @@ const CreateArticle = () => {
     axios.get('http://localhost/Subcategories.php')
       .then(response => setSubcategories(response.data))
       .catch(error => console.error('Error fetching subcategories:', error));
+
+    axios.get('http://localhost/Users.php')
+      .then(response => setAuthors(response.data))
+      .catch(error => console.error('Error fetching authors:', error));
   }, []);
 
   useEffect(() => {
@@ -126,8 +132,14 @@ const CreateArticle = () => {
         
         <div className="form-group">
           <label htmlFor="author_id">Autor</label>
-          <input type="text" id="author_id" name="author_id" value={article.author_id} onChange={handleChange} className="form-control" />
+          <select id="author_id" name="author_id" value={article.author_id} onChange={handleChange} className="form-control">
+            <option value="" disabled>Seleccione un autor</option>
+            {authors.map((author, index) => (
+              <option key={index} value={author.id}>{author.name}</option>
+            ))}
+          </select>
         </div>
+
         
         <div className="form-group">
           <label htmlFor="content">Contenido de Inicio</label>
