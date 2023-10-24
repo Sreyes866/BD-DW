@@ -64,6 +64,7 @@ const CreateArticle = () => {
     formData.append('content2', article.content2);
     formData.append('content3', article.content3);
     formData.append('image', article.image);  
+    formData.append('template_type', article.templateType);
     
     fetch('http://localhost/addarticule.php', {
       

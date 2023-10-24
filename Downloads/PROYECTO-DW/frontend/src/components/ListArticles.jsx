@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Template1 from './Template1';
-import Template3 from './Template3';  // Asegúrate de importar la tercera plantilla
-import Template2 from './Template2';  // Asegúrate de importar la tercera plantilla
+import Template3 from './Template3';  
+import Template2 from './Template2';  
 
 
 const ListArticles = () => {
@@ -163,69 +163,29 @@ const ListArticles = () => {
         <button onClick={applyFilter}>Apply Filter</button>
       </div>
       <div className="container">
-      <div>
-        {/* Selector de plantilla */}
-        <label htmlFor="templateSelector">Elegir plantilla: </label>
-        <select id="templateSelector" onChange={handleChangeTemplate}>
-          <option value="Template1">Plantilla 1</option>
-          <option value="Template2">Plantilla 2</option>
-          <option value="Template3">Plantilla 3</option>
-        </select>
-      </div>
+      
       </div>
       {filteredArticles.map((article, index) => (
         <div key={index} style={{border: '1px solid #ccc', margin: '20px', padding: '15px'}}>
           
           {editingArticle && editingArticle.id === article.id ? (
             <>
-              {selectedTemplate === 'Template1' ? (
-                <Template1 
-                  article={editingArticle} 
-                  isEditing={true} 
-                  handleChange={handleInputChange}
-                  categories={categories}
-                  subcategories={subcategories}
-                />
-              ) : selectedTemplate === 'Template2' ? (
-                <Template2 
-                  article={editingArticle} 
-                  isEditing={true} 
-                  handleChange={handleInputChange}
-                  categories={categories}
-                  subcategories={subcategories}
-                />
-              ) : (
-                <Template3 
-                  article={editingArticle} 
-                  isEditing={true} 
-                  handleChange={handleInputChange}
-                  categories={categories}
-                  subcategories={subcategories}
-                />
-              )}
+              <ArticleRenderer 
+                article={editingArticle} 
+                isEditing={true} 
+                handleChange={handleInputChange}
+                categories={categories}
+                subcategories={subcategories}
+              />
               <button onClick={handleSave}>Guardar</button>
             </>
           ) : (
             <>
-              {selectedTemplate === 'Template1' ? (
-                <Template1 
-                  article={article}
-                  categories={categories}
-                  subcategories={subcategories}
-                />
-              ) : selectedTemplate === 'Template2' ? (
-                <Template2 
-                  article={article}
-                  categories={categories}
-                  subcategories={subcategories}
-                />
-              ) : (
-                <Template3 
-                  article={article}
-                  categories={categories}
-                  subcategories={subcategories}
-                />
-              )}
+              <ArticleRenderer 
+                article={article}
+                categories={categories}
+                subcategories={subcategories}
+              />
               <button onClick={() => handleDelete(article.id)}>Eliminar</button>
               <button onClick={() => handleEdit(article)}>Editar</button>
             </>
@@ -234,6 +194,21 @@ const ListArticles = () => {
       ))}
     </div>
   );
+   
+
+};
+
+const ArticleRenderer = ({ article, categories, subcategories, isEditing, handleChange }) => {
+  switch(article.template_type) {
+    case 'Template1':
+      return <Template1 article={article} isEditing={isEditing} handleChange={handleChange} categories={categories} subcategories={subcategories} />;
+    case 'Template2':
+      return <Template2 article={article} isEditing={isEditing} handleChange={handleChange} categories={categories} subcategories={subcategories} />;
+    case 'Template3':
+      return <Template3 article={article} isEditing={isEditing} handleChange={handleChange} categories={categories} subcategories={subcategories} />;
+    default:
+      return <p>Plantilla no soportada</p>;
+  }
 };
 
 export default ListArticles;

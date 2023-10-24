@@ -1,20 +1,29 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const ModerateArticles = () => {
   const [articles, setArticles] = useState([]);
 
   useEffect(() => {
-    // Simulación de una llamada a la API para obtener los artículos pendientes de moderación
-    setArticles([
-      { id: 1, title: 'Article 1', status: 'Pending' },
-      { id: 2, title: 'Article 2', status: 'Pending' },
-      { id: 3, title: 'Article 3', status: 'Pending' },
-      
-    ]);
+    
+    axios.get('http://localhost/Articles.php')
+      .then(response => {
+        if (Array.isArray(response.data)) {
+          setArticles(response.data.map(article => ({ 
+            id: article.id, 
+            title: article.title, 
+            status: 'Pending'  
+          })));
+        } else {
+          console.error('Data is not an array:', response.data);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching articles:', error);
+      });
   }, []);
 
   const handleApprove = (id) => {
-    // Simulación de la aprobación del artículo
     const updatedArticles = articles.map(article =>
       article.id === id ? { ...article, status: 'Approved' } : article
     );
@@ -23,7 +32,6 @@ const ModerateArticles = () => {
   };
 
   const handleReject = (id) => {
-    // Simulación del rechazo del artículo
     const updatedArticles = articles.map(article =>
       article.id === id ? { ...article, status: 'Rejected' } : article
     );
@@ -48,3 +56,4 @@ const ModerateArticles = () => {
 };
 
 export default ModerateArticles;
+
