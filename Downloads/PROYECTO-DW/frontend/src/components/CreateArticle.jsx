@@ -3,6 +3,8 @@ import axios from 'axios';
 import Template1 from './Template1';  
 import Template2 from './Template2';
 import Template3 from './Template3';
+import { useAuth } from '../context/AuthContext'; 
+
 
 const CreateArticle = () => {
   const [article, setArticle] = useState({
@@ -23,6 +25,8 @@ const CreateArticle = () => {
   const [filteredSubcategories, setFilteredSubcategories] = useState([]);
   const [articleCreated, setArticleCreated] = useState(false);
   const [authors, setAuthors] = useState([]);
+  const { userName, userRole } = useAuth();
+
 
 
   useEffect(() => {
@@ -132,12 +136,25 @@ const CreateArticle = () => {
         
         <div className="form-group">
           <label htmlFor="author_id">Autor</label>
-          <select id="author_id" name="author_id" value={article.author_id} onChange={handleChange} className="form-control">
-            <option value="" disabled>Seleccione un autor</option>
-            {authors.map((author, index) => (
-              <option key={index} value={author.id}>{author.name}</option>
-            ))}
-          </select>
+          {userRole === 'author' ? (
+            <input
+              type="text"
+              id="author_id"
+              name="author_id"
+              value={userName}
+              readOnly 
+              className="form-control"
+            />
+          ) : (
+            <input
+              type="text"
+              id="author_id"
+              name="author_id"
+              value="No eres un autor"
+              readOnly 
+              className="form-control"
+            />
+          )}
         </div>
 
         
