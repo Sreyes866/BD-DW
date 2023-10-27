@@ -26,6 +26,7 @@ const CreateArticle = () => {
   const [articleCreated, setArticleCreated] = useState(false);
   const [authors, setAuthors] = useState([]);
   const { userName, userRole } = useAuth();
+  const [publishStatus, setPublishStatus] = useState('');
 
 
 
@@ -61,6 +62,12 @@ const CreateArticle = () => {
     setArticle({ ...article, image: e.target.files[0] });
   };
 
+
+  const handlePublishStatus = (status) => {  
+    setPublishStatus(status);
+    
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
   
@@ -75,6 +82,7 @@ const CreateArticle = () => {
     formData.append('content3', article.content3);
     formData.append('image', article.image);  
     formData.append('template_type', article.templateType);
+    formData.append('publish_status', publishStatus);
     
     fetch('http://localhost/addarticule.php', {
       
@@ -203,17 +211,32 @@ const CreateArticle = () => {
           <input type="file" id="image" onChange={handleImageChange} className="form-control-file" />
         </div>
 
+        <div className="form-group">  
+          <label htmlFor="publishStatus">Estado de Publicación</label>
+          <select id="publishStatus" name="publishStatus" value={publishStatus} onChange={(e) => setPublishStatus(e.target.value)} className="form-control">
+            <option value="" disabled>Seleccione el estado</option>
+            <option value="Published">Publicar</option>
+            <option value="Draft">Borrador</option>
+          </select>
+        </div>
+
         <button type="submit" className="btn btn-primary">Crear</button>
       </form>
 
       {articleCreated && (
+      <div>
         <div className="alert alert-success">
           Artículo creado con éxito.
         </div>
-      )}
-      
-    </div>
-  );
+        <div className="alert alert-info">
+          ¿Quieres publicar este artículo ahora?
+          <button onClick={() => handlePublishStatus('Published')}>Publicar</button>
+          <button onClick={() => handlePublishStatus('Draft')}>Guardar como borrador</button>
+        </div>
+      </div>
+    )}
+  </div>
+);
 };
 
 export default CreateArticle;
