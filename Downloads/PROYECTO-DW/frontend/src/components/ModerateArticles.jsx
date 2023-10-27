@@ -15,7 +15,7 @@ const ModerateArticles = () => {
         if (Array.isArray(response.data)) {
           setArticles(response.data.map(article => ({
             ...article,
-            status: 'Pending'
+            status: article.approval_status 
           })));
         } else {
           console.error('Data is not an array:', response.data);
@@ -82,7 +82,9 @@ const ModerateArticles = () => {
     <div>
       <h1>Moderate Articles</h1>
       <ul>
-        {articles.map((article) => (
+        {articles
+          .filter(article => article.status === 'Pending')
+          .map((article) => (
           <li key={article.id}>
             <ArticleRenderer article={article} categories={categories} subcategories={subcategories} />
             <button onClick={() => handleApprove(article.id)}>Approve</button>
