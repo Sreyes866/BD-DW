@@ -57,6 +57,13 @@ const ListArticles = () => {
   };
 
   useEffect(() => {
+    // Asume que cada artículo tiene una propiedad 'approval_status' que puede ser 'Approved' o 'Rejected'
+    const approvedArticles = articles.filter(article => article.approval_status === 'Approved');
+    setFilteredArticles(approvedArticles);
+  }, [articles]);
+  
+
+  useEffect(() => {
     fetchData();
   }, []);
 
