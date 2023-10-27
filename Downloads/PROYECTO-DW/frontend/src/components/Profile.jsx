@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 const Profile = () => {
   const history = useHistory();
   const { userName, userUsername, userEmail, userRole, userPassword, isSubscribed, expiryDate } = useAuth();
+  const { resetAuth } = useAuth(); // REINICIAR SESION
 
   const [currentUser, setCurrentUser] = useState({
     username: userUsername,
@@ -70,8 +71,10 @@ const Profile = () => {
   };
 
   const handleLogout = () => {
-    history.push('/login');
+    resetAuth(); 
+    history.push('/home'); 
   };
+
 
   return (
     <div className="profile-container">

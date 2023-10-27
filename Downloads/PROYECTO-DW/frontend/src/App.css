@@ -586,3 +586,21 @@ select {
   border: 1px solid #817e7e;
   border-radius: 4px;
 }
+
+
+.my-articles-container {
+  padding: 20px;
+}
+
+.article-section h3 {
+  cursor: pointer;
+}
+
+.article-list {
+  display: none;
+  margin-top: 10px;
+}
+
+.article-list.show {
+  display: block;
+}
