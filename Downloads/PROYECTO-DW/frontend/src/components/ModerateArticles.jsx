@@ -39,18 +39,31 @@ const ModerateArticles = () => {
   }, []);
 
   const handleApprove = (id) => {
-    const updatedArticles = articles.map(article =>
-      article.id === id ? { ...article, status: 'Approved' } : article
-    );
-    setArticles(updatedArticles);
+    axios.post('http://localhost/updateApprovalStatus.php', { id, status: 'Approved' })
+      .then(response => {
+        const updatedArticles = articles.map(article =>
+          article.id === id ? { ...article, status: 'Approved' } : article
+        );
+        setArticles(updatedArticles);
+      })
+      .catch(error => {
+        console.error('Error updating approval status:', error);
+      });
   };
-
+  
   const handleReject = (id) => {
-    const updatedArticles = articles.map(article =>
-      article.id === id ? { ...article, status: 'Rejected' } : article
-    );
-    setArticles(updatedArticles);
+    axios.post('http://localhost/updateApprovalStatus.php', { id, status: 'Rejected' })
+      .then(response => {
+        const updatedArticles = articles.map(article =>
+          article.id === id ? { ...article, status: 'Rejected' } : article
+        );
+        setArticles(updatedArticles);
+      })
+      .catch(error => {
+        console.error('Error updating rejected status:', error);
+      });
   };
+  
 
   const ArticleRenderer = ({ article, categories, subcategories }) => {
     switch(article.template_type) {
