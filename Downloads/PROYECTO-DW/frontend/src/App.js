@@ -191,12 +191,13 @@ return (
         <Route path="/announcements"><Announcements /></Route>
         <Route path="/profile">{isLoggedIn ? <Profile /> : <Redirect to="/login" />}</Route>
         <Route path="/manage-users">{isLoggedIn && userRole === 'admin' ? <ManageUsers /> : <Redirect to="/login" />}</Route>
-        <Route path="/article/:id">{isLoggedIn ? <ArticleDetail articles={articles} deleteArticle={deleteArticle} updateArticle={updateArticle} /> : <Redirect to="/login" />}</Route>
-
+        <Route path="/article/:id">
+  <ArticleDetail articles={articles} deleteArticle={deleteArticle} updateArticle={updateArticle} />
+</Route>
                 <Route path="/my-articles">
           {isRouteAllowed('/my-articles') ? <MyArticles /> : <Redirect to="/login" />}
         </Route>
-
+        
                 <Route path="/subscription" component={Subscription} />
 
                 <Route path="/Managecategories">
