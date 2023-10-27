@@ -1,24 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 const MyArticles = () => {
   const [showArticles, setShowArticles] = useState({ published: false, drafts: false, review: false });
   const [articles, setArticles] = useState([]);
+  const { userName } = useAuth();
+
+  useEffect(() => {
+    axios.get('http://localhost/Articles.php')
+      .then(response => {
+        const myArticles = response.data.filter(article => article.author_id === userName);
+        setArticles(myArticles);
+      })
+      .catch(error => console.error('Error:', error));
+  }, [userName]);
 
   const toggleShowArticles = (type) => {
     setShowArticles({ ...showArticles, [type]: !showArticles[type] });
   };
 
-  useEffect(() => {
-    axios.get('http://localhost/Articles.php')
-      .then(response => {
-        setArticles(response.data);
-      })
-      .catch(error => console.error('Error fetching articles:', error));
-  }, []);
-
   const publishedArticles = articles.filter(article => article.approval_status === 'Approved');
-  const draftArticles = articles.filter(article => article.publish_status === 'Draft');  
+  const draftArticles = articles.filter(article => article.publish_status === 'Draft');
   const reviewArticles = articles.filter(article => article.approval_status === 'Pending');
 
   return (
@@ -46,4 +49,5 @@ const MyArticles = () => {
 };
 
 export default MyArticles;
+
 
