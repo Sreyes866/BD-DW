@@ -11,9 +11,10 @@ const ManageUsers = () => {
     email: '',
     role: '',
     password: '',
+    nationality: '',
     is_subscribed: '0',
     expiryDate: null,
-    is_active: 1 // Default to active
+    is_active: 1
   });
 
   const fetchUsers = async () => {
@@ -56,9 +57,10 @@ const ManageUsers = () => {
           email: '', 
           role: '', 
           password: '', 
+          nationality: '',
           is_subscribed: '0', 
           expiryDate: null,
-          is_active: 1
+          is_active: 1 // Añadido el campo nationality
         });
       }
     } catch (error) {
@@ -82,13 +84,14 @@ const ManageUsers = () => {
 
   const handleSave = async (user) => {
     try {
-      const { name, email, role, expiryDate, is_active } = user;
+      const { name, email, role, expiryDate, is_active, nationality } = user; // Añadido nationality
       const response = await axios.post('http://localhost/UpdateUserProfileAdmin.php', {
         action: 'updateUser',
         username: user.username,
         name,
         email,
         role,
+        nationality,
         expiryDate,
         is_active
       });
@@ -132,6 +135,7 @@ return (
             <th>Correo</th>
             <th>Rol</th>
             <th>Contraseña</th>
+            <th>Nacionalidad</th>
             <th>Membresía</th>
             <th>Fecha de expiración</th>
             <th>Estado</th>
@@ -148,6 +152,7 @@ return (
                   <td><input defaultValue={user.email} onChange={(e) => user.email = e.target.value} /></td>
                   <td><input defaultValue={user.role} onChange={(e) => user.role = e.target.value} /></td>
                   <td>●●●●●●</td>
+                  <td><input defaultValue={user.nationality} onChange={(e) => user.nationality = e.target.value} /></td>
                   <td>{user.is_subscribed === '1' ? 'Activa' : 'Inactiva'}</td>
                   <td>{user.is_subscribed === '1' ? <input type="date" defaultValue={user.expiryDate} onChange={(e) => user.expiryDate = e.target.value} /> : 'N/A'}</td>
                   <td>{parseInt(user.is_active) === 1 ? 'Activo' : 'Inactivo'}</td>
@@ -164,6 +169,7 @@ return (
                   <td>{user.email}</td>
                   <td>{user.role}</td>
                   <td>●●●●●●</td>
+                  <td>{user.nationality}</td>
                   <td>{user.is_subscribed === '1' ? 'Activa' : 'Inactiva'}</td>
                   <td>{user.expiryDate}</td>
                   <td>{parseInt(user.is_active) === 1 ? 'Activo' : 'Inactivo'}</td>
@@ -185,6 +191,7 @@ return (
       <input placeholder="Correo" value={newUser.email} onChange={(e) => setNewUser({...newUser, email: e.target.value})} />
       <input placeholder="Rol" value={newUser.role} onChange={(e) => setNewUser({...newUser, role: e.target.value})} />
       <input type="password" placeholder="Contraseña" value={newUser.password} onChange={(e) => setNewUser({...newUser, password: e.target.value})} />
+      <input placeholder="Nacionalidad" value={newUser.nationality} onChange={(e) => setNewUser({...newUser, nationality: e.target.value})} />
       <select value={newUser.is_subscribed} onChange={(e) => setNewUser({...newUser, is_subscribed: e.target.value, expiryDate: e.target.value === "0" ? null : newUser.expiryDate})}>
         <option value="0">Inactiva</option>
         <option value="1">Activa</option>
