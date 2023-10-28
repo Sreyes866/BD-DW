@@ -16,6 +16,10 @@ const ListArticles = () => {
   const [selectedAuthor, setSelectedAuthor] = useState('');
   const [sortOrder, setSortOrder] = useState('');
   const [editingArticle, setEditingArticle] = useState(null);
+  const [selectedNationality, setSelectedNationality] = useState([]);
+  const [users, setUsers] = useState([]);
+
+
 
   const fetchData = () => {
     axios.get('http://localhost/Articles.php')
@@ -52,12 +56,20 @@ const ListArticles = () => {
       .catch(error => {
           console.error('Hubo un error al obtener los datos:', error);
       });
+      
+      axios.get('http://localhost/Users.php') 
+      .then(response => {
+        setUsers(response.data);
+      })
+      .catch(error => console.error('Error fetching users:', error)); 
+
+
   
 
   };
 
   useEffect(() => {
-    // Asume que cada artículo tiene una propiedad 'approval_status' que puede ser 'Approved' o 'Rejected'
+    
     const approvedArticles = articles.filter(article => article.approval_status === 'Approved');
     setFilteredArticles(approvedArticles);
   }, [articles]);
@@ -107,8 +119,15 @@ const ListArticles = () => {
     setEditingArticle({ ...editingArticle, [name]: value });
   };
 
+  const authorToNationality = {};
+    users.forEach(user => {
+      authorToNationality[user.name] = user.nationality;
+    });
+
   const applyFilter = () => {
     let newFilteredArticles = [...articles];
+
+    newFilteredArticles = newFilteredArticles.filter(article => article.approval_status === 'Approved');
 
     if (selectedCategory) {
       newFilteredArticles = newFilteredArticles.filter(article => article.category_id === selectedCategory);
@@ -128,6 +147,10 @@ const ListArticles = () => {
       newFilteredArticles.sort((a, b) => b.title.localeCompare(a.title));
     }
 
+   if (selectedNationality) {
+      newFilteredArticles = newFilteredArticles.filter(article => authorToNationality[article.author_id] === selectedNationality);
+    }
+    
     setFilteredArticles(newFilteredArticles);
   };
 
@@ -166,6 +189,20 @@ const ListArticles = () => {
           <option value="asc">Ascending</option>
           <option value="desc">Descending</option>
         </select>
+
+        <select onChange={(e) => setSelectedNationality(e.target.value)}>
+          <option value="">Select Nationality</option>
+          {Array.from(new Set(users.map(user => user.nationality))).map((nationality, index) => (
+            <option key={index} value={nationality}>
+              {nationality}
+            </option>
+          ))}
+        </select>
+
+
+
+
+
 
         <button onClick={applyFilter}>Apply Filter</button>
       </div>
