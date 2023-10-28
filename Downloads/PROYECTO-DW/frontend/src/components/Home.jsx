@@ -5,11 +5,21 @@ import axios from 'axios';
 const Home = () => {
   const [articles, setArticles] = useState([]);
   const [ads, setAds] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
 
   const fetchArticles = async () => {
     try {
       const response = await axios.get('http://localhost/Articles.php');
-      setArticles(response.data);
+      const updatedArticles = response.data.map(article => {
+        if (article.image) {
+          const blob = new Blob([article.image], { type: 'image/jpeg' });
+          article.imageURL = URL.createObjectURL(blob);
+        }
+        return article;
+      });
+      
+      setArticles(updatedArticles);
     } catch (error) {
       console.error('Error fetching articles:', error);
     }
@@ -27,6 +37,14 @@ const Home = () => {
 
   useEffect(() => {
     fetchArticles();
+
+    axios.get('http://localhost/Categories.php')
+      .then(response => setCategories(response.data))
+      .catch(error => console.error('Error fetching categories:', error));
+
+    axios.get('http://localhost/Subcategories.php')
+      .then(response => setSubcategories(response.data))
+      .catch(error => console.error('Error fetching subcategories:', error));
     
     const fetchAds = async () => {
       try {
@@ -40,26 +58,26 @@ const Home = () => {
     fetchAds();
   }, []);
 
-  const sortedArticles = [...articles].sort((a, b) => b.id - a.id);
-  const recentArticles = sortedArticles.slice(0, 10);
-
   return (
     <div className="container my-5">
       <div className="row justify-content-center">
         <div className="col-12 col-md-8">
           <h2 className="text-center mb-4">Artículos Recientes</h2>
           <div className="list-group">
-            {recentArticles.map((article, index) => (
-              <Link to={`/article/${article.id}`} key={index} className="list-group-item list-group-item-action">
-                <div className="d-flex w-100 justify-content-between">
-                  <h5 className="mb-1">{article.title}</h5>
-                  <small>Categoría: {article.category}</small>
-                </div>
-              </Link>
-            ))}
+            {articles.map((article, index) => {
+              const categoryName = categories.find(cat => cat.id === article.category_id)?.name || 'Desconocido';
+              const subcategoryName = subcategories.find(sub => sub.id === article.sub_category_id)?.name || 'Desconocido';
+              return (
+                <Link to={`/article/${article.id}`} key={index} className="list-group-item list-group-item-action">
+                  <div className="d-flex w-100 justify-content-between">
+                    <h5 className="mb-1">{article.title}</h5>
+                    <small>Categoría: {categoryName} / Subcategoría: {subcategoryName}</small>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
 
-          {/* Sección de anuncios */}
           <h2 className="text-center mt-4">Anuncios</h2>
           <div className="row justify-content-center">
             {ads.map((ad, index) => (
@@ -84,8 +102,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      
-      {/* Subhome */}
+
       <div className="mt-5 p-4 rounded bg-light border">
         <div className="text-center d-flex justify-content-center">
           <Link to="/subscribe" className="btn btn-outline-dark mb-3 me-2">Suscríbase</Link>
