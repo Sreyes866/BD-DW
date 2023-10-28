@@ -27,15 +27,28 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
-
-    emailjs.sendForm('service_db-dw', 'template_0idkwyf', form, 'BLyjSRydByFGcVhN6')
-      .then((result) => {
-          console.log(result.text);
-          alert("Mensaje enviado!");
-      }, (error) => {
-          console.log(error.text);
-          alert("Ocurrió un error al enviar el mensaje. Inténtalo de nuevo.");
-      });
+    const userEmail = form.user_email.value; // Obtén el valor del campo de correo electrónico
+    
+    // Añadir comprobación para userEmail
+    if (!userEmail) {
+      alert("Por favor, introduce una dirección de correo electrónico.");
+      return;
+    }
+  
+    emailjs.send(
+      'service_db-dw',
+      'template_0idkwyf',
+      {
+        user_email: userEmail,
+      },
+      'BLyjSRydByFGcVhN6'
+    ).then(
+      () => alert("Correo enviado con éxito"),
+      (error) => {
+        console.log(error.text);
+        alert("Ocurrió un error al enviar el mensaje. Inténtalo de nuevo.");
+      }
+    );
   };
 
   useEffect(() => {
@@ -70,7 +83,7 @@ const Contact = () => {
               <input type="text" className="form-control" name="user_name" placeholder="Nombres" required />
             </div>
             <div className="mb-3">
-              <input type="text" className="form-control" name="user_surname" placeholder="Apellidos" required />
+              <input type="text" className="form-control" name="user_lastname" placeholder="Apellidos" required />
             </div>
             <div className="mb-3">
               <input type="email" className="form-control" name="user_email" placeholder="Correo electrónico" required />
