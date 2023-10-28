@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import Template1 from './Template1';
+import Template2 from './Template2';
+import Template3 from './Template3';
 
 const MyArticles = () => {
   const [showArticles, setShowArticles] = useState({ published: false, drafts: false, review: false });
@@ -29,25 +32,45 @@ const MyArticles = () => {
       <div className="article-section">
         <h3 onClick={() => toggleShowArticles('published')}>Artículos Publicados</h3>
         <div className={`article-list ${showArticles.published ? 'show' : ''}`}>
-          {publishedArticles.map(article => <div key={article.id}>{article.title}</div>)}
+          {publishedArticles.map(article => (
+            <ArticleRenderer key={article.id} article={article} />
+          ))}
         </div>
       </div>
       <div className="article-section">
         <h3 onClick={() => toggleShowArticles('drafts')}>Artículos sin Publicar (Drafts)</h3>
         <div className={`article-list ${showArticles.drafts ? 'show' : ''}`}>
-          {draftArticles.map(article => <div key={article.id}>{article.title}</div>)}
+          {draftArticles.map(article => (
+            <ArticleRenderer key={article.id} article={article} />
+          ))}
         </div>
       </div>
       <div className="article-section">
         <h3 onClick={() => toggleShowArticles('review')}>Artículos en Revisión</h3>
         <div className={`article-list ${showArticles.review ? 'show' : ''}`}>
-          {reviewArticles.map(article => <div key={article.id}>{article.title}</div>)}
+          {reviewArticles.map(article => (
+            <ArticleRenderer key={article.id} article={article} />
+          ))}
         </div>
       </div>
     </div>
   );
 };
 
+const ArticleRenderer = ({ article }) => {
+  switch(article.template_type) {
+    case 'Template1':
+      return <Template1 article={article} />;
+    case 'Template2':
+      return <Template2 article={article} />;
+    case 'Template3':
+      return <Template3 article={article} />;
+    default:
+      return <p>Plantilla no soportada</p>;
+  }
+};
+
 export default MyArticles;
+
 
 
