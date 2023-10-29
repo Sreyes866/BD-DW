@@ -6,7 +6,9 @@ import { useHistory } from 'react-router-dom';
 const SubscriptionStatus = () => {
   const [subscriptionStatus, setSubscriptionStatus] = useState('Inactiva');
   const [expiryDate, setExpiryDate] = useState(null);
+  const [discountPercentage, setDiscountPercentage] = useState(null);
   const { userUsername } = useAuth();
+  const { userEmail } = useAuth(); 
   const history = useHistory();
 
   const fetchSubscriptionStatus = async () => {
@@ -19,8 +21,25 @@ const SubscriptionStatus = () => {
     }
   };
 
+
+  const fetchDiscount = async () => {
+    try {
+      const response = await axios.post('http://localhost/sendAutomaticOffers.php');
+      const usersWithOffers = response.data;
+      const userOffer = usersWithOffers.find(u => u.email === userEmail);  // Utilizar userEmail para la comparación
+      if (userOffer) {
+        setDiscountPercentage(userOffer.offer_details.discount_percentage);
+      }
+    } catch (error) {
+      console.error('Error al obtener el descuento:', error);
+    }
+  };
+  
+
+
   useEffect(() => {
     fetchSubscriptionStatus();
+    fetchDiscount();
   }, [userUsername]);
 
   const handlePurchaseClick = () => {
@@ -39,6 +58,9 @@ const handleCancelSubscription = async () => {
     console.error('Error al enviar la petición de cancelación:', error);
   }
 };
+
+const originalPrice = 469.99;
+const discountedPrice = discountPercentage ? originalPrice * (1 - discountPercentage / 100) : null;
 
   return (
     <div className="subscription-container">
@@ -62,14 +84,21 @@ const handleCancelSubscription = async () => {
           <button className="btn btn-primary" onClick={handlePurchaseClick}>Comprar</button>
         </div>
         <div className="plan">
-          <h2>Anual</h2>
+        <h2>Anual</h2>
           <ul>
             <li>Libre de Anuncios: Disfrutarás de una experiencia de lectura sin interrupciones publicitarias.</li>
             <li>Interacción con Autores: Posibilidad de participar en discusiones y preguntas directas a los autores.</li>
             <li>Múltiples Dispositivos: Puedes tener hasta 4 dispositivos activos con una sola membresía, lo que brinda flexibilidad.</li>
             <li>Descargas de Artículos: La capacidad de descargar artículos para leer sin conexión en tus dispositivos.</li>
           </ul>
-          <p>Q469.99/1 año</p>
+          {discountPercentage ? (
+            <>
+              <p style={{textDecoration: 'line-through'}}>Q{originalPrice.toFixed(2)}/1 año</p>
+              <p>Q{discountedPrice.toFixed(2)}/1 año con {discountPercentage}% de descuento</p>
+            </>
+          ) : (
+            <p>Q{originalPrice.toFixed(2)}/1 año</p>
+          )}
           <button className="btn btn-primary" onClick={handlePurchaseClick}>Comprar</button>
         </div>
       </div>
@@ -77,6 +106,5 @@ const handleCancelSubscription = async () => {
     <p>La suscripción se renueva automáticamente</p>
   </div>
 );
-};
-
+          };
 export default SubscriptionStatus;
