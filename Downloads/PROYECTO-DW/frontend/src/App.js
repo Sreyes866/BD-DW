@@ -36,7 +36,6 @@ import MyArticles from './components/MyArticles';
 import OnDemandOffer from './components/OnDemandOffer';
 import AutomaticOffer from './components/AutomaticOffer';
 
-
 const App = () => {
   const { isLoggedIn, userRole } = useAuth();
 

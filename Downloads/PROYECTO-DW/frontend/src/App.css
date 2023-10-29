@@ -604,3 +604,76 @@ select {
 .article-list.show {
   display: block;
 }
+
+
+.automatic-offer-container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+  background-color: #f1f5f9;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px #aaa;
+}
+
+.form-section, .offers-section, .offer-details {
+  margin-bottom: 20px;
+}
+
+h1, h2, h3 {
+  color: #1a73e8;
+}
+
+label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+select {
+  padding: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  background-color: #1a73e8;
+  color: white;
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #155a8a;
+}
+
+.offers-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.offer-card {
+  width: 30%;
+  margin: 10px;
+  padding: 15px;
+  background-color: #e3f2fd;
+  border: 1px solid #bbdefb;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.offer-card:hover {
+  background-color: #bbdefb;
+}
+
+.edit-section {
+  background-color: #e8f0fe;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+.buttons-section {
+  margin-top: 10px;
+}
