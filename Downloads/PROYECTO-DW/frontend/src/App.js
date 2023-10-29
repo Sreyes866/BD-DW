@@ -161,7 +161,7 @@ return (
   {isRouteAllowed('/ManageCategories') && <li className="nav-item"><Link className="nav-link" to="/ManageCategories">Gestionar Categorías</Link></li>}
   {isRouteAllowed('/ManageSubcategories') && <li className="nav-item"><Link className="nav-link" to="/ManageSubcategories">Gestionar Subcategorías</Link></li>}
   {isRouteAllowed('/moderate-articles') && <li className="nav-item"><Link className="nav-link" to="/moderate-articles">Moderar Artículos</Link></li>}
-  {isRouteAllowed('/my-articles') && <li className="nav-item"><Link className="nav-link" to="/my-articles">Mis Artículos</Link></li>}s
+  {isRouteAllowed('/my-articles') && <li className="nav-item"><Link className="nav-link" to="/my-articles">Mis Artículos</Link></li>}
 </>
               ) : (
                 <li className="nav-item dropdown">

@@ -9,6 +9,8 @@ const AutomaticOffer = () => {
   const [selectedConfig, setSelectedConfig] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [activeOffers, setActiveOffers] = useState({});
+  const [sentToUsers, setSentToUsers] = useState([]); // Agregado
+  const [showSentInfo, setShowSentInfo] = useState(false); // Agregado
   const [formData, setFormData] = useState({
     discount_percentage: 5,
     validity_days: 1,
@@ -59,6 +61,15 @@ const AutomaticOffer = () => {
     const offerToActivate = configs.find(config => config.id === id);
     if (offerToActivate) {
       sendAutomaticEmail(offerToActivate);
+      fetch('http://localhost/sendAutomaticOffers.php')
+        .then(response => response.json())
+        .then(data => {
+          setSentToUsers(data);
+          setShowSentInfo(true);
+        })
+        .catch(error => {
+          console.error("Hubo un error al obtener la lista de usuarios:", error);
+        });
     }
   };
 
@@ -134,11 +145,25 @@ const AutomaticOffer = () => {
                 </div>
               </div>
             )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+  </div>
+)}
+      {showSentInfo && (
+        <div className="sent-info-popup">
+          <h2>Información de Envío</h2>
+          <p>Se ha enviado la oferta a:</p>
+          <ul>
+            {sentToUsers.map((user, index) => (
+              <li key={index}>
+                {user.name} al correo {user.email}
+              </li>
+            ))}
+          </ul>
+          <button onClick={() => setShowSentInfo(false)}>Cerrar</button>
+  </div>
+)}
+</div>
+</div>
+);
 };
 
 export default AutomaticOffer;
