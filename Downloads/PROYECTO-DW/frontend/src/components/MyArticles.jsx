@@ -71,26 +71,38 @@ const MyArticles = () => {
     article => article.approval_status === 'Pending' && article.publish_status !== 'Draft'
   );
 
+  const handlePublish = (article) => {
+    axios.post('http://localhost/publishArticle.php', { id: article.id })
+      .then(response => {
+        fetchData();
+      })
+      .catch(error => console.error('Error publishing article:', error));
+  };
+
+
   return (
     <div className="container">
       <div className="article-section">
         <h3>Artículos Publicados</h3>
         {publishedArticles.map((article, index) => (
-          <ArticleRenderer key={index} article={article} categories={categories} subcategories={subcategories} isEditing={editingArticle?.id === article.id} handleChange={handleInputChange} handleEdit={handleEdit} handleSave={handleSave} handleDelete={handleDelete} />
+          <ArticleRenderer key={index} article={article} categories={categories} subcategories={subcategories} isEditing={editingArticle?.id === article.id} handleChange={handleInputChange} handleEdit={handleEdit} handleSave={handleSave} handleDelete={handleDelete} handlePublish={handlePublish} />
+
         ))}
       </div>
 
       <div className="article-section">
         <h3>Artículos sin Publicar (Drafts)</h3>
         {draftArticles.map((article, index) => (
-          <ArticleRenderer key={index} article={article} categories={categories} subcategories={subcategories} isEditing={editingArticle?.id === article.id} handleChange={handleInputChange} handleEdit={handleEdit} handleSave={handleSave} handleDelete={handleDelete} />
+          <ArticleRenderer key={index} article={article} categories={categories} subcategories={subcategories} isEditing={editingArticle?.id === article.id} handleChange={handleInputChange} handleEdit={handleEdit} handleSave={handleSave} handleDelete={handleDelete} handlePublish={handlePublish} />
+
         ))}
       </div>
 
       <div className="article-section">
         <h3>Artículos en Revisión</h3>
         {reviewArticles.map((article, index) => (
-          <ArticleRenderer key={index} article={article} categories={categories} subcategories={subcategories} isEditing={editingArticle?.id === article.id} handleChange={handleInputChange} handleEdit={handleEdit} handleSave={handleSave} handleDelete={handleDelete} />
+          <ArticleRenderer key={index} article={article} categories={categories} subcategories={subcategories} isEditing={editingArticle?.id === article.id} handleChange={handleInputChange} handleEdit={handleEdit} handleSave={handleSave} handleDelete={handleDelete} handlePublish={handlePublish} />
+
         ))}
       </div>
     </div>
@@ -110,7 +122,7 @@ const renderTemplate = (article, isEditing, handleChange, categories, subcategor
   }
 };
 
-const ArticleRenderer = ({ article, categories, subcategories, isEditing, handleChange, handleEdit, handleSave, handleDelete }) => {
+const ArticleRenderer = ({ article, categories, subcategories, isEditing, handleChange, handleEdit, handleSave, handleDelete, handlePublish }) => {
   return (
     <div style={{ border: '1px solid #ccc', margin: '20px', padding: '15px' }}>
       {isEditing ? (
@@ -124,12 +136,12 @@ const ArticleRenderer = ({ article, categories, subcategories, isEditing, handle
           {renderTemplate(article, false, null, categories, subcategories)}
           <button onClick={() => handleEdit(article)}>Editar</button>
           <button onClick={() => handleDelete(article.id)}>Eliminar</button>
+          {article.publish_status === 'Draft' && <button onClick={() => handlePublish(article)}>Publicar</button>}
         </>
       )}
     </div>
   );
 };
-
 
 export default MyArticles;
 
