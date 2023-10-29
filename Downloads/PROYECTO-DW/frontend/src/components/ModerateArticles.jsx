@@ -83,7 +83,7 @@ const ModerateArticles = () => {
       <h1>Moderate Articles</h1>
       <ul>
         {articles
-          .filter(article => article.status === 'Pending')
+          .filter(article => article.status === 'Pending' && article.publish_status !== 'Draft')
           .map((article) => (
           <li key={article.id}>
             <ArticleRenderer article={article} categories={categories} subcategories={subcategories} />
