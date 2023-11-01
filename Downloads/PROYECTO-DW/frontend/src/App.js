@@ -221,7 +221,7 @@ return (
           {isRouteAllowed('/automatic-offer') ? <AutomaticOffer /> : <Redirect to="/login" />}
         </Route>
         <Route path="/on-demand-offer">
-          {isRouteAllowed('/on-demand-offer') ? <OnDemandOffer /> : <Redirect to="/login" />}
+          {isRouteAllowed('/on-demand-offer') ? <OnDemandOffer /> : <Redirect to="/on-demand-offer" />}
         </Route>
         <Route path="/process-subscription" component={ProcessSubscription} />
         <Route path="/EditProfile" component={EditProfile} />

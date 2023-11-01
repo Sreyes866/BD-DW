@@ -677,3 +677,79 @@ button:hover {
 .buttons-section {
   margin-top: 10px;
 }
+
+
+
+.demand-offer-container {
+  width: 100%;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.form-section,
+.offers-section,
+.offer-details {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form-section label,
+.offers-section label,
+.offer-details label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-section input,
+.form-section select,
+.offers-section input,
+.offers-section select,
+.offer-details input,
+.offer-details select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.offers-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.offer-card {
+  width: 200px;
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.offer-details {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.offer-details table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.offer-details th,
+.offer-details td {
+  border: 1px solid #ccc;
+  text-align: left;
+  padding: 8px;
+}
+
+.offer-details th {
+  background-color: #f2f2f2;
+}

@@ -7,6 +7,7 @@ const SubscriptionStatus = () => {
   const [subscriptionStatus, setSubscriptionStatus] = useState('Inactiva');
   const [expiryDate, setExpiryDate] = useState(null);
   const [discountPercentage, setDiscountPercentage] = useState(null);
+  const [onDemandDiscount, setOnDemandDiscount] = useState(null);
   const { userUsername } = useAuth();
   const { userEmail } = useAuth(); 
   const history = useHistory();
@@ -35,11 +36,24 @@ const SubscriptionStatus = () => {
     }
   };
   
+  const fetchOnDemandDiscount = async () => {
+    try {
+      const response = await axios.post('http://localhost/sendOnDemandOffer.php');
+      const offers = response.data;
+      const userOffer = offers.find(offer => offer.users.some(u => u.username === userUsername));
+      if (userOffer) {
+        setOnDemandDiscount(userOffer.discount_percentage);
+      }
+    } catch (error) {
+      console.error('Error al obtener el descuento bajo demanda:', error);
+    }
+  };
 
 
   useEffect(() => {
     fetchSubscriptionStatus();
     fetchDiscount();
+    fetchOnDemandDiscount();
   }, [userUsername]);
 
   const handlePurchaseClick = () => {
@@ -61,6 +75,9 @@ const handleCancelSubscription = async () => {
 
 const originalPrice = 469.99;
 const discountedPrice = discountPercentage ? originalPrice * (1 - discountPercentage / 100) : null;
+
+const finalDiscount = onDemandDiscount || discountPercentage;
+
 
   return (
     <div className="subscription-container">
@@ -85,26 +102,27 @@ const discountedPrice = discountPercentage ? originalPrice * (1 - discountPercen
         </div>
         <div className="plan">
         <h2>Anual</h2>
-          <ul>
-            <li>Libre de Anuncios: Disfrutarás de una experiencia de lectura sin interrupciones publicitarias.</li>
-            <li>Interacción con Autores: Posibilidad de participar en discusiones y preguntas directas a los autores.</li>
-            <li>Múltiples Dispositivos: Puedes tener hasta 4 dispositivos activos con una sola membresía, lo que brinda flexibilidad.</li>
-            <li>Descargas de Artículos: La capacidad de descargar artículos para leer sin conexión en tus dispositivos.</li>
-          </ul>
-          {discountPercentage ? (
-            <>
-              <p style={{textDecoration: 'line-through'}}>Q{originalPrice.toFixed(2)}/1 año</p>
-              <p>Q{discountedPrice.toFixed(2)}/1 año con {discountPercentage}% de descuento</p>
-            </>
-          ) : (
-            <p>Q{originalPrice.toFixed(2)}/1 año</p>
-          )}
-          <button className="btn btn-primary" onClick={handlePurchaseClick}>Comprar</button>
-        </div>
+        <ul>
+          <li>Libre de Anuncios: Disfrutarás de una experiencia de lectura sin interrupciones publicitarias.</li>
+          <li>Interacción con Autores: Posibilidad de participar en discusiones y preguntas directas a los autores.</li>
+          <li>Múltiples Dispositivos: Puedes tener hasta 4 dispositivos activos con una sola membresía, lo que brinda flexibilidad.</li>
+          <li>Descargas de Artículos: La capacidad de descargar artículos para leer sin conexión en tus dispositivos.</li>
+        </ul>
+        {(discountPercentage || finalDiscount) ? (
+          <>
+            <p style={{textDecoration: 'line-through'}}>Q{originalPrice.toFixed(2)}/1 año</p>
+            <p>Q{(originalPrice * (1 - (discountPercentage || finalDiscount) / 100)).toFixed(2)}/1 año con {(discountPercentage || finalDiscount)}% de descuento</p>
+          </>
+        ) : (
+          <p>Q{originalPrice.toFixed(2)}/1 año</p>
+        )}
+        <button className="btn btn-primary" onClick={handlePurchaseClick}>Comprar</button>
       </div>
-    )}
-    <p>La suscripción se renueva automáticamente</p>
-  </div>
+    </div>
+  )}
+  <p>La suscripción se renueva automáticamente</p>
+</div>
 );
+
           };
 export default SubscriptionStatus;
