@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import PremiumCategoriesManager from './PremiumCategoriesManager';
 
 const Profile = () => {
   const history = useHistory();
@@ -150,6 +151,7 @@ const Profile = () => {
             <button onClick={() => history.push('/subscription')}>Administrar Suscripción</button>
             <button onClick={() => history.push('/manage-users')}>Administrar Usuarios</button>
             <button onClick={() => history.push('/create-ad')}>Administrar Anuncios</button> 
+            {userRole === 'admin' && <PremiumCategoriesManager />}
           </div>
         )}
       </div>
