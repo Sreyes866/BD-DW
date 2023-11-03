@@ -153,6 +153,7 @@ const Profile = () => {
   <>
     <button onClick={() => history.push('/manage-users')}>Administrar Usuarios</button>
     <button onClick={() => history.push('/create-ad')}>Administrar Anuncios</button>
+    <button onClick={() => history.push('/authors-articles')}>Administrar Autores</button>
   </>
 )}
 

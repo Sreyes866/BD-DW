@@ -35,6 +35,9 @@ import Search from "./components/Search";
 import MyArticles from './components/MyArticles';
 import OnDemandOffer from './components/OnDemandOffer';
 import AutomaticOffer from './components/AutomaticOffer';
+import AuthorsArticles from './components/AuthorsArticles.jsx';
+
+
 
 const App = () => {
   const { isLoggedIn, userRole } = useAuth();
@@ -96,7 +99,7 @@ const App = () => {
   };
 
   const routesForRole = {
-    admin: ['/home', '/contact', '/history', '/faq', '/announcements', '/list-articles', '/profile', '/ManageCategories', '/ManageSubcategories', '/automatic-offer', '/on-demand-offer'],
+    admin: ['/home', '/contact', '/history', '/faq', '/announcements', '/list-articles', '/profile', '/ManageCategories', '/ManageSubcategories', '/automatic-offer', '/on-demand-offer', '/authors-articles'],
     moderator: ['/home', '/contact', '/history', '/faq', '/announcements', '/list-articles', '/profile', '/moderate-articles'],
     author: ['/home', '/contact', '/history', '/faq', '/announcements', '/create-article', '/list-articles', '/profile', '/my-articles'],
     logged_in_visitor: ['/home', '/contact', '/history', '/faq', '/announcements', '/list-articles', '/profile'],
@@ -233,6 +236,11 @@ return (
         <Route path="/create-ad">
   {userRole === 'admin' ? <CreateAd /> : <Redirect to="/login" />}
 </Route>
+
+
+<Route path="/authors-articles">
+          {isRouteAllowed('/authors-articles') ? <AuthorsArticles /> : <Redirect to="/authors-articles" />}
+        </Route>
 
         <Route path="/confirm" component={ConfirmationPage} />
         <Route path="/ForgotPassword" component={ForgotPassword} />
