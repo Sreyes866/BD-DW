@@ -149,8 +149,13 @@ const Profile = () => {
             <p>{userRole}</p>
             <button onClick={() => setEditMode(true)}>Editar Perfil</button>
             <button onClick={() => history.push('/subscription')}>Administrar Suscripción</button>
-            <button onClick={() => history.push('/manage-users')}>Administrar Usuarios</button>
-            <button onClick={() => history.push('/create-ad')}>Administrar Anuncios</button> 
+            {userRole === 'admin' && (
+  <>
+    <button onClick={() => history.push('/manage-users')}>Administrar Usuarios</button>
+    <button onClick={() => history.push('/create-ad')}>Administrar Anuncios</button>
+  </>
+)}
+
             {userRole === 'admin' && <PremiumCategoriesManager />}
           </div>
         )}
