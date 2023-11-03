@@ -7,6 +7,8 @@ const Home = () => {
   const [ads, setAds] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
+  const [mostVisitedAuthors, setMostVisitedAuthors] = useState([]);
+
 
   const fetchArticles = async () => {
     try {
@@ -35,8 +37,19 @@ const Home = () => {
     }
   };
 
+  const fetchMostVisitedAuthors = async () => {
+    try {
+      const response = await axios.get('http://localhost/MostVisitedAuthors.php');
+      setMostVisitedAuthors(response.data);
+    } catch (error) {
+      console.error('Error fetching most visited authors:', error);
+    }
+  };
+
   useEffect(() => {
     fetchArticles();
+    fetchMostVisitedAuthors();
+
 
     axios.get('http://localhost/Categories.php')
       .then(response => setCategories(response.data))
@@ -58,30 +71,55 @@ const Home = () => {
     fetchAds();
   }, []);
 
+  
+
   return (
     <div className="container my-5">
       <div className="row justify-content-center">
         <div className="col-12 col-md-8">
           <h2 className="text-center mb-4">Artículos Recientes</h2>
-          <div className="list-group">
+          <div className="article-grid">
             {articles.map((article, index) => {
               const categoryName = categories.find(cat => cat.id === article.category_id)?.name || 'Desconocido';
               const subcategoryName = subcategories.find(sub => sub.id === article.sub_category_id)?.name || 'Desconocido';
               return (
-                <Link to={`/article/${article.id}`} key={index} className="list-group-item list-group-item-action">
-                  <div className="d-flex w-100 justify-content-between">
-                    <h5 className="mb-1">{article.title}</h5>
-                    <small>Categoría: {categoryName} / Subcategoría: {subcategoryName}</small>
+                <Link to={`/article/${article.id}`} key={index} className="article-card">
+                  <div className="article-image-container">
+                    {article.image && (
+                      <img 
+                        className="article-image"
+                        src={`data:image/jpeg;base64,${article.image}`} 
+                        alt={article.title}
+                      />
+                    )}
+                  </div>
+                  <div className="article-content">
+                    <h5 className="article-title">{article.title}</h5>
+                    <div className="article-metadata">
+                      <small>Categoría: {categoryName}</small>
+                      <small>Subcategoría: {subcategoryName}</small>
+                    </div>
                   </div>
                 </Link>
               );
             })}
           </div>
 
+                    {/* Sección de Autores Más Visitados */}
+                    <h2 className="text-center mt-4">Autores Más Visitados</h2>
+          <div className="list-group">
+            {mostVisitedAuthors.map((author, index) => (
+              <div key={index} className="list-group-item">
+                <span>Autor: {author.author}</span>
+                <span> - Visitas Totales: {author.total_visits}</span>
+              </div>
+            ))}
+          </div>
+
           <h2 className="text-center mt-4">Anuncios</h2>
-          <div className="row justify-content-center">
+          <div className="ads-grid">
             {ads.map((ad, index) => (
-              <div key={index} className="col-md-4 mb-4">
+              <div key={index} className="ad-card">
                 <div className="card">
                   <a 
                     href={ad.link_url} 
@@ -90,9 +128,9 @@ const Home = () => {
                     onClick={(event) => handleAdClick(ad.id, ad.link_url, event)}
                   >
                     <img
-                      className="card-img-top"
-                      src={ad.image_url}
-                      alt="Ad"
+                className="ad-image"
+                src={ad.image_url}
+                alt="Anuncio"
                       style={{ cursor: 'pointer' }}
                     />
                   </a>

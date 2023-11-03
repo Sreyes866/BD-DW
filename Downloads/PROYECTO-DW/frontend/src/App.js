@@ -203,7 +203,11 @@ return (
         <Route path="/articles/:category/:subCategory"><ArticlesByCategory fetchedArticles={fetchedArticles} /></Route>
         <Route path="/announcements"><Announcements /></Route>
         <Route path="/profile">{isLoggedIn ? <Profile /> : <Redirect to="/login" />}</Route>
-        <Route path="/manage-users">{isLoggedIn && userRole === 'admin' ? <ManageUsers /> : <Redirect to="/login" />}</Route>
+
+        <Route path="/manage-users">
+  {userRole === 'admin' ? <ManageUsers /> : <Redirect to="/login" />}
+</Route>
+
         <Route path="/article/:id">
   <ArticleDetail articles={articles} deleteArticle={deleteArticle} updateArticle={updateArticle} />
 </Route>
@@ -225,7 +229,11 @@ return (
         </Route>
         <Route path="/process-subscription" component={ProcessSubscription} />
         <Route path="/EditProfile" component={EditProfile} />
-        <Route path="/create-ad" component={CreateAd} />
+
+        <Route path="/create-ad">
+  {userRole === 'admin' ? <CreateAd /> : <Redirect to="/login" />}
+</Route>
+
         <Route path="/confirm" component={ConfirmationPage} />
         <Route path="/ForgotPassword" component={ForgotPassword} />
         <Route path="/ResetPassword" component={ResetPassword} />
