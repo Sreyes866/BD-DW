@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import PremiumCategoriesManager from './PremiumCategoriesManager';
+import AssignCategoriesToAuthor from './AssignCategoriesToAuthor';
 
 const Profile = () => {
   const history = useHistory();
@@ -158,6 +159,7 @@ const Profile = () => {
 )}
 
             {userRole === 'admin' && <PremiumCategoriesManager />}
+            {userRole === 'admin' && <AssignCategoriesToAuthor />}
           </div>
         )}
       </div>
