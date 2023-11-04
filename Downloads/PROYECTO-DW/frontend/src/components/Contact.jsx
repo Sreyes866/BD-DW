@@ -61,15 +61,15 @@ const Contact = () => {
       <div className="row my-5">
         <div className="col-md-4">
           <h3>Dirección</h3>
-          <p>1234 Calle Principal, Ciudad, País</p>
+          <p>Km. 19.2. Carr. a Fraijanes, Guatemala</p>
         </div>
         <div className="col-md-4">
           <h3>Teléfonos</h3>
-          <p>+1 (123) 456-7890</p>
+          <p>+(502) 6665-3700</p>
         </div>
         <div className="col-md-4">
           <h3>Correo Electrónico</h3>
-          <p>info@empresa.com</p>
+          <p>thinksphereteam@gmail.com</p>
         </div>
       </div>
       <div className="row my-5">

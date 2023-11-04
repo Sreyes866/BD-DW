@@ -40,8 +40,7 @@ const History = () => {
           </h2>
           <div id="collapseHistory" className="accordion-collapse collapse show" aria-labelledby="headingHistory" data-bs-parent="#historyAccordion">
             <div className="accordion-body">
-              ThinkSphere fue fundada en 2010 con la visión de ser líder en soluciones tecnológicas...
-            </div>
+            "Desde su inicio en 2023, nuestra revista en línea se ha destacado por su diversidad y amplitud de contenido. Inicialmente concebida como un proyecto que abarcaba múltiples áreas de interés, hemos crecido constantemente para convertirnos en una plataforma integral que atiende las necesidades informativas de una audiencia global diversa. Nuestra historia es la de la adaptación continua y el compromiso de ofrecer una amplia variedad de artículos de alta calidad."            </div>
           </div>
         </div>
         <div className="accordion-item">
@@ -52,8 +51,7 @@ const History = () => {
           </h2>
           <div id="collapseMission" className="accordion-collapse collapse" aria-labelledby="headingMission" data-bs-parent="#historyAccordion">
             <div className="accordion-body">
-              Nuestra misión es mejorar la eficiencia de las empresas a través de soluciones tecnológicas innovadoras...
-            </div>
+            "Nuestra misión es proporcionar a nuestros lectores una experiencia enriquecedora a través de una amplia gama de artículos que abordan diversas categorías y subcategorías. Nos esforzamos por ser un recurso confiable para aquellos que buscan información, entretenimiento e inspiración en áreas que van desde la tecnología hasta el arte, la ciencia y la cultura. Nuestro objetivo es ser una fuente de conocimiento versátil que enriquece la vida de nuestros lectores."            </div>
           </div>
         </div>
         <div className="accordion-item">
@@ -64,8 +62,7 @@ const History = () => {
           </h2>
           <div id="collapseVision" className="accordion-collapse collapse" aria-labelledby="headingVision" data-bs-parent="#historyAccordion">
             <div className="accordion-body">
-              Nuestra visión es ser la empresa líder en tecnología y consultoría a nivel global...
-            </div>
+            "Nuestra visión es convertirnos en un destino en línea de primera elección para aquellos que buscan explorar un mundo diverso de conocimiento y entretenimiento. Aspiramos a ser una plataforma global que inspire, eduque y entretenga a nuestra audiencia a través de una amplia variedad de artículos. Buscamos ampliar continuamente nuestras categorías y subcategorías para mantenernos relevantes y emocionantes para nuestros lectores en constante evolución."            </div>
           </div>
         </div>
       </div>
