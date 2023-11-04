@@ -25,16 +25,13 @@ const CreateArticle = () => {
   const [filteredSubcategories, setFilteredSubcategories] = useState([]);
   const [articleCreated, setArticleCreated] = useState(false);
   const [authors, setAuthors] = useState([]);
-  const { userName, userRole } = useAuth();
+  const { userName, userRole, userId } = useAuth();
   const [publishStatus, setPublishStatus] = useState('');
 
 
 
-  useEffect(() => {
-    axios.get('http://localhost/Categories.php')
-      .then(response => setCategories(response.data))
-      .catch(error => console.error('Error fetching categories:', error));
 
+  useEffect(() => {
     axios.get('http://localhost/Subcategories.php')
       .then(response => setSubcategories(response.data))
       .catch(error => console.error('Error fetching subcategories:', error));
@@ -47,6 +44,38 @@ const CreateArticle = () => {
   useEffect(() => {
     setFilteredSubcategories(subcategories.filter(sub => sub.category_id === article.category_id));
   }, [article.category_id, subcategories]);
+
+  useEffect(() => {
+    console.log(`Current user role: ${userRole}, User ID: ${userId}`);
+    if (userRole === 'author' && userId) {
+      axios.get(`http://localhost/AssignedCategories.php?author_id=${userId}`)
+        .then(response => {
+          console.log('Assigned categories to author:', response.data);
+          const categoriesData = response.data.categories; // Aquí accedes al array dentro del objeto
+          if (Array.isArray(categoriesData)) {
+            setCategories(categoriesData);
+          } else {
+            console.log('Expected an array for categories, but got:', categoriesData);
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching assigned categories:', error);
+        });
+    } else {
+      // Fetch all categories if the user is not an author
+      axios.get('http://localhost/Categories.php')
+        .then(response => {
+          if (Array.isArray(response.data)) {
+            setCategories(response.data);
+          } else {
+            console.error('Expected an array for categories, but got:', response.data);
+          }
+        })
+        .catch(error => console.error('Error fetching all categories:', error));
+    }}, [userId, userRole]);
+  
+  
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -103,7 +132,9 @@ const CreateArticle = () => {
   const AdditionalFields = () => {
     if (article.templateType === 'Template1' || article.templateType === 'Template2') {
       return (
-        <>
+          
+      <>
+      
           
           <div className="form-group">
             <label htmlFor="content1">Contenido Adicional 1</label>
@@ -172,14 +203,17 @@ const CreateArticle = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="category_id">Categoría</label>
-          <select id="category_id" name="category_id" value={article.category_id} onChange={handleChange} className="form-control">
-            <option value="" disabled>Seleccione una categoría</option>
-            {categories.map((category, index) => (
-              <option key={index} value={category.id}>{category.name}</option>
-            ))}
-          </select>
-        </div>
+            <label htmlFor="category_id">Categoría</label>
+            <select id="category_id" name="category_id" value={article.category_id} onChange={handleChange} className="form-control">
+              <option value="" disabled>Seleccione una categoría</option>
+              {categories.map((category, index) => (
+                // Asegúrate de que el valor de 'category.id' sea el esperado y coincida con el valor que usa la subcategoría para filtrar.
+                <option key={index} value={category.id}>{category.name}</option>
+              ))}
+            </select>
+          </div>
+
+
 
         <div className="form-group">
           <label htmlFor="sub_category_id">Subcategoría</label>
