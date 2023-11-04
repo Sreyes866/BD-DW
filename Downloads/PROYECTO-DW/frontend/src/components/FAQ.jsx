@@ -34,7 +34,7 @@ const FAQ = () => {
         {/* Aquí vienen las preguntas y respuestas */}
         {[
           { question: '¿Cómo creo un artículo?', answer: 'Dirígete a la sección "Crear Artículo" y sigue las instrucciones.' },
-          { question: '¿Cómo me registro?', answer: 'Haz clic en "Registrarse" en la esquina superior derecha y completa el formulario.' },
+          { question: '¿Cómo me registro?', answer: 'Haz clic en "Iniciar" en la esquina superior derecha y completa el formulario.' },
           { question: '¿Cómo inicio sesión?', answer: 'Haz clic en "Iniciar Sesión" y proporciona tus credenciales.' },
           { question: '¿Cómo puedo convertirme en un autor?', answer: 'Después de registrarte, envía tu solicitud para ser autor desde tu perfil.' },
           { question: '¿Cómo edito un artículo?', answer: 'Ve a tu lista de artículos y selecciona "Editar" en el artículo que desees modificar.' },
