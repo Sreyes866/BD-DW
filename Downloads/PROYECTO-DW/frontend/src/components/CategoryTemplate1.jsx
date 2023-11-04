@@ -56,25 +56,29 @@ const CategoryTemplate1 = () => {
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [articlesRes, categoriesRes, subcategoriesRes] = await Promise.all([
-          axios.get('http://localhost/RecentArticles.php'),
-          axios.get('http://localhost/Categories.php'),
-          axios.get('http://localhost/Subcategories.php')
-        ]);
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const [articlesRes, categoriesRes, subcategoriesRes] = await Promise.all([
+        axios.get('http://localhost/RecentArticles.php'),
+        axios.get('http://localhost/Categories.php'),
+        axios.get('http://localhost/Subcategories.php')
+      ]);
 
-        setArticles(articlesRes.data);
-        setCategories(categoriesRes.data);
-        setSubcategories(subcategoriesRes.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+      
+      const approvedArticles = articlesRes.data.filter(article => article.approval_status === 'Approved');
 
-    fetchData();
-  }, []);
+      setArticles(approvedArticles);
+      setCategories(categoriesRes.data);
+      setSubcategories(subcategoriesRes.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  fetchData();
+}, []);
+
 
   
   const backgroundImage = categoryBackgrounds[category];

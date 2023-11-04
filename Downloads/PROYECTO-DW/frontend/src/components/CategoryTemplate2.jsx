@@ -63,17 +63,20 @@ const CategoryTemplate2 = () => {
           axios.get('http://localhost/Categories.php'),
           axios.get('http://localhost/Subcategories.php')
         ]);
-
-        setArticles(articlesRes.data);
+  
+        const approvedArticles = articlesRes.data.filter(article => article.approval_status === 'Approved');
+  
+        setArticles(approvedArticles);
         setCategories(categoriesRes.data);
         setSubcategories(subcategoriesRes.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-
+  
     fetchData();
   }, []);
+  
 
   let filteredArticles = articles;
   if (category) {

@@ -38,17 +38,21 @@ const ArticlesByCategory = () => {
           axios.get('http://localhost/Categories.php'),
           axios.get('http://localhost/Subcategories.php')
         ]);
-
-        setArticles(articlesRes.data);
+  
+        // Filtrar artículos que tengan el estado 'approved'
+        const approvedArticles = articlesRes.data.filter(article => article.approval_status === 'approved');
+  
+        setArticles(approvedArticles);
         setCategories(categoriesRes.data);
         setSubcategories(subcategoriesRes.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-
+  
     fetchAllData();
   }, []);
+  
 
   useEffect(() => {
     // Incrementa el contador de visitas para cada artículo visitado

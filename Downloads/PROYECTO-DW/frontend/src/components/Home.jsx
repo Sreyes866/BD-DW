@@ -13,7 +13,8 @@ const Home = () => {
   const fetchArticles = async () => {
     try {
       const response = await axios.get('http://localhost/Articles.php');
-      const updatedArticles = response.data.map(article => {
+      const approvedArticles = response.data.filter(article => article.approval_status === 'Approved');
+      const updatedArticles = approvedArticles.map(article => {
         if (article.image) {
           const blob = new Blob([article.image], { type: 'image/jpeg' });
           article.imageURL = URL.createObjectURL(blob);
@@ -26,6 +27,7 @@ const Home = () => {
       console.error('Error fetching articles:', error);
     }
   };
+  
 
   const handleAdClick = async (adId, link_url, event) => {
     event.preventDefault();
