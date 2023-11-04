@@ -43,7 +43,7 @@ const MyArticles = () => {
   };
 
   useEffect(() => {
-    // Suponiendo que tienes un endpoint que devuelve las categorías asignadas a un autor específico
+    
     if (userRole === 'author' && userId) {
       axios.get(`http://localhost/AssignedCategories.php?author_id=${userId}`)
         .then(response => {
@@ -59,7 +59,7 @@ const MyArticles = () => {
           console.error('Error fetching assigned categories:', error);
         });
     } else {
-      // Si el usuario no es un autor, tal vez quieras mostrar todas las categorías o manejarlo de manera diferente
+      
       axios.get('http://localhost/Categories.php')
         .then(response => setCategories(response.data))
         .catch(error => console.error('Error fetching categories:', error));
@@ -72,12 +72,12 @@ const MyArticles = () => {
   };
 
   const handleSave = () => {
-    // Verifica que editingArticle no sea null antes de enviar
+    
     if (editingArticle) {
       axios.post('http://localhost/updateArticle.php', editingArticle)
         .then(response => {
-          setEditingArticle(null); // Después de guardar, resetea el artículo que se está editando
-          fetchData(); // Recarga los datos
+          setEditingArticle(null); 
+          fetchData(); 
         })
         .catch(error => console.error('Error updating article:', error));
     }
@@ -85,7 +85,7 @@ const MyArticles = () => {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setEditingArticle(prevArticle => ({ ...prevArticle, [name]: value })); // Usa una función para asegurarte de tener la última versión del estado
+    setEditingArticle(prevArticle => ({ ...prevArticle, [name]: value })); 
   };
 
   const publishedArticles = articles.filter(article => article.approval_status === 'Approved');

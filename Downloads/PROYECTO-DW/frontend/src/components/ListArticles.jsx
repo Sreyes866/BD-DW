@@ -70,7 +70,7 @@ const ListArticles = () => {
 
 
   useEffect(() => {
-    // Reemplaza 'userRole' y 'userId' con los valores apropiados de tu contexto o estado
+    
     if (userRole === 'author' && userId) {
       axios.get(`http://localhost/AssignedCategories.php?author_id=${userId}`)
         .then(response => {
@@ -85,12 +85,12 @@ const ListArticles = () => {
           console.error('Error fetching assigned categories:', error);
         });
     } else {
-      // Si el usuario no es un autor o no tienes un userId, maneja la lógica para cargar todas las categorías o como veas conveniente
+      
       axios.get('http://localhost/Categories.php')
         .then(response => setCategories(response.data))
         .catch(error => console.error('Error fetching categories:', error));
     }
-  }, [userId, userRole]); // Asegúrate de reemplazar estas dependencias con las que sean relevantes para tu caso
+  }, [userId, userRole]); 
   
 
   useEffect(() => {
