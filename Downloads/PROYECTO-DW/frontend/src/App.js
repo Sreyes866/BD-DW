@@ -36,7 +36,7 @@ import MyArticles from './components/MyArticles';
 import OnDemandOffer from './components/OnDemandOffer';
 import AutomaticOffer from './components/AutomaticOffer';
 import AuthorsArticles from './components/AuthorsArticles.jsx';
-
+import CommentForm from './components/CommentForm';
 
 
 const App = () => {
@@ -250,10 +250,13 @@ return (
         </Route>
         <Route path="/Employees"><Employees /></Route>
         <Route path="/Search"><Search /></Route>
+        <Route path="/CommentForm"><CommentForm /></Route>
+      
+
       </Switch>
     </div>
   </Router>
 );
 };
 
-export default App; 
+export default App;

@@ -43,7 +43,7 @@ const ListArticles = () => {
       })
       .catch(error => console.error('Error fetching articles:', error));
 
-
+    
 
     axios.get('http://localhost/Subcategories.php')
       .then(response => setSubcategories(response.data))

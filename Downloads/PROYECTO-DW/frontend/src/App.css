@@ -897,3 +897,59 @@ button:hover {
     font-size: 14px;
   }
 }
+
+/* commentStyles.css */
+
+/* Contenedor general de los comentarios */
+.comments-container {
+  margin: 0 auto;
+  max-width: 800px; /* Ajusta esto según la anchura deseada */
+  padding: 1rem;
+}
+
+/* Estilo para cada comentario */
+.comment {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #e1e1e1;
+}
+
+/* Estilo para las respuestas */
+.reply {
+  margin-top: 0.5rem;
+  margin-left: 2rem; /* Añade indentación a las respuestas */
+  background-color: #f0f0f0;
+}
+
+/* Botones y áreas de texto */
+.comment button,
+.comment textarea {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid #d1d1d1;
+  border-radius: 4px;
+}
+
+.comment button {
+  background-color: #5c5cff;
+  color: white;
+  cursor: pointer;
+  border: none;
+}
+
+.comment button:hover {
+  background-color: #4b4bbf;
+}
+
+.comment textarea {
+  width: 100%;
+  min-height: 80px;
+}
+
+/* Clase para errores */
+.error {
+  color: red;
+  margin-top: 0.5rem;
+}
