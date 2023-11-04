@@ -82,7 +82,8 @@ const Template1 = ({ article, isEditing, handleChange, handleImageChange, catego
             ))}
           </select>
         ) : (
-          categories.find(cat => cat.id === article.category_id)?.name || 'No especificada'
+          categories.find(cat => cat.id === Number(article.category_id))?.name || 'No especificada'
+
         )}
       </p>
   

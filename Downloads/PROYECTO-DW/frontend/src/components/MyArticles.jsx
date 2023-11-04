@@ -8,9 +8,9 @@ import Template3 from './Template3';
 const MyArticles = () => {
   const [articles, setArticles] = useState([]);
   const [editingArticle, setEditingArticle] = useState(null);
-  const { userName } = useAuth();
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
+  const { userName, userId, userRole } = useAuth();
 
 
   const fetchData = () => {
@@ -26,9 +26,6 @@ const MyArticles = () => {
     fetchData();  
   
     
-    axios.get('http://localhost/Categories.php')
-      .then(response => setCategories(response.data))
-      .catch(error => console.error('Error fetching categories:', error));
   
     
     axios.get('http://localhost/Subcategories.php')
@@ -45,24 +42,50 @@ const MyArticles = () => {
       .catch(error => console.error('Error deleting article:', error));
   };
 
-
+  useEffect(() => {
+    // Suponiendo que tienes un endpoint que devuelve las categorías asignadas a un autor específico
+    if (userRole === 'author' && userId) {
+      axios.get(`http://localhost/AssignedCategories.php?author_id=${userId}`)
+        .then(response => {
+          console.log(response.data);
+          const assignedCategoriesObject = response.data;
+          if (assignedCategoriesObject.categories && Array.isArray(assignedCategoriesObject.categories)) {
+            setCategories(assignedCategoriesObject.categories);
+          } else {
+            console.error('Expected an array for assigned categories, got:', assignedCategoriesObject);
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching assigned categories:', error);
+        });
+    } else {
+      // Si el usuario no es un autor, tal vez quieras mostrar todas las categorías o manejarlo de manera diferente
+      axios.get('http://localhost/Categories.php')
+        .then(response => setCategories(response.data))
+        .catch(error => console.error('Error fetching categories:', error));
+    }
+  }, [userId, userRole]);
+  
 
   const handleEdit = (article) => {
     setEditingArticle(article);
   };
 
   const handleSave = () => {
-    axios.post('http://localhost/updateArticle.php', editingArticle)
-      .then(response => {
-        setEditingArticle(null);
-        fetchData();
-      })
-      .catch(error => console.error('Error updating article:', error));
+    // Verifica que editingArticle no sea null antes de enviar
+    if (editingArticle) {
+      axios.post('http://localhost/updateArticle.php', editingArticle)
+        .then(response => {
+          setEditingArticle(null); // Después de guardar, resetea el artículo que se está editando
+          fetchData(); // Recarga los datos
+        })
+        .catch(error => console.error('Error updating article:', error));
+    }
   };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setEditingArticle({ ...editingArticle, [name]: value });
+    setEditingArticle(prevArticle => ({ ...prevArticle, [name]: value })); // Usa una función para asegurarte de tener la última versión del estado
   };
 
   const publishedArticles = articles.filter(article => article.approval_status === 'Approved');
@@ -85,7 +108,7 @@ const MyArticles = () => {
       <div className="article-section">
         <h3>Artículos Publicados</h3>
         {publishedArticles.map((article, index) => (
-          <ArticleRenderer key={index} article={article} categories={categories} subcategories={subcategories} isEditing={editingArticle?.id === article.id} handleChange={handleInputChange} handleEdit={handleEdit} handleSave={handleSave} handleDelete={handleDelete} handlePublish={handlePublish} />
+          <ArticleRenderer key={index} article={editingArticle?.id === article.id ? editingArticle : article} categories={categories} subcategories={subcategories} isEditing={editingArticle?.id === article.id} handleChange={handleInputChange} handleEdit={handleEdit} handleSave={handleSave} handleDelete={handleDelete} handlePublish={handlePublish} />
 
         ))}
       </div>

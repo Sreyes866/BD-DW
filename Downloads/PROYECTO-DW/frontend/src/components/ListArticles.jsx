@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 import Template1 from './Template1';
 import Template3 from './Template3';  
 import Template2 from './Template2';  
@@ -18,6 +19,7 @@ const ListArticles = () => {
   const [editingArticle, setEditingArticle] = useState(null);
   const [selectedNationality, setSelectedNationality] = useState([]);
   const [users, setUsers] = useState([]);
+  const { userName, userId, userRole } = useAuth();
 
 
 
@@ -41,9 +43,7 @@ const ListArticles = () => {
       })
       .catch(error => console.error('Error fetching articles:', error));
 
-    axios.get('http://localhost/Categories.php')
-      .then(response => setCategories(response.data))
-      .catch(error => console.error('Error fetching categories:', error));
+
 
     axios.get('http://localhost/Subcategories.php')
       .then(response => setSubcategories(response.data))
@@ -67,6 +67,31 @@ const ListArticles = () => {
   
 
   };
+
+
+  useEffect(() => {
+    // Reemplaza 'userRole' y 'userId' con los valores apropiados de tu contexto o estado
+    if (userRole === 'author' && userId) {
+      axios.get(`http://localhost/AssignedCategories.php?author_id=${userId}`)
+        .then(response => {
+          const assignedCategoriesObject = response.data;
+          if (assignedCategoriesObject.categories && Array.isArray(assignedCategoriesObject.categories)) {
+            setCategories(assignedCategoriesObject.categories);
+          } else {
+            console.error('Expected an array for assigned categories, got:', assignedCategoriesObject);
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching assigned categories:', error);
+        });
+    } else {
+      // Si el usuario no es un autor o no tienes un userId, maneja la lógica para cargar todas las categorías o como veas conveniente
+      axios.get('http://localhost/Categories.php')
+        .then(response => setCategories(response.data))
+        .catch(error => console.error('Error fetching categories:', error));
+    }
+  }, [userId, userRole]); // Asegúrate de reemplazar estas dependencias con las que sean relevantes para tu caso
+  
 
   useEffect(() => {
     
