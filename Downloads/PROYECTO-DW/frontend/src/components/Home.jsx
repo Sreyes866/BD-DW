@@ -76,7 +76,7 @@ const Home = () => {
   
 
   return (
-    <div className="container my-5">
+        <div className="container my-5">
       <div className="row justify-content-center">
         <div className="col-12 col-md-8">
           <h2 className="text-center mb-4">Artículos Recientes</h2>
@@ -95,6 +95,7 @@ const Home = () => {
                       />
                     )}
                   </div>
+                  
                   <div className="article-content">
                     <h5 className="article-title">{article.title}</h5>
                     <div className="article-metadata">
@@ -102,11 +103,11 @@ const Home = () => {
                       <small>Subcategoría: {subcategoryName}</small>
                     </div>
                   </div>
+                  
                 </Link>
               );
             })}
           </div>
-
                     {/* Sección de Autores Más Visitados */}
                     <h2 className="text-center mt-4">Autores Más Visitados</h2>
           <div className="list-group">

@@ -158,8 +158,13 @@ const Profile = () => {
   </>
 )}
 
-            {userRole === 'admin' && <PremiumCategoriesManager />}
-            {userRole === 'admin' && <AssignCategoriesToAuthor />}
+{userRole === 'admin' && (
+  <div className="category-managers-container">
+    <PremiumCategoriesManager />
+    <AssignCategoriesToAuthor />
+  </div>
+)}
+
           </div>
         )}
       </div>

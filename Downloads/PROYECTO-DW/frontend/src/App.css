@@ -2,7 +2,7 @@
 
 /* Fondo de la página */
 html, body {
-  background-color: rgb(225, 229, 238);
+  background-color: rgb(215, 192, 133);
   height: 100%;
 }
 
@@ -87,8 +87,8 @@ label {
 
 /* Estilo específico para Home */
 .home-container {
-  background-color: blue;
-  color: white;
+  background-color: rgb(40, 40, 126);
+  color: rgb(122, 50, 50);
 }
 
 /* Dropdowns y submenús */
@@ -283,7 +283,7 @@ select {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #f4f4f4;  /* Fondo ligeramente gris */
+  background-color: #bec9e6;  /* Fondo ligeramente gris */
 }
 
 .profile-card {
@@ -337,28 +337,29 @@ select {
 }
 
 
-/* Estilos para ManageUsers */
-/* Contenedor de usuarios */
+/* Contenedor de usuarios con mejor desplazamiento y visibilidad */
 .manage-users-container {
   max-width: 100%;
   margin: auto;
   padding: 20px;
-  overflow-x: auto; /* Habilita el desplazamiento horizontal */
-  font-family: 'Arial', sans-serif; /* Cambio de fuente para todo el contenedor */
+  overflow-x: auto; /* Permite el desplazamiento si es necesario */
+  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9; /* Fondo más claro */
 }
 
-/* Estilos para la tabla */
+/* Estilos para la tabla con mejor respuesta */
 .manage-users-table {
-  width: 100%;
+  max-width: 100%; /* Se ajusta al contenedor */
   border-collapse: collapse;
-  white-space: nowrap;  /* Asegura que el texto no se envuelva y la tabla pueda desplazarse */
+  white-space: nowrap;
 }
 
-/* Cabeza de tabla */
+/* Cabeza de tabla con mejor contraste */
 .manage-users-table thead th {
   padding: 20px;
-  border-bottom: 1px solid #ccc;
-  font-weight: bold; /* Texto en negrita para encabezados */
+  border-bottom: 2px solid #666; /* Línea más oscura para mayor contraste */
+  background-color: #333; /* Fondo oscuro */
+  color: #fff; /* Texto claro */
 }
 
 /* Cuerpo de tabla */
@@ -366,22 +367,23 @@ select {
   padding: 20px;
   border-bottom: 1px solid #ccc;
   text-align: center;
+  background-color: #fff; /* Fondo claro para cada fila */
 }
 
 /* Botones en la tabla */
 .manage-users-table button {
-  padding: 8px 16px; /* Tamaño reducido del botón */
-  background-color: #4CAF50; /* Color de fondo del botón */
-  color: white; /* Color de texto del botón */
+  padding: 10px 20px;
+  background-color: #5C6BC0; /* Color de fondo principal */
+  color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  font-size: 16px; /* Tamaño de fuente más grande para el texto del botón */
+  font-size: 16px;
 }
 
 .manage-users-table button:hover {
-  background-color: #45a049; /* Color de fondo al pasar el ratón */
+  background-color: #3949AB; /* Color más oscuro para el hover */
 }
 
 /* Campos de entrada */
@@ -389,9 +391,10 @@ select {
 .manage-users-table input[type="email"],
 .manage-users-table select {
   padding: 12px;
-  border: 2px solid #ccc;
+  border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 16px; /* Tamaño de fuente más grande para la entrada de texto */
+  font-size: 16px;
+  width: 100%; /* Ocupa el ancho disponible */
 }
 
 .search-bar {
@@ -399,10 +402,13 @@ select {
 }
 
 .search-bar input {
-  width: 100%;
+  width: calc(100% - 20px); /* Ajuste para padding */
   padding: 10px;
   font-size: 16px;
+  border-radius: 4px; /* Bordes redondeados para la barra de búsqueda */
+  border: 1px solid #ccc;
 }
+
 
 /* CreateAd Container */
 .create-ad-container {
@@ -953,3 +959,23 @@ button:hover {
   color: red;
   margin-top: 0.5rem;
 }
+
+
+.category-managers-container {
+  display: flex;
+  justify-content: space-between; /* Esto separará los dos componentes */
+  padding: 20px;
+}
+
+/* Si los componentes no tienen un ancho definido, puedes hacerlo así */
+.category-managers-container > div {
+  flex-basis: 48%; /* Asumiendo que quieres que cada uno tome menos de la mitad del espacio para no tocarse */
+}
+
+
+/* Estilo específico para Home */
+.home-background {
+  background-color: #152851; /* Nuevo color de fondo */
+}
+
+/* Resto de tus estilos CSS */

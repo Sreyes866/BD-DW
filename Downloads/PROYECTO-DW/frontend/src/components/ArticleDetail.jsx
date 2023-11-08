@@ -71,6 +71,7 @@ const ArticleDetail = () => {
   if (!article) return <div>Loading...</div>;
 
   return (
+
     <div className="container">
       <Template2 article={article} isEditing={false} handleChange={handleChange} categories={categories} subcategories={subcategories} />
       {(userRole === 'admin' || userRole === 'moderator') && (
@@ -82,6 +83,7 @@ const ArticleDetail = () => {
       {isLoggedIn && <CommentForm articleId={id} onCommentPosted={handleNewComment} />}
       <CommentList comments={comments} setComments={setComments} articleId={id} />
     </div>
+
   );
 };
 

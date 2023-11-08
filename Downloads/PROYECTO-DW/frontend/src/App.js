@@ -208,14 +208,14 @@ return (
         <Route path="/profile">{isLoggedIn ? <Profile /> : <Redirect to="/Profile" />}</Route>
 
         <Route path="/manage-users">
-  {userRole === 'admin' ? <ManageUsers /> : <Redirect to="/ManageUsers" />}
+  {userRole === 'admin' ? <ManageUsers /> : <Redirect to="/manage-users" />}
 </Route>
 
         <Route path="/article/:id">
   <ArticleDetail articles={articles} deleteArticle={deleteArticle} updateArticle={updateArticle} />
 </Route>
         <Route path="/my-articles">
-          {isRouteAllowed('/my-articles') ? <MyArticles /> : <Redirect to="/MyArticles" />}
+          {isRouteAllowed('/my-articles') ? <MyArticles /> : <Redirect to="/my-articles" />}
         </Route>
         <Route path="/subscription" component={Subscription} />
         <Route path="/Managecategories">
