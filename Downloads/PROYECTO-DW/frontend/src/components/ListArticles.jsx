@@ -4,7 +4,8 @@ import { useAuth } from '../context/AuthContext';
 import Template1 from './Template1';
 import Template3 from './Template3';  
 import Template2 from './Template2';  
-
+import CommentForm from './CommentForm';
+import CommentList from './CommentList';
 
 const ListArticles = () => {
   const [articles, setArticles] = useState([]);
@@ -19,6 +20,7 @@ const ListArticles = () => {
   const [editingArticle, setEditingArticle] = useState(null);
   const [selectedNationality, setSelectedNationality] = useState([]);
   const [users, setUsers] = useState([]);
+  const [comments, setComments] = useState({});
   const { userName, userId, userRole } = useAuth();
 
 
@@ -179,6 +181,29 @@ const ListArticles = () => {
     setFilteredArticles(newFilteredArticles);
   };
 
+
+  const handleNewComment = (articleId, newComment) => {
+    setComments((prevComments) => ({
+      ...prevComments,
+      [articleId]: [...(prevComments[articleId] || []), newComment]
+    }));
+  };
+
+
+  const ArticleRenderer = ({ article, categories, subcategories, isEditing, handleChange }) => {
+    switch(article.template_type) {
+      case 'Template1':
+        return <Template1 article={article} isEditing={isEditing} handleChange={handleChange} categories={categories} subcategories={subcategories} />;
+      case 'Template2':
+        return <Template2 article={article} isEditing={isEditing} handleChange={handleChange} categories={categories} subcategories={subcategories} />;
+      case 'Template3':
+        return <Template3 article={article} isEditing={isEditing} handleChange={handleChange} categories={categories} subcategories={subcategories} />;
+      default:
+        return <p>Plantilla no soportada</p>;
+    }
+  };
+
+
   return (
     <div className="container">
       <div>
@@ -235,8 +260,7 @@ const ListArticles = () => {
       
       </div>
       {filteredArticles.map((article, index) => (
-        <div key={index} style={{border: '1px solid #ccc', margin: '20px', padding: '15px'}}>
-          
+        <div key={index} style={{ border: '1px solid #ccc', margin: '20px', padding: '15px' }}>
           {editingArticle && editingArticle.id === article.id ? (
             <>
               <ArticleRenderer 
@@ -257,38 +281,22 @@ const ListArticles = () => {
               />
               <button onClick={() => handleDelete(article.id)}>Eliminar</button>
               <button onClick={() => handleEdit(article)}>Editar</button>
+              {/* Renderizar CommentForm y CommentList */}
+              <CommentForm
+                articleId={article.id}
+                onCommentPosted={(newComment) => handleNewComment(article.id, newComment)}
+              />
+              <CommentList
+                comments={comments[article.id] || []}
+                setComments={setComments}
+                articleId={article.id}
+              />
             </>
           )}
         </div>
       ))}
     </div>
   );
-   
-
-};
-
-const ArticleRenderer = ({ article, categories, subcategories, isEditing, handleChange }) => {
-  switch(article.template_type) {
-    case 'Template1':
-      return <Template1 article={article} isEditing={isEditing} handleChange={handleChange} categories={categories} subcategories={subcategories} />;
-    case 'Template2':
-      return <Template2 article={article} isEditing={isEditing} handleChange={handleChange} categories={categories} subcategories={subcategories} />;
-    case 'Template3':
-      return <Template3 article={article} isEditing={isEditing} handleChange={handleChange} categories={categories} subcategories={subcategories} />;
-    default:
-      return <p>Plantilla no soportada</p>;
-  }
 };
 
 export default ListArticles;
-
-
-
-
-
-
-
-
-
-
-

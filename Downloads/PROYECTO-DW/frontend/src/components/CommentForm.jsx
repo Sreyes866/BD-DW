@@ -4,7 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 
 const CommentForm = ({ articleId, parentCommentId, onCommentPosted }) => {
   const [commentText, setCommentText] = useState('');
-  const { userId, userName } = useContext(AuthContext); // Asegúrate de que AuthContext provea el userName
+  const { userId, userName } = useContext(AuthContext);
   const [error, setError] = useState(null);
 
   const submitComment = async () => {
@@ -31,16 +31,14 @@ const CommentForm = ({ articleId, parentCommentId, onCommentPosted }) => {
       const data = response.data;
 
       if (data.message === 'Comentario añadido exitosamente') {
-        // Suponiendo que la API devuelve el nombre del usuario en la propiedad 'userName'
         const newComment = {
           ...data.newComment,
-          userName: userName // O data.newComment.userName si el servidor lo provee
+          userName: userName, // Asumiendo que userName es proporcionado por AuthContext
+          replies: [] // Asegura que los nuevos comentarios tengan la propiedad replies
         };
         setCommentText('');
         setError(null);
-        if (onCommentPosted) {
-          onCommentPosted(newComment);
-        }
+        onCommentPosted(newComment); // Actualiza la lista de comentarios en el componente padre
       } else {
         setError(data.message);
       }
@@ -49,6 +47,7 @@ const CommentForm = ({ articleId, parentCommentId, onCommentPosted }) => {
       setError('Ocurrió un error al enviar el comentario.');
     }
   };
+
 
   return (
     <div>

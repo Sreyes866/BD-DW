@@ -205,27 +205,27 @@ return (
         <Route path="/faq"><FAQ /></Route>
         <Route path="/articles/:category/:subCategory"><ArticlesByCategory fetchedArticles={fetchedArticles} /></Route>
         <Route path="/announcements"><Announcements /></Route>
-        <Route path="/profile">{isLoggedIn ? <Profile /> : <Redirect to="/login" />}</Route>
+        <Route path="/profile">{isLoggedIn ? <Profile /> : <Redirect to="/Profile" />}</Route>
 
         <Route path="/manage-users">
-  {userRole === 'admin' ? <ManageUsers /> : <Redirect to="/login" />}
+  {userRole === 'admin' ? <ManageUsers /> : <Redirect to="/ManageUsers" />}
 </Route>
 
         <Route path="/article/:id">
   <ArticleDetail articles={articles} deleteArticle={deleteArticle} updateArticle={updateArticle} />
 </Route>
         <Route path="/my-articles">
-          {isRouteAllowed('/my-articles') ? <MyArticles /> : <Redirect to="/login" />}
+          {isRouteAllowed('/my-articles') ? <MyArticles /> : <Redirect to="/MyArticles" />}
         </Route>
         <Route path="/subscription" component={Subscription} />
         <Route path="/Managecategories">
-          {isRouteAllowed('/ManageCategories') ? <ManageCategories /> : <Redirect to="/login" />}
+          {isRouteAllowed('/ManageCategories') ? <ManageCategories /> : <Redirect to="/ManageCategories" />}
         </Route>
         <Route path="/Managesubcategories">
-          {isRouteAllowed('/ManageSubcategories') ? <ManageSubcategories /> : <Redirect to="/login" />}
+          {isRouteAllowed('/ManageSubcategories') ? <ManageSubcategories /> : <Redirect to="/ManageSubcategories" />}
         </Route>
         <Route path="/automatic-offer">
-          {isRouteAllowed('/automatic-offer') ? <AutomaticOffer /> : <Redirect to="/login" />}
+          {isRouteAllowed('/automatic-offer') ? <AutomaticOffer /> : <Redirect to="/automatic-offer" />}
         </Route>
         <Route path="/on-demand-offer">
           {isRouteAllowed('/on-demand-offer') ? <OnDemandOffer /> : <Redirect to="/on-demand-offer" />}
@@ -234,7 +234,7 @@ return (
         <Route path="/EditProfile" component={EditProfile} />
 
         <Route path="/create-ad">
-  {userRole === 'admin' ? <CreateAd /> : <Redirect to="/login" />}
+  {userRole === 'admin' ? <CreateAd /> : <Redirect to="/create-ad" />}
 </Route>
 
 
@@ -246,7 +246,7 @@ return (
         <Route path="/ForgotPassword" component={ForgotPassword} />
         <Route path="/ResetPassword" component={ResetPassword} />
                 <Route path="/moderate-articles">
-          {isRouteAllowed('/moderate-articles') ? <ModerateArticles /> : <Redirect to="/login" />}
+          {isRouteAllowed('/moderate-articles') ? <ModerateArticles /> : <Redirect to="/moderate-articles" />}
         </Route>
         <Route path="/Employees"><Employees /></Route>
         <Route path="/Search"><Search /></Route>

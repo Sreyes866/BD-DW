@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, useHistory } from 'react-router-dom'; 
-import Template2 from './Template2';  
+import { useParams, useHistory } from 'react-router-dom';
+import Template2 from './Template2';
 import CommentForm from './CommentForm';
-import CommentList from './CommentList'; // Este sería un nuevo componente para listar comentarios
-import { useAuth } from '../context/AuthContext'; 
-
+import CommentList from './CommentList';
+import { useAuth } from '../context/AuthContext';
 
 const ArticleDetail = () => {
   const { id } = useParams();
@@ -15,93 +14,75 @@ const ArticleDetail = () => {
   const [subcategories, setSubcategories] = useState([]);
   const [article, setArticle] = useState(null);
   const [comments, setComments] = useState([]);
-  const { isLoggedIn, userRole } = useAuth(); 
-
+  const { isLoggedIn, userRole } = useAuth();
 
   useEffect(() => {
-    // Cargar todos los artículos
-    axios.get('http://localhost/Articles.php')
-      .then(response => {
-        setArticles(response.data);
-      })
-      .catch(error => console.error('Error fetching articles:', error));
+    const fetchData = async () => {
+      try {
+        const articlesResponse = await axios.get('http://localhost/Articles.php');
+        setArticles(articlesResponse.data);
+        const categoriesResponse = await axios.get('http://localhost/Categories.php');
+        setCategories(categoriesResponse.data);
+        const subcategoriesResponse = await axios.get('http://localhost/Subcategories.php');
+        setSubcategories(subcategoriesResponse.data);
+        const commentsResponse = await axios.get(`http://localhost/getComments.php?article_id=${id}`);
+        setComments(commentsResponse.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
 
-    // Cargar categorías y subcategorías
-    axios.get('http://localhost/Categories.php')
-      .then(response => setCategories(response.data))
-      .catch(error => console.error('Error fetching categories:', error));
-
-    axios.get('http://localhost/Subcategories.php')
-      .then(response => setSubcategories(response.data))
-      .catch(error => console.error('Error fetching subcategories:', error));
-
-
-      axios.get(`http://localhost/getComments.php?article_id=${id}`)
-      .then(response => {
-        setComments(response.data);
-      })
-      .catch(error => console.error('Error fetching comments:', error));
-  
-
+    fetchData();
   }, [id]);
 
-  // Buscar el artículo específico por ID
   useEffect(() => {
     const foundArticle = articles.find(a => a.id === parseInt(id, 10));
     setArticle(foundArticle);
   }, [articles, id]);
 
-
-  const refreshComments = () => {
-    axios.get(`http://localhost/getComments.php?article_id=${id}`)
-      .then(response => {
-        setComments(response.data);
-      })
-      .catch(error => console.error('Error fetching comments:', error));
+  const refreshComments = async () => {
+    try {
+      const response = await axios.get(`http://localhost/getComments.php?article_id=${id}`);
+      setComments(response.data);
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+    }
   };
 
-  const handleDelete = () => {
-    axios.post('http://localhost/deleteArticle.php', { id })
-      .then(response => {
-        history.push('/articles'); // Redirigir al usuario a la lista de artículos
-      })
-      .catch(error => console.error('Error deleting article:', error));
+  const handleDelete = async () => {
+    try {
+      await axios.post('http://localhost/deleteArticle.php', { id });
+      history.push('/articles');
+    } catch (error) {
+      console.error('Error deleting article:', error);
+    }
   };
 
-  const handleSave = () => {
-    axios.post('http://localhost/updateArticle.php', article)
-      .then(response => {
-        console.log('Artículo actualizado');
-      })
-      .catch(error => console.error('Error updating article:', error));
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setArticle({
-      ...article,
-      [name]: value
-    });
+    setArticle({ ...article, [name]: value });
   };
 
-  
+  const handleNewComment = (newComment) => {
+    refreshComments(); // Refresh comments to fetch the latest including new ones
+  };
+
   if (!article) return <div>Loading...</div>;
 
   return (
     <div className="container">
       <Template2 article={article} isEditing={false} handleChange={handleChange} categories={categories} subcategories={subcategories} />
-      {/* Solo mostrar estos botones a los admins y moderadores */}
       {(userRole === 'admin' || userRole === 'moderator') && (
         <>
           <button onClick={handleDelete}>Eliminar artículo</button>
+          {/* Add button for saving if needed */}
         </>
       )}
-      {/* Renderizar CommentForm solo si isLoggedIn es true */}
-      {isLoggedIn && <CommentForm articleId={id} onCommentPosted={refreshComments} />}
+      {isLoggedIn && <CommentForm articleId={id} onCommentPosted={handleNewComment} />}
       <CommentList comments={comments} setComments={setComments} articleId={id} />
     </div>
   );
 };
 
 export default ArticleDetail;
-
