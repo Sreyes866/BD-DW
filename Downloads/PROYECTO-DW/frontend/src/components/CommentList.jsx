@@ -103,6 +103,52 @@ const CommentList = ({ articleId, commentIdToHighlight }) => {
   };
   
 
+  const fetchComments = async () => {
+    try {
+      const response = await axios.get(`http://localhost/getCommentReplies.php?article_id=${articleId}`);
+      setComments(response.data.comments); 
+    } catch (error) {
+      console.error('Error al cargar los comentarios:', error);
+      setError('No se pudieron cargar los comentarios.');
+    }
+  };
+
+  // Usa la función fetchComments dentro del useEffect
+  useEffect(() => {
+    fetchComments();
+  }, [articleId]);
+
+
+  const censorComment = async (commentId, isCensored) => {
+    try {
+        console.log(`Censurando comentario: ${commentId}, Estado: ${isCensored}`);
+        const response = await axios.post('http://localhost/censorComment.php', {
+            commentId,
+            isCensored
+        });
+        console.log(response.data.message);
+        // Recargar comentarios para reflejar cambios
+        fetchComments();
+    } catch (error) {
+        console.error('Error al censurar comentario:', error);
+    }
+};
+
+const ignoreReports = async (commentId) => {
+  try {
+      console.log(`Ignorando reportes del comentario: ${commentId}`);
+      const response = await axios.post('http://localhost/resolveCommentReports.php', { commentId });
+      console.log(response.data.message);
+      // Recargar comentarios para reflejar cambios
+      fetchComments();
+  } catch (error) {
+      console.error('Error al ignorar reportes:', error);
+  }
+};
+
+
+
+
   // Función recursiva para renderizar comentarios y respuestas
   const renderComments = (commentsToRender, parentId = null) => {
     return commentsToRender
@@ -116,11 +162,15 @@ const CommentList = ({ articleId, commentIdToHighlight }) => {
             className={`comment ${parentId ? 'reply' : ''} ${isHighlighted ? 'highlighted-comment' : ''}`}
           >
             <strong>{comment.userName || 'Usuario Desconocido'}</strong>
-            <p>{comment.Text}</p>
+            <p>{comment.isCensored ? 'Comentario censurado' : comment.Text}</p>
             {userId && (
               <>
                 <button onClick={() => handleReplyClick(comment.CommentID)}>Responder</button>
                 <button onClick={() => reportComment(comment.CommentID)}>Reportar</button>
+                <button onClick={() => censorComment(comment.CommentID, !comment.isCensored)}>
+                  {comment.isCensored ? 'Descensurar' : 'Censurar'}
+                </button>
+                <button onClick={() => ignoreReports(comment.CommentID)}>Ignorar</button>
               </>
             )}
             {replyTo === comment.CommentID && (
@@ -145,6 +195,8 @@ const CommentList = ({ articleId, commentIdToHighlight }) => {
   };
   
   if (!comments.length) return <p>No hay comentarios para este artículo.</p>;
+  
+
   
   return (
     <div className="comments-container">

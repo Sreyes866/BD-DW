@@ -106,6 +106,8 @@ const ArticleDetail = () => {
   if (!article) return <div>Loading...</div>;
 
 
+
+  
   return (
     <div className="container">
       <Template2 article={article} isEditing={false} handleChange={handleChange} categories={categories} subcategories={subcategories} />

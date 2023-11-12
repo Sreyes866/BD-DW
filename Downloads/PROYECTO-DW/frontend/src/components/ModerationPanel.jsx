@@ -24,14 +24,14 @@ const ModerationPanel = () => {
   if (isLoading) return <p>Cargando...</p>;
 
   return (
-    <div>
+    <div className="moderation-panel">
       <h2>Panel de Moderación</h2>
       {reportedComments.length > 0 ? (
         <ul>
           {reportedComments.map((comment) => (
             <li key={comment.CommentID}>
               <p><strong>Comentario:</strong> {comment.Text}</p>
-              <p><strong>Autor:</strong> {comment.userName}</p>
+              <p><strong>Usuario:</strong> {comment.userName}</p>
               <p><strong>Reportes:</strong> {comment.reportCount}</p>
               {/* Enlace que incluye el ID del comentario para resaltar */}
               <Link to={`/article/${comment.ArticleID}?comment=${comment.CommentID}`}>Ver comentario en el artículo</Link>
