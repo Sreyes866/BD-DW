@@ -37,6 +37,7 @@ import OnDemandOffer from './components/OnDemandOffer';
 import AutomaticOffer from './components/AutomaticOffer';
 import AuthorsArticles from './components/AuthorsArticles.jsx';
 import CommentForm from './components/CommentForm';
+import ModerationPanel from './components/ModerationPanel'; // Asegúrate de que el componente esté correctamente importado
 
 
 const App = () => {
@@ -98,9 +99,29 @@ const App = () => {
     setArticles(newArticles);
   };
 
+
+
+  const [hasUnmoderatedComments, setHasUnmoderatedComments] = useState(false);
+
+  useEffect(() => {
+    // Esta función simula una petición al backend para obtener si hay comentarios sin moderar
+    const fetchUnmoderatedCommentsStatus = async () => {
+      try {
+        // Aquí deberías hacer la petición real al backend
+        const response = await axios.get('http://localhost/checkUnmoderatedComments.php');
+        setHasUnmoderatedComments(response.data.hasUnmoderatedComments);
+      } catch (error) {
+        console.error('Error fetching unmoderated comments status:', error);
+      }
+    };
+
+    fetchUnmoderatedCommentsStatus();
+  }, []); 
+  
+
   const routesForRole = {
     admin: ['/home', '/contact', '/history', '/faq', '/announcements', '/list-articles', '/profile', '/ManageCategories', '/ManageSubcategories', '/automatic-offer', '/on-demand-offer', '/authors-articles'],
-    moderator: ['/home', '/contact', '/history', '/faq', '/announcements', '/list-articles', '/profile', '/moderate-articles'],
+    moderator: ['/home', '/contact', '/history', '/faq', '/announcements', '/list-articles', '/profile', '/moderate-articles', '/moderate-comments'],
     author: ['/home', '/contact', '/history', '/faq', '/announcements', '/create-article', '/list-articles', '/profile', '/my-articles'],
     logged_in_visitor: ['/home', '/contact', '/history', '/faq', '/announcements', '/list-articles', '/profile'],
     visitor: ['/home', '/contact', '/history', '/faq', '/announcements', '/list-articles']
@@ -111,6 +132,8 @@ const App = () => {
   };
 
 
+
+  
 return (
   <Router>
     <div className="App">
@@ -159,12 +182,25 @@ return (
                         </ul>
                       </li>
                     )}
+
+
   {isRouteAllowed('/create-article') && <li className="nav-item"><Link className="nav-link" to="/create-article">Crear Artículo</Link></li>}
   {isRouteAllowed('/profile') && <li className="nav-item"><Link className="nav-link" to="/profile">Perfil</Link></li>}
   {isRouteAllowed('/ManageCategories') && <li className="nav-item"><Link className="nav-link" to="/ManageCategories">Gestionar Categorías</Link></li>}
   {isRouteAllowed('/ManageSubcategories') && <li className="nav-item"><Link className="nav-link" to="/ManageSubcategories">Gestionar Subcategorías</Link></li>}
   {isRouteAllowed('/moderate-articles') && <li className="nav-item"><Link className="nav-link" to="/moderate-articles">Moderar Artículos</Link></li>}
+
+  {isLoggedIn && userRole === 'moderator' && (
+        <li className="nav-item">
+          <Link className="nav-link" to="/moderate-comments">
+            Moderar Comentarios
+            {hasUnmoderatedComments && <span className="notification-dot"></span>}
+          </Link>
+        </li>
+      )}
+              
   {isRouteAllowed('/my-articles') && <li className="nav-item"><Link className="nav-link" to="/my-articles">Mis Artículos</Link></li>}
+
 </>
               ) : (
                 <li className="nav-item dropdown">
@@ -211,6 +247,11 @@ return (
   {userRole === 'admin' ? <ManageUsers /> : <Redirect to="/manage-users" />}
 </Route>
 
+<Route path="/moderate-comments">
+            {isLoggedIn && userRole === 'moderator' ? <ModerationPanel /> : <Redirect to="/moderate-comments" />} 
+          </Route>
+
+
         <Route path="/article/:id">
   <ArticleDetail articles={articles} deleteArticle={deleteArticle} updateArticle={updateArticle} />
 </Route>
@@ -242,12 +283,16 @@ return (
           {isRouteAllowed('/authors-articles') ? <AuthorsArticles /> : <Redirect to="/authors-articles" />}
         </Route>
 
+
+
         <Route path="/confirm" component={ConfirmationPage} />
         <Route path="/ForgotPassword" component={ForgotPassword} />
         <Route path="/ResetPassword" component={ResetPassword} />
                 <Route path="/moderate-articles">
           {isRouteAllowed('/moderate-articles') ? <ModerateArticles /> : <Redirect to="/moderate-articles" />}
         </Route>
+
+
         <Route path="/Employees"><Employees /></Route>
         <Route path="/Search"><Search /></Route>
         <Route path="/CommentForm"><CommentForm /></Route>

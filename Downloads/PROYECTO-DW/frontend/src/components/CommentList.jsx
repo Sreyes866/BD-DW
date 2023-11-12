@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 
-const CommentList = ({ articleId }) => {
+const CommentList = ({ articleId, commentIdToHighlight }) => {
   const { userId, userName } = useContext(AuthContext);
   const [comments, setComments] = useState([]);
   const [replyText, setReplyText] = useState('');
@@ -107,38 +107,45 @@ const CommentList = ({ articleId }) => {
   const renderComments = (commentsToRender, parentId = null) => {
     return commentsToRender
       .filter((comment) => comment && comment.ParentCommentID === parentId)
-      .map((comment) => (
-        <div key={comment.CommentID} className={`comment ${parentId ? 'reply' : ''}`}>
-          <strong>{comment.userName || 'Usuario Desconocido'}</strong>
-          <p>{comment.Text}</p>
-          {userId && (
-            <>
-              <button onClick={() => handleReplyClick(comment.CommentID)}>Responder</button>
-              <button onClick={() => reportComment(comment.CommentID)}>Reportar</button>
-            </>
-          )}
-          {replyTo === comment.CommentID && (
-            <div>
-              <textarea
-                value={replyText}
-                onChange={(e) => setReplyText(e.target.value)}
-                placeholder="Escribe tu respuesta aquí..."
-              ></textarea>
-              <button onClick={() => submitReply(comment.CommentID)}>Enviar Respuesta</button>
-              {error && <p className="error">{error}</p>}
-            </div>
-          )}
-          {comment.replies && (
-            <div className="replies">
-              {renderComments(comment.replies, comment.CommentID)}
-            </div>
-          )}
-        </div>
-      ));
+      .map((comment) => {
+        const isHighlighted = comment.CommentID.toString() === commentIdToHighlight;
+  
+        return (
+          <div 
+            key={comment.CommentID} 
+            className={`comment ${parentId ? 'reply' : ''} ${isHighlighted ? 'highlighted-comment' : ''}`}
+          >
+            <strong>{comment.userName || 'Usuario Desconocido'}</strong>
+            <p>{comment.Text}</p>
+            {userId && (
+              <>
+                <button onClick={() => handleReplyClick(comment.CommentID)}>Responder</button>
+                <button onClick={() => reportComment(comment.CommentID)}>Reportar</button>
+              </>
+            )}
+            {replyTo === comment.CommentID && (
+              <div>
+                <textarea
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
+                  placeholder="Escribe tu respuesta aquí..."
+                ></textarea>
+                <button onClick={() => submitReply(comment.CommentID)}>Enviar Respuesta</button>
+                {error && <p className="error">{error}</p>}
+              </div>
+            )}
+            {comment.replies && (
+              <div className="replies">
+                {renderComments(comment.replies, comment.CommentID)}
+              </div>
+            )}
+          </div>
+        );
+      });
   };
-
+  
   if (!comments.length) return <p>No hay comentarios para este artículo.</p>;
-
+  
   return (
     <div className="comments-container">
       <h3>Comentarios</h3>

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import Template2 from './Template2';
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
 import { useAuth } from '../context/AuthContext';
+import HighlightedCommentList from './HighlightedCommentList';
 
 const ArticleDetail = () => {
   const { id } = useParams();
@@ -15,6 +16,9 @@ const ArticleDetail = () => {
   const [article, setArticle] = useState(null);
   const [comments, setComments] = useState([]);
   const { isLoggedIn, userRole } = useAuth();
+  const location = useLocation();
+  const commentIdToHighlight = new URLSearchParams(location.search).get('comment');
+
 
 
   useEffect(() => {
@@ -98,12 +102,11 @@ const ArticleDetail = () => {
     });
   };
   
-  
 
   if (!article) return <div>Loading...</div>;
 
-  return (
 
+  return (
     <div className="container">
       <Template2 article={article} isEditing={false} handleChange={handleChange} categories={categories} subcategories={subcategories} />
       {(userRole === 'admin' || userRole === 'moderator') && (
@@ -117,8 +120,13 @@ const ArticleDetail = () => {
           onCommentPosted={handleNewComment} 
         />
       )}
-      <CommentList comments={comments} setComments={setComments} articleId={id} />
-      {/* Otros códigos y componentes */}
+      {/* Pasa commentIdToHighlight al componente CommentList */}
+      <CommentList 
+        comments={comments} 
+        setComments={setComments} 
+        articleId={id} 
+        commentIdToHighlight={commentIdToHighlight} 
+      />
     </div>
   );
 };

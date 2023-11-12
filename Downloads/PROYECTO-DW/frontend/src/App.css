@@ -2,7 +2,7 @@
 
 /* Fondo de la página */
 html, body {
-  background-color: rgb(215, 192, 133);
+  background-color: rgb(176, 186, 211);
   height: 100%;
 }
 
@@ -979,3 +979,18 @@ button:hover {
 }
 
 /* Resto de tus estilos CSS */
+
+
+.highlighted-comment {
+  background-color: rgb(234, 109, 85); /* O cualquier otro estilo que prefieras */
+}
+
+
+.notification-dot {
+  height: 10px;
+  width: 10px;
+  background-color: #ff0000;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 5px;
+}
