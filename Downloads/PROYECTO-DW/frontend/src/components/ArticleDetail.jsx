@@ -16,6 +16,7 @@ const ArticleDetail = () => {
   const [comments, setComments] = useState([]);
   const { isLoggedIn, userRole } = useAuth();
 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -35,19 +36,33 @@ const ArticleDetail = () => {
     fetchData();
   }, [id]);
 
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const response = await axios.get(`http://localhost/getCommentReplies.php?article_id=${id}`);
+        setComments(response.data.comments);
+      } catch (error) {
+        console.error('Error al cargar los comentarios:', error);
+      }
+    };
+  
+    fetchComments();
+  
+    // Configurar un polling cada 30 segundos (30000 milisegundos)
+    const interval = setInterval(fetchComments, 30000);
+  
+    // Limpiar el intervalo cuando el componente se desmonta
+    return () => clearInterval(interval);
+  }, [id]);
+
+
+
   useEffect(() => {
     const foundArticle = articles.find(a => a.id === parseInt(id, 10));
     setArticle(foundArticle);
   }, [articles, id]);
 
-  const refreshComments = async () => {
-    try {
-      const response = await axios.get(`http://localhost/getComments.php?article_id=${id}`);
-      setComments(response.data);
-    } catch (error) {
-      console.error('Error fetching comments:', error);
-    }
-  };
 
   const handleDelete = async () => {
     try {
@@ -65,8 +80,25 @@ const ArticleDetail = () => {
   };
 
   const handleNewComment = (newComment) => {
-    refreshComments(); // Refresh comments to fetch the latest including new ones
+    console.log('Nuevo comentario:', newComment);
+    setComments(currentComments => {
+      let updatedComments = [];
+      if (newComment.ParentCommentID) {
+        // Encuentra el comentario principal y añade la respuesta
+        updatedComments = currentComments.map(comment => 
+          comment.CommentID === newComment.ParentCommentID 
+            ? {...comment, replies: [...comment.replies, newComment]} 
+            : comment
+        );
+      } else {
+        // Si es un comentario principal, añádelo al inicio de la lista de comentarios
+        updatedComments = [newComment, ...currentComments];
+      }
+      return updatedComments;  // Asegúrate de retornar la lista actualizada de comentarios
+    });
   };
+  
+  
 
   if (!article) return <div>Loading...</div>;
 
@@ -77,13 +109,17 @@ const ArticleDetail = () => {
       {(userRole === 'admin' || userRole === 'moderator') && (
         <>
           <button onClick={handleDelete}>Eliminar artículo</button>
-          {/* Add button for saving if needed */}
         </>
       )}
-      {isLoggedIn && <CommentForm articleId={id} onCommentPosted={handleNewComment} />}
+      {isLoggedIn && (
+        <CommentForm 
+          articleId={id} 
+          onCommentPosted={handleNewComment} 
+        />
+      )}
       <CommentList comments={comments} setComments={setComments} articleId={id} />
+      {/* Otros códigos y componentes */}
     </div>
-
   );
 };
 

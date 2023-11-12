@@ -6,8 +6,12 @@ const CommentForm = ({ articleId, parentCommentId, onCommentPosted }) => {
   const [commentText, setCommentText] = useState('');
   const { userId, userName } = useContext(AuthContext);
   const [error, setError] = useState(null);
+  const [isCommentAdded, setIsCommentAdded] = useState(false);
 
   const submitComment = async () => {
+    setError(null);
+    setIsCommentAdded(false);
+
     if (!commentText.trim()) {
       setError('El comentario no puede estar vacío.');
       return;
@@ -32,13 +36,15 @@ const CommentForm = ({ articleId, parentCommentId, onCommentPosted }) => {
 
       if (data.message === 'Comentario añadido exitosamente') {
         const newComment = {
-          ...data.newComment,
-          userName: userName, // Asumiendo que userName es proporcionado por AuthContext
-          replies: [] // Asegura que los nuevos comentarios tengan la propiedad replies
+          CommentID: data.newCommentID, // Asegúrate de que el backend realmente devuelve el ID del nuevo comentario
+          Text: commentText,
+          userName: userName,
+          ParentCommentID: parentCommentId, // Asegúrate de incluir el ID del comentario padre si existe
+          replies: [] // Inicializar las respuestas como un arreglo vacío
         };
         setCommentText('');
-        setError(null);
-        onCommentPosted(newComment); // Actualiza la lista de comentarios en el componente padre
+        onCommentPosted(newComment); // Llama a esta función para actualizar el estado en el componente padre
+        setIsCommentAdded(true);
       } else {
         setError(data.message);
       }
@@ -47,7 +53,6 @@ const CommentForm = ({ articleId, parentCommentId, onCommentPosted }) => {
       setError('Ocurrió un error al enviar el comentario.');
     }
   };
-
 
   return (
     <div>
@@ -58,6 +63,7 @@ const CommentForm = ({ articleId, parentCommentId, onCommentPosted }) => {
       ></textarea>
       <button onClick={submitComment}>Enviar Comentario</button>
       {error && <p className="error">{error}</p>}
+      {isCommentAdded && <p>Comentario añadido</p>}
     </div>
   );
 };
