@@ -174,30 +174,6 @@ const CreateArticle = () => {
         </div>
         
         <div className="form-group">
-          <label htmlFor="author_id">Autor</label>
-          {userRole === 'author' ? (
-            <input
-              type="text"
-              id="author_id"
-              name="author_id"
-              value={userName}
-              readOnly 
-              className="form-control"
-            />
-          ) : (
-            <input
-              type="text"
-              id="author_id"
-              name="author_id"
-              value="No eres un autor"
-              readOnly 
-              className="form-control"
-            />
-          )}
-        </div>
-
-        
-        <div className="form-group">
           <label htmlFor="content">Contenido de Inicio</label>
           <textarea id="content" name="content" value={article.content} onChange={handleChange} className="form-control" rows="5"></textarea>
         </div>
