@@ -116,7 +116,7 @@ const MyArticles = () => {
       <div className="article-section">
         <h3>Artículos sin Publicar (Drafts)</h3>
         {draftArticles.map((article, index) => (
-          <ArticleRenderer key={index} article={article} categories={categories} subcategories={subcategories} isEditing={editingArticle?.id === article.id} handleChange={handleInputChange} handleEdit={handleEdit} handleSave={handleSave} handleDelete={handleDelete} handlePublish={handlePublish} />
+          <ArticleRenderer key={index} article={editingArticle?.id === article.id ? editingArticle : article} categories={categories} subcategories={subcategories} isEditing={editingArticle?.id === article.id} handleChange={handleInputChange} handleEdit={handleEdit} handleSave={handleSave} handleDelete={handleDelete} handlePublish={handlePublish} />
 
         ))}
       </div>
@@ -124,7 +124,7 @@ const MyArticles = () => {
       <div className="article-section">
         <h3>Artículos en Revisión</h3>
         {reviewArticles.map((article, index) => (
-          <ArticleRenderer key={index} article={article} categories={categories} subcategories={subcategories} isEditing={editingArticle?.id === article.id} handleChange={handleInputChange} handleEdit={handleEdit} handleSave={handleSave} handleDelete={handleDelete} handlePublish={handlePublish} />
+          <ArticleRenderer key={index} article={editingArticle?.id === article.id ? editingArticle : article} categories={categories} subcategories={subcategories} isEditing={editingArticle?.id === article.id} handleChange={handleInputChange} handleEdit={handleEdit} handleSave={handleSave} handleDelete={handleDelete} handlePublish={handlePublish} />
 
         ))}
       </div>
