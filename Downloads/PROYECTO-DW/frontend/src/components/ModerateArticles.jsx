@@ -52,15 +52,15 @@ const ModerateArticles = () => {
   };
   
   const handleReject = (id) => {
-    axios.post('http://localhost/updateApprovalStatus.php', { id, status: 'Rejected' })
+    axios.post('http://localhost/updateApprovalStatus.php', { id, approval_status: 'Pending', publish_status: 'Draft' })
       .then(response => {
         const updatedArticles = articles.map(article =>
-          article.id === id ? { ...article, status: 'Rejected' } : article
+          article.id === id ? { ...article, approval_status: 'Pending', publish_status: 'Draft' } : article
         );
         setArticles(updatedArticles);
       })
       .catch(error => {
-        console.error('Error updating rejected status:', error);
+        console.error('Error updating article status:', error);
       });
   };
   
