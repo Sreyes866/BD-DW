@@ -170,21 +170,25 @@ const ignoreReports = async (commentId) => {
             </p>
   
             {userId && (
-              <>
-                <button onClick={() => handleReplyClick(comment.CommentID)}>Responder</button>
-                <button onClick={() => reportComment(comment.CommentID)}>Reportar</button>
-                {userRole === 'moderator' && (
-                  <>
-                    <button onClick={() => censorComment(comment.CommentID, true)}>
-                      Censurar
-                    </button>
-                    <button onClick={() => censorComment(comment.CommentID, false)}>
-                      Descensurar
-                    </button>
-                  </>
-                )}
-                <button onClick={() => ignoreReports(comment.CommentID)}>Ignorar Reportes</button>
-              </>
+      <>
+        <button onClick={() => handleReplyClick(comment.CommentID)}>Responder</button>
+        <button onClick={() => reportComment(comment.CommentID)}>Reportar</button>
+        {userRole === 'moderator' && (
+          <>
+            {comment.IsCensored === 0 && (
+              <button onClick={() => censorComment(comment.CommentID, true)}>
+                Censurar
+              </button>
+            )}
+            {comment.IsCensored === 1 && (
+              <button onClick={() => censorComment(comment.CommentID, false)}>
+                Descensurar
+              </button>
+            )}
+          </>
+        )}
+        <button onClick={() => ignoreReports(comment.CommentID)}>Ignorar Reportes</button>
+      </>
             )}
             {replyTo === comment.CommentID && (
               <div>
