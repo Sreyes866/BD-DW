@@ -5,7 +5,6 @@ import Template2 from './Template2';
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
 import { useAuth } from '../context/AuthContext';
-import HighlightedCommentList from './HighlightedCommentList';
 
 const ArticleDetail = () => {
   const { id } = useParams();
@@ -15,7 +14,8 @@ const ArticleDetail = () => {
   const [subcategories, setSubcategories] = useState([]);
   const [article, setArticle] = useState(null);
   const [comments, setComments] = useState([]);
-  const { isLoggedIn, userRole, isSubscribed } = useAuth();
+  const { isLoggedIn, userRole, userId, userUsername } = useAuth(); 
+  const [userSubscriptionStatus, setUserSubscriptionStatus] = useState(null);
   const location = useLocation();
   const commentIdToHighlight = new URLSearchParams(location.search).get('comment');
 
@@ -61,6 +61,21 @@ const ArticleDetail = () => {
   }, [id]);
 
 
+  useEffect(() => {
+    const fetchUserSubscriptionStatus = async () => {
+      try {
+        const response = await axios.post('http://localhost/GetSubscriptionStatus.php', { username: userUsername });
+        setUserSubscriptionStatus(response.data.is_subscribed);
+      } catch (error) {
+        console.error('Error al obtener el estado de suscripción del usuario:', error);
+      }
+    };
+
+    if (userUsername) {
+      fetchUserSubscriptionStatus();
+    }
+  }, [userUsername]);
+
 
   useEffect(() => {
     if (!articles.length || !categories.length) {
@@ -68,19 +83,26 @@ const ArticleDetail = () => {
     }
   
     const foundArticle = articles.find(a => a.id === parseInt(id, 10));
+    const updateVisitCount = async () => {
+      try {
+        await axios.post('http://localhost/updateVisitCount.php', { articleId: id });
+      } catch (error) {
+        console.error('Error updating visit count:', error);
+      }
+    };
     if (foundArticle) {
       const articleCategoryId = parseInt(foundArticle.category_id, 10); 
       const articleCategory = categories.find(c => parseInt(c.id, 10) === articleCategoryId);
       
       if (articleCategory) {
         const updatedArticle = { ...foundArticle, categoryName: articleCategory.name };
-  
         const isArticlePremium = articleCategory.is_premium === "1"; 
-        const isUserSubscribed = isSubscribed === 1;
-  
+
+        
+        const isUserSubscribed = userSubscriptionStatus === 1;
         console.log(`isArticlePremium: ${isArticlePremium}, isUserSubscribed: ${isUserSubscribed}`);
   
-        if (isArticlePremium && !isUserSubscribed) {
+        if (isArticlePremium && !userSubscriptionStatus) {
           alert('Este contenido es exclusivo para suscriptores.');
         } else {
           setArticle(updatedArticle);
@@ -88,8 +110,9 @@ const ArticleDetail = () => {
       } else {
         console.log('Categoría no encontrada para el artículo:', foundArticle);
       }
+      updateVisitCount();
     }
-  }, [articles, categories, id, isSubscribed]);
+  }, [articles, categories, id, userSubscriptionStatus]); 
   
   
   
@@ -147,13 +170,15 @@ const ArticleDetail = () => {
           <button onClick={handleDelete}>Eliminar artículo</button>
         </>
       )}
+      { (userRole === 'admin' || userRole === 'moderator' || article.author_id === userId) && (
+        <div>Visitas: {article.visit_count}</div>
+      )}
       {isLoggedIn && (
         <CommentForm 
           articleId={id} 
           onCommentPosted={handleNewComment} 
         />
       )}
-      {/* Pasa commentIdToHighlight al componente CommentList */}
       <CommentList 
         comments={comments} 
         setComments={setComments} 
