@@ -15,7 +15,7 @@ const ArticleDetail = () => {
   const [subcategories, setSubcategories] = useState([]);
   const [article, setArticle] = useState(null);
   const [comments, setComments] = useState([]);
-  const { isLoggedIn, userRole } = useAuth();
+  const { isLoggedIn, userRole, isSubscribed } = useAuth();
   const location = useLocation();
   const commentIdToHighlight = new URLSearchParams(location.search).get('comment');
 
@@ -63,9 +63,40 @@ const ArticleDetail = () => {
 
 
   useEffect(() => {
+    if (!articles.length || !categories.length) {
+      return;
+    }
+  
     const foundArticle = articles.find(a => a.id === parseInt(id, 10));
-    setArticle(foundArticle);
-  }, [articles, id]);
+    if (foundArticle) {
+      const articleCategoryId = parseInt(foundArticle.category_id, 10); 
+      const articleCategory = categories.find(c => parseInt(c.id, 10) === articleCategoryId);
+      
+      if (articleCategory) {
+        const updatedArticle = { ...foundArticle, categoryName: articleCategory.name };
+  
+        const isArticlePremium = articleCategory.is_premium === "1"; 
+        const isUserSubscribed = isSubscribed === 1;
+  
+        console.log(`isArticlePremium: ${isArticlePremium}, isUserSubscribed: ${isUserSubscribed}`);
+  
+        if (isArticlePremium && !isUserSubscribed) {
+          alert('Este contenido es exclusivo para suscriptores.');
+        } else {
+          setArticle(updatedArticle);
+        }
+      } else {
+        console.log('Categoría no encontrada para el artículo:', foundArticle);
+      }
+    }
+  }, [articles, categories, id, isSubscribed]);
+  
+  
+  
+  
+  
+  
+  
 
 
   const handleDelete = async () => {

@@ -78,10 +78,10 @@ const Template2 = ({ article, isEditing, handleChange, handleImageChange, catego
             ))}
           </select>
         ) : (
-          categories.find(cat => cat.id === Number(article.category_id))?.name || 'No especificada'
-
+          article.categoryName || 'No especificada'
         )}
       </p>
+
   
       <p style={categoryStyle}>
         <strong>Subcategoría:</strong>{' '}
