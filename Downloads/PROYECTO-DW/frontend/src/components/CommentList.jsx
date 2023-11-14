@@ -2,8 +2,9 @@ import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 
+
 const CommentList = ({ articleId, commentIdToHighlight }) => {
-  const { userId, userName } = useContext(AuthContext);
+  const { userId, userName, userRole } = useContext(AuthContext);
   const [comments, setComments] = useState([]);
   const [replyText, setReplyText] = useState('');
   const [replyTo, setReplyTo] = useState(null);
@@ -118,21 +119,27 @@ const CommentList = ({ articleId, commentIdToHighlight }) => {
     fetchComments();
   }, [articleId]);
 
-
-  const censorComment = async (commentId, isCensored) => {
+  const censorComment = async (commentId, shouldCensor) => {
     try {
-        console.log(`Censurando comentario: ${commentId}, Estado: ${isCensored}`);
-        const response = await axios.post('http://localhost/censorComment.php', {
-            commentId,
-            isCensored
-        });
-        console.log(response.data.message);
-        // Recargar comentarios para reflejar cambios
-        fetchComments();
+      const response = await axios.post('http://localhost/censorComment.php', {
+        commentId,
+        isCensored: shouldCensor ? 1 : 0 // Censurar es 1, Descensurar es 0
+      });
+  
+      if (response.data && response.data.message) {
+        alert(response.data.message);
+      } else {
+        alert('Se recibió una respuesta inesperada del servidor');
+      }
+  
+      fetchComments();
     } catch (error) {
-        console.error('Error al censurar comentario:', error);
+      console.error('Error al censurar comentario:', error);
+      alert('Error al censurar comentario');
     }
-};
+  };
+
+
 
 const ignoreReports = async (commentId) => {
   try {
@@ -156,6 +163,10 @@ const ignoreReports = async (commentId) => {
       .map((comment) => {
         const isHighlighted = comment.CommentID.toString() === commentIdToHighlight;
   
+
+
+
+
         return (
           <div 
             key={comment.CommentID} 
@@ -167,10 +178,17 @@ const ignoreReports = async (commentId) => {
               <>
                 <button onClick={() => handleReplyClick(comment.CommentID)}>Responder</button>
                 <button onClick={() => reportComment(comment.CommentID)}>Reportar</button>
-                <button onClick={() => censorComment(comment.CommentID, !comment.isCensored)}>
-                  {comment.isCensored ? 'Descensurar' : 'Censurar'}
-                </button>
-                <button onClick={() => ignoreReports(comment.CommentID)}>Ignorar</button>
+                {userRole === 'moderator' && (
+                  <>
+                    <button onClick={() => censorComment(comment.CommentID, true)}>
+                      Censurar
+                    </button>
+                    <button onClick={() => censorComment(comment.CommentID, false)}>
+                      Descensurar
+                    </button>
+                  </>
+                )}
+                <button onClick={() => ignoreReports(comment.CommentID)}>Ignorar Reportes</button>
               </>
             )}
             {replyTo === comment.CommentID && (
@@ -196,14 +214,13 @@ const ignoreReports = async (commentId) => {
   
   if (!comments.length) return <p>No hay comentarios para este artículo.</p>;
   
-
-  
   return (
     <div className="comments-container">
       <h3>Comentarios</h3>
       {renderComments(comments)}
     </div>
   );
+  
 };
 
 export default CommentList;
