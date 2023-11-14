@@ -114,10 +114,7 @@ const CommentList = ({ articleId, commentIdToHighlight }) => {
     }
   };
 
-  // Usa la función fetchComments dentro del useEffect
-  useEffect(() => {
-    fetchComments();
-  }, [articleId]);
+
 
   const censorComment = async (commentId, shouldCensor) => {
     try {
@@ -162,18 +159,16 @@ const ignoreReports = async (commentId) => {
       .filter((comment) => comment && comment.ParentCommentID === parentId)
       .map((comment) => {
         const isHighlighted = comment.CommentID.toString() === commentIdToHighlight;
-  
-
-
-
+        const isCensored = comment.IsCensored === 1; // Declara 'isCensored' aquí
 
         return (
-          <div 
-            key={comment.CommentID} 
-            className={`comment ${parentId ? 'reply' : ''} ${isHighlighted ? 'highlighted-comment' : ''}`}
-          >
+          <div key={comment.CommentID} className={`comment ${parentId ? 'reply' : ''} ${isHighlighted ? 'highlighted-comment' : ''}`}>
             <strong>{comment.userName || 'Usuario Desconocido'}</strong>
-            <p>{comment.isCensored ? 'Comentario censurado' : comment.Text}</p>
+            {/* Aplicar estilo de censura solo al párrafo del comentario */}
+            <p className={comment.IsCensored === 1 ? 'censored-comment-style' : ''}>
+              {comment.IsCensored === 1 ? 'Este comentario ha sido censurado' : comment.Text}
+            </p>
+  
             {userId && (
               <>
                 <button onClick={() => handleReplyClick(comment.CommentID)}>Responder</button>

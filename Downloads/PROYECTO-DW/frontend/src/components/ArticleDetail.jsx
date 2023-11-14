@@ -41,24 +41,25 @@ const ArticleDetail = () => {
   }, [id]);
 
 
-  useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const response = await axios.get(`http://localhost/getCommentReplies.php?article_id=${id}`);
-        setComments(response.data.comments);
-      } catch (error) {
-        console.error('Error al cargar los comentarios:', error);
-      }
-    };
-  
-    fetchComments();
-  
-    // Configurar un polling cada 30 segundos (30000 milisegundos)
-    const interval = setInterval(fetchComments, 30000);
-  
-    // Limpiar el intervalo cuando el componente se desmonta
-    return () => clearInterval(interval);
-  }, [id]);
+useEffect(() => {
+  const fetchComments = async () => {
+    try {
+      const response = await axios.get(`http://localhost/getCommentReplies.php?article_id=${id}`);
+      setComments(response.data.comments);
+    } catch (error) {
+      console.error('Error al cargar los comentarios:', error);
+    }
+  };
+
+  fetchComments();
+
+  // Configurar un polling cada 30 segundos (30000 milisegundos)
+  const interval = setInterval(fetchComments, 30000);
+
+  // Limpiar el intervalo cuando el componente se desmonta
+  return () => clearInterval(interval);
+}, [id]);
+
 
 
   useEffect(() => {
@@ -115,11 +116,7 @@ const ArticleDetail = () => {
   }, [articles, categories, id, userSubscriptionStatus]); 
   
   
-  
-  
-  
-  
-  
+    
 
 
   const handleDelete = async () => {

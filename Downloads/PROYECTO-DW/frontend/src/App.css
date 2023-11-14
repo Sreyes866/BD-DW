@@ -1052,3 +1052,10 @@ button:hover {
 .strong {
   font-weight: bold;
 }
+
+
+.censored-comment-style {
+  /* Estilo para ocultar o alterar la visualización del texto del comentario censurado */
+  color: rgba(128, 128, 128, 0.7); /* Gris con un poco de transparencia */
+  font-style: italic; /* Texto en cursiva */
+}
