@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import ReportConfigModal from './ReportConfigModal';
+
 
 const ModerationPanel = () => {
   const [reportedComments, setReportedComments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showReportConfig, setShowReportConfig] = useState(false); 
 
   const fetchReportedComments = async () => {
     try {
@@ -43,11 +46,34 @@ const ModerationPanel = () => {
     }
   };
 
+
+  const ignoreReports = async (commentId) => {
+    try {
+      await axios.post('http://localhost/resolveCommentReports.php', { commentId });
+      // Actualizar la lista de comentarios reportados
+      fetchReportedComments();
+    } catch (error) {
+      console.error('Error al ignorar reportes:', error);
+    }
+  };
+  
+
   if (isLoading) return <p>Cargando...</p>;
 
+
+  const openReportConfig = () => {
+    setShowReportConfig(true);
+  };
+
+  if (isLoading) return <p>Cargando...</p>;
+
+
+  
   return (
     <div className="moderation-panel">
       <h2>Panel de Moderación</h2>
+      <button onClick={openReportConfig}>Configurar Informe de Comentarios</button> {/* Botón para abrir el modal */}
+      {showReportConfig && <ReportConfigModal onClose={() => setShowReportConfig(false)} />} {/* Renderiza el modal si showReportConfig es verdadero */}
       {reportedComments.length > 0 ? (
         <ul>
           {reportedComments.map((comment) => (
@@ -59,6 +85,7 @@ const ModerationPanel = () => {
               <button onClick={() => handleCensorComment(comment.CommentID, !comment.isCensored)}>
                 {comment.isCensored ? 'Descensurar' : 'Censurar'}
               </button>
+              <button onClick={() => ignoreReports(comment.CommentID)}>Ignorar Reportes</button>
             </li>
           ))}
         </ul>
