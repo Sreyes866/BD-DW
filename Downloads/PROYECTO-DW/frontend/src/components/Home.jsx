@@ -4,6 +4,7 @@ import axios from 'axios';
 
 const Home = () => {
   const [articles, setArticles] = useState([]);
+  const [featuredArticles, setFeaturedArticles] = useState([]);
   const [ads, setAds] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
@@ -14,6 +15,8 @@ const Home = () => {
     try {
       const response = await axios.get('http://localhost/Articles.php');
       const approvedArticles = response.data.filter(article => article.approval_status === 'Approved');
+      const featuredArticleIds = JSON.parse(localStorage.getItem('featuredArticles')) || [];
+      const featured = approvedArticles.filter(article => featuredArticleIds.includes(article.id));
       const updatedArticles = approvedArticles.map(article => {
         if (article.image) {
           const blob = new Blob([article.image], { type: 'image/jpeg' });
@@ -21,8 +24,9 @@ const Home = () => {
         }
         return article;
       });
-      
+
       setArticles(updatedArticles);
+      setFeaturedArticles(featured);
     } catch (error) {
       console.error('Error fetching articles:', error);
     }
@@ -38,6 +42,8 @@ const Home = () => {
       console.error('Error tracking click:', error);
     }
   };
+
+  
 
   const fetchMostVisitedAuthors = async () => {
     try {
@@ -124,6 +130,14 @@ const Home = () => {
             ))}
           </div>
 
+          {/* Sección de Artículos Destacados */}
+          <h2 className="text-center mb-4">Artículos Destacados</h2>
+          <div className="article-grid">
+            {featuredArticles.map((article, index) => (
+              <ArticleCard article={article} categories={categories} subcategories={subcategories} key={index} />
+            ))}
+          </div>
+
           <h2 className="text-center mt-4">Anuncios</h2>
           <div className="ads-grid">
             {ads.map((ad, index) => (
@@ -174,6 +188,34 @@ const Home = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+
+const ArticleCard = ({ article, categories, subcategories }) => {
+  const categoryName = categories.find(cat => cat.id === article.category_id)?.name || 'Desconocido';
+  const subcategoryName = subcategories.find(sub => sub.id === article.sub_category_id)?.name || 'Desconocido';
+  
+  return (
+    <Link to={`/article/${article.id}`} className="article-card">
+      <div className="article-image-container">
+        {article.image && (
+          <img 
+            className="article-image"
+            src={`data:image/jpeg;base64,${article.image}`} 
+            alt={article.title}
+          />
+        )}
+      </div>
+      
+      <div className="article-content">
+        <h5 className="article-title">{article.title}</h5>
+        <div className="article-metadata">
+          <small>Categoría: {categoryName}</small>
+          <small>Subcategoría: {subcategoryName}</small>
+        </div>
+      </div>
+    </Link>
   );
 };
 

@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import PremiumCategoriesManager from './PremiumCategoriesManager';
 import AssignCategoriesToAuthor from './AssignCategoriesToAuthor';
+import ManageFeaturedArticles from './ManageFeaturedArticles';
 
 const Profile = () => {
   const history = useHistory();
@@ -162,6 +163,7 @@ const Profile = () => {
   <div className="category-managers-container">
     <PremiumCategoriesManager />
     <AssignCategoriesToAuthor />
+    <ManageFeaturedArticles />
   </div>
 )}
 
