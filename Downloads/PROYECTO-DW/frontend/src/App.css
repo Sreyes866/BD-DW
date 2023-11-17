@@ -1053,6 +1053,11 @@ button:hover {
   font-weight: bold;
 }
 
+.auto-censored-message {
+  color: red;
+}
+
+
 
 .censored-comment-style {
   /* Estilo para ocultar o alterar la visualización del texto del comentario censurado */

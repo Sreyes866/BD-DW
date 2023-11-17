@@ -37,7 +37,7 @@ import OnDemandOffer from './components/OnDemandOffer';
 import AutomaticOffer from './components/AutomaticOffer';
 import AuthorsArticles from './components/AuthorsArticles.jsx';
 import CommentForm from './components/CommentForm';
-import ModerationPanel from './components/ModerationPanel'; // Asegúrate de que el componente esté correctamente importado
+import ModerationPanel from './components/ModerationPanel'; 
 
 
 const App = () => {

@@ -187,7 +187,6 @@ const ignoreReports = async (commentId) => {
             )}
           </>
         )}
-        <button onClick={() => ignoreReports(comment.CommentID)}>Ignorar Reportes</button>
       </>
             )}
             {replyTo === comment.CommentID && (
