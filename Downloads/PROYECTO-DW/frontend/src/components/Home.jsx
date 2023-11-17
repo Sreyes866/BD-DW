@@ -41,12 +41,17 @@ const Home = () => {
 
   const fetchMostVisitedAuthors = async () => {
     try {
-      const response = await axios.get('http://localhost/MostVisitedAuthors.php');
-      setMostVisitedAuthors(response.data);
+      const response = await axios.get('http://localhost/AutoresVisitados.php');
+      if (Array.isArray(response.data)) {
+        setMostVisitedAuthors(response.data);
+      } else {
+        console.error('Received data is not an array:', response.data);
+      }
     } catch (error) {
       console.error('Error fetching most visited authors:', error);
     }
   };
+  
 
   useEffect(() => {
     fetchArticles();
@@ -109,7 +114,7 @@ const Home = () => {
             })}
           </div>
                     {/* Sección de Autores Más Visitados */}
-                    <h2 className="text-center mt-4">Autores Más Visitados</h2>
+          <h2 className="text-center mt-4">Autores Más Visitados</h2>
           <div className="list-group">
             {mostVisitedAuthors.map((author, index) => (
               <div key={index} className="list-group-item">
