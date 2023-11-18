@@ -307,7 +307,7 @@ const ListArticles = () => {
                 categories={categories}
                 subcategories={subcategories}
               />
-              <button onClick={handleSave}>Guardar</button>
+              
             </>
           ) : (
             <>
@@ -316,8 +316,7 @@ const ListArticles = () => {
                 categories={categories}
                 subcategories={subcategories}
               />
-              <button onClick={() => handleDelete(article.id)}>Eliminar</button>
-              <button onClick={() => handleEdit(article)}>Editar</button>
+             
               {/* Renderizar CommentForm y CommentList */}
               <CommentForm
                 articleId={article.id}

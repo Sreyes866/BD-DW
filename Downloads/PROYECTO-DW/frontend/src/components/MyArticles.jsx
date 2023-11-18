@@ -72,9 +72,12 @@ const MyArticles = () => {
   };
 
   const handleSave = () => {
-    
     if (editingArticle) {
-      axios.post('http://localhost/updateArticle.php', editingArticle)
+      const dataToSend = { ...editingArticle };
+      if (!dataToSend.image) {
+        delete dataToSend.image; // Elimina la imagen del objeto si no hay una nueva seleccionada
+      }
+      axios.post('http://localhost/updateArticle.php', dataToSend)
         .then(response => {
           setEditingArticle(null); 
           fetchData(); 
@@ -82,6 +85,7 @@ const MyArticles = () => {
         .catch(error => console.error('Error updating article:', error));
     }
   };
+  
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -101,14 +105,24 @@ const MyArticles = () => {
       })
       .catch(error => console.error('Error publishing article:', error));
   };
-
+  
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditingArticle(prevArticle => ({ ...prevArticle, image: reader.result }));
+      };
+      reader.readAsDataURL(file); // Convierte la imagen a Base64
+    }
+  };
 
   return (
     <div className="container">
       <div className="article-section">
         <h3>Artículos Publicados</h3>
         {publishedArticles.map((article, index) => (
-          <ArticleRenderer key={index} article={editingArticle?.id === article.id ? editingArticle : article} categories={categories} subcategories={subcategories} isEditing={editingArticle?.id === article.id} handleChange={handleInputChange} handleEdit={handleEdit} handleSave={handleSave} handleDelete={handleDelete} handlePublish={handlePublish} />
+          <ArticleRenderer key={index} article={editingArticle?.id === article.id ? editingArticle : article} categories={categories} subcategories={subcategories} isEditing={editingArticle?.id === article.id} handleChange={handleInputChange} handleEdit={handleEdit} handleSave={handleSave} handleDelete={handleDelete} handlePublish={handlePublish}  handleImageChange={handleImageChange} />
 
         ))}
       </div>
@@ -116,7 +130,7 @@ const MyArticles = () => {
       <div className="article-section">
         <h3>Artículos sin Publicar (Drafts)</h3>
         {draftArticles.map((article, index) => (
-          <ArticleRenderer key={index} article={editingArticle?.id === article.id ? editingArticle : article} categories={categories} subcategories={subcategories} isEditing={editingArticle?.id === article.id} handleChange={handleInputChange} handleEdit={handleEdit} handleSave={handleSave} handleDelete={handleDelete} handlePublish={handlePublish} />
+          <ArticleRenderer key={index} article={editingArticle?.id === article.id ? editingArticle : article} categories={categories} subcategories={subcategories} isEditing={editingArticle?.id === article.id} handleChange={handleInputChange} handleEdit={handleEdit} handleSave={handleSave} handleDelete={handleDelete} handlePublish={handlePublish}  handleImageChange={handleImageChange} />
 
         ))}
       </div>
@@ -124,7 +138,7 @@ const MyArticles = () => {
       <div className="article-section">
         <h3>Artículos en Revisión</h3>
         {reviewArticles.map((article, index) => (
-          <ArticleRenderer key={index} article={editingArticle?.id === article.id ? editingArticle : article} categories={categories} subcategories={subcategories} isEditing={editingArticle?.id === article.id} handleChange={handleInputChange} handleEdit={handleEdit} handleSave={handleSave} handleDelete={handleDelete} handlePublish={handlePublish} />
+          <ArticleRenderer key={index} article={editingArticle?.id === article.id ? editingArticle : article} categories={categories} subcategories={subcategories} isEditing={editingArticle?.id === article.id} handleChange={handleInputChange} handleEdit={handleEdit} handleSave={handleSave} handleDelete={handleDelete} handlePublish={handlePublish}  handleImageChange={handleImageChange} />
 
         ))}
       </div>
@@ -144,11 +158,12 @@ const renderTemplate = (article, isEditing, handleChange, categories, subcategor
   }
 };
 
-const ArticleRenderer = ({ article, categories, subcategories, isEditing, handleChange, handleEdit, handleSave, handleDelete, handlePublish }) => {
+const ArticleRenderer = ({ article, categories, subcategories, isEditing, handleChange, handleEdit, handleSave, handleDelete, handlePublish, handleImageChange }) => {
   return (
     <div style={{ border: '1px solid #ccc', margin: '20px', padding: '15px' }}>
       {isEditing ? (
         <>
+        <input type="file" onChange={handleImageChange} />
           {renderTemplate(article, isEditing, handleChange, categories, subcategories)}
           <button onClick={handleSave}>Guardar</button>
           <button onClick={() => handleEdit(null)}>Cancelar</button>
