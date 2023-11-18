@@ -18,6 +18,7 @@ const ArticleDetail = () => {
   const [userSubscriptionStatus, setUserSubscriptionStatus] = useState(null);
   const location = useLocation();
   const commentIdToHighlight = new URLSearchParams(location.search).get('comment');
+  const [exclusiveContent, setExclusiveContent] = useState(false);
 
 
 
@@ -82,15 +83,8 @@ useEffect(() => {
     if (!articles.length || !categories.length) {
       return;
     }
-  
+
     const foundArticle = articles.find(a => a.id === parseInt(id, 10));
-    const updateVisitCount = async () => {
-      try {
-        await axios.post('http://localhost/updateVisitCount.php', { articleId: id });
-      } catch (error) {
-        console.error('Error updating visit count:', error);
-      }
-    };
     if (foundArticle) {
       const articleCategoryId = parseInt(foundArticle.category_id, 10); 
       const articleCategory = categories.find(c => parseInt(c.id, 10) === articleCategoryId);
@@ -99,19 +93,15 @@ useEffect(() => {
         const updatedArticle = { ...foundArticle, categoryName: articleCategory.name };
         const isArticlePremium = articleCategory.is_premium === "1"; 
 
-        
-        const isUserSubscribed = userSubscriptionStatus === 1;
-        console.log(`isArticlePremium: ${isArticlePremium}, isUserSubscribed: ${isUserSubscribed}`);
-  
         if (isArticlePremium && !userSubscriptionStatus) {
-          alert('Este contenido es exclusivo para suscriptores.');
+          setExclusiveContent(true);
         } else {
           setArticle(updatedArticle);
+          setExclusiveContent(false);
         }
       } else {
         console.log('Categoría no encontrada para el artículo:', foundArticle);
       }
-      updateVisitCount();
     }
   }, [articles, categories, id, userSubscriptionStatus]); 
   
@@ -153,6 +143,25 @@ useEffect(() => {
     });
   };
   
+
+  const goToSubscriptionPage = () => {
+    history.push('/subscription');
+  };
+
+  const goToRegisterPage = () => {
+    history.push('/register');
+  };
+
+  if (exclusiveContent) {
+    return (
+      <div className="container">
+        <p>Este contenido es exclusivo para suscriptores. Si quieres acceder a este contenido, por favor suscríbete.</p>
+        <button onClick={goToSubscriptionPage}>Suscribirse</button>
+        <p>Si aun no tienes usuario, presioan aqui y te rediriguimos para que puedas crearlo</p>
+        <button onClick={goToRegisterPage}>Registrarse</button>
+      </div>
+    );
+  }
 
   if (!article) return <div>Loading...</div>;
 
