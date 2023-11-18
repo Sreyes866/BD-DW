@@ -5,11 +5,13 @@ import { useAuth } from '../context/AuthContext';
 import PremiumCategoriesManager from './PremiumCategoriesManager';
 import AssignCategoriesToAuthor from './AssignCategoriesToAuthor';
 import ManageFeaturedArticles from './ManageFeaturedArticles';
+import FrequentReportedUsers from './FrequentReportedUsers'; 
 
 const Profile = () => {
   const history = useHistory();
   const { userName, userUsername, userEmail, userRole, userPassword, isSubscribed, expiryDate } = useAuth();
   const { resetAuth } = useAuth(); // REINICIAR SESION
+  const [showFrequentReportedUsers, setShowFrequentReportedUsers] = useState(false); 
 
   const [currentUser, setCurrentUser] = useState({
     username: userUsername,
@@ -76,6 +78,11 @@ const Profile = () => {
   const handleLogout = () => {
     resetAuth(); 
     history.push('/home'); 
+  };
+
+
+  const handleShowFrequentReportedUsers = () => {
+    setShowFrequentReportedUsers(!showFrequentReportedUsers); 
   };
 
 
@@ -165,6 +172,15 @@ const Profile = () => {
     <AssignCategoriesToAuthor />
     <ManageFeaturedArticles />
   </div>
+)}
+
+
+
+{userRole === 'moderator' && (
+  <>
+    <button onClick={handleShowFrequentReportedUsers}>Reporte de comentarios de usuarios</button>
+    {showFrequentReportedUsers && <FrequentReportedUsers />} {/* Renderiza el componente si showFrequentReportedUsers es true */}
+  </>
 )}
 
           </div>

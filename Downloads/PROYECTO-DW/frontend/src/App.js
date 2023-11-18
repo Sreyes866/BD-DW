@@ -39,6 +39,8 @@ import AuthorsArticles from './components/AuthorsArticles.jsx';
 import CommentForm from './components/CommentForm';
 import ModerationPanel from './components/ModerationPanel'; 
 import RandomAd from './components/RandomAd.jsx';
+import FrequentReportedUsers from './components/FrequentReportedUsers.jsx';
+
 
 const App = () => {
   const { isLoggedIn, userRole } = useAuth();
@@ -228,13 +230,13 @@ return (
             <Home articles={articles} />
           </Route>
           <Route path="/home">
-            {isRouteAllowed('/home') ? <Home articles={articles} /> : <Redirect to="/login" />}
+            {isRouteAllowed('/home') ? <Home articles={articles} /> : <Redirect to="/home" />}
           </Route>
           <Route path="/create-article">
-  {isRouteAllowed('/create-article') ? <CreateArticle addArticle={addArticle} /> : <Redirect to="/login" />}
+  {isRouteAllowed('/create-article') ? <CreateArticle addArticle={addArticle} /> : <Redirect to="/create-article" />}
 </Route>
 <Route path="/list-articles">
-  {isRouteAllowed('/list-articles') ? <ListArticles articles={articles} /> : <Redirect to="/login" />}
+  {isRouteAllowed('/list-articles') ? <ListArticles articles={articles} /> : <Redirect to="/list-articles" />}
 </Route>
         <Route path="/contact"><Contact /></Route>
         <Route path="/history"><History /></Route>
@@ -259,6 +261,8 @@ return (
           {isRouteAllowed('/my-articles') ? <MyArticles /> : <Redirect to="/my-articles" />}
         </Route>
         <Route path="/subscription" component={Subscription} />
+
+        
         <Route path="/Managecategories">
           {isRouteAllowed('/ManageCategories') ? <ManageCategories /> : <Redirect to="/ManageCategories" />}
         </Route>
