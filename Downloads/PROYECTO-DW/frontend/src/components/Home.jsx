@@ -15,23 +15,38 @@ const Home = () => {
   const fetchArticles = async () => {
     try {
       const response = await axios.get('http://localhost/Articles.php');
-      const approvedArticles = response.data.filter(article => article.approval_status === 'Approved');
+      // Filtrar para obtener artículos aprobados y activos
+      const approvedAndActiveArticles = response.data.filter(article => 
+        article.approval_status === 'Approved' && article.is_active === 1
+      );
+  
+      // Ordenar por fecha y limitar a los 10 más recientes
+      const sortedAndLimitedArticles = approvedAndActiveArticles
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+        .slice(0, 10);
+  
       const featuredArticleIds = JSON.parse(localStorage.getItem('featuredArticles')) || [];
-      const featured = approvedArticles.filter(article => featuredArticleIds.includes(article.id));
-      const updatedArticles = approvedArticles.map(article => {
+      // Filtrar los artículos destacados dentro de los 10 más recientes
+      const featured = sortedAndLimitedArticles.filter(article => 
+        featuredArticleIds.includes(article.id)
+      );
+  
+      const updatedArticles = sortedAndLimitedArticles.map(article => {
         if (article.image) {
           const blob = new Blob([article.image], { type: 'image/jpeg' });
           article.imageURL = URL.createObjectURL(blob);
         }
         return article;
       });
-
+  
       setArticles(updatedArticles);
       setFeaturedArticles(featured);
     } catch (error) {
       console.error('Error fetching articles:', error);
     }
   };
+  
+  
   
 
   const handleAdClick = async (adId, link_url, event) => {

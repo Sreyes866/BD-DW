@@ -70,7 +70,38 @@ const ListArticles = () => {
 
   };
 
+  useEffect(() => {
+    const latestApprovedVersions = getLatestApprovedVersions(articles);
+    setFilteredArticles(latestApprovedVersions);
+  }, [articles]);
+  
+  // Función para obtener la versión más reciente aprobada de cada artículo
+  const getLatestApprovedVersions = (articles) => {
+    const articleMap = {};
+  
+    articles.forEach((article) => {
+      if (article.approval_status === 'Approved') {
+        const existing = articleMap[article.original_article_id];
+        if (!existing || existing.version < article.version) {
+          articleMap[article.original_article_id] = article;
+        }
+      }
+    });
+  
+    return Object.values(articleMap);
+  };
 
+  useEffect(() => {
+    const activeArticles = getActiveArticles(articles);
+    setFilteredArticles(activeArticles);
+  }, [articles]);
+  
+  // Función para obtener los artículos con is_active = true
+  const getActiveArticles = (articles) => {
+    return articles.filter(article => article.is_active);
+  };
+  
+  
   useEffect(() => {
     
     if (userRole === 'author' && userId) {
@@ -96,10 +127,16 @@ const ListArticles = () => {
   
 
   useEffect(() => {
-    
-    const approvedArticles = articles.filter(article => article.approval_status === 'Approved');
-    setFilteredArticles(approvedArticles);
+    // Función para filtrar artículos que están aprobados y activos
+    const filterApprovedAndActiveArticles = (articles) => {
+      return articles.filter(article => article.approval_status === 'Approved' && article.is_active === 1);
+    };
+  
+    // Aplicar el filtro a los artículos
+    const approvedAndActiveArticles = filterApprovedAndActiveArticles(articles);
+    setFilteredArticles(approvedAndActiveArticles);
   }, [articles]);
+  
   
 
   useEffect(() => {
