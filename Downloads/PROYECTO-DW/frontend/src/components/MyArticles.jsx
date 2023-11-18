@@ -131,7 +131,6 @@ const MyArticles = () => {
     </div>
   );
 };
-
 const renderTemplate = (article, isEditing, handleChange, categories, subcategories) => {
   switch(article.template_type) {
     case 'Template1':

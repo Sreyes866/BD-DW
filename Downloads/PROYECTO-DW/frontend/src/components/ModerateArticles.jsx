@@ -39,11 +39,10 @@ const ModerateArticles = () => {
   }, []);
 
   const handleApprove = (id) => {
-    axios.post('http://localhost/updateApprovalStatus.php', { id, status: 'Approved' })
+    axios.post('http://localhost/updateApprovalStatus.php', { id, approval_status: 'Approved', publish_status: 'Published' })
       .then(response => {
-        const updatedArticles = articles.map(article =>
-          article.id === id ? { ...article, status: 'Approved' } : article
-        );
+        // Filtrar artículos para excluir el aprobado
+        const updatedArticles = articles.filter(article => article.id !== id);
         setArticles(updatedArticles);
       })
       .catch(error => {
@@ -52,9 +51,14 @@ const ModerateArticles = () => {
   };
   
   const handleReject = (id) => {
-    axios.post('http://localhost/updateApprovalStatus.php', { id, approval_status: 'Pending', publish_status: 'Draft' })
+    axios.post('http://localhost/updateApprovalStatus.php', { 
+      id, 
+      approval_status: 'Pending', 
+      publish_status: 'Draft' 
+    })
       .then(response => {
-        const updatedArticles = articles.map(article =>
+        // Actualizar los artículos, cambiando el estado del rechazado
+        const updatedArticles = articles.map(article => 
           article.id === id ? { ...article, approval_status: 'Pending', publish_status: 'Draft' } : article
         );
         setArticles(updatedArticles);
@@ -63,6 +67,9 @@ const ModerateArticles = () => {
         console.error('Error updating article status:', error);
       });
   };
+  
+  
+  
   
 
   const ArticleRenderer = ({ article, categories, subcategories }) => {
