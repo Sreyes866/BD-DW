@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import RandomAd from './RandomAd';
 const History = () => {
   const [ads, setAds] = useState([]);
 
@@ -88,6 +88,10 @@ const History = () => {
             </div>
           </div>
         ))}
+                  </div>
+                {/* Anuncio Aleatorio */}
+      <div className="row justify-content-center">
+        <RandomAd onAdClick={handleAdClick} />
       </div>
     </div>
   );

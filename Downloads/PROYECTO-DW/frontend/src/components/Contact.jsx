@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import emailjs from 'emailjs-com';
+import RandomAd from './RandomAd';
 
 const Contact = () => {
   const [ads, setAds] = useState([]);
@@ -116,6 +117,10 @@ const Contact = () => {
             </div>
           </div>
         ))}
+                          </div>
+                {/* Anuncio Aleatorio */}
+      <div className="row justify-content-center">
+        <RandomAd onAdClick={handleAdClick} />
       </div>
     </div>
   );

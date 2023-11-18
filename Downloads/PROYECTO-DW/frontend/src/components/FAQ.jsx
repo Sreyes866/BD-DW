@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import RandomAd from './RandomAd';
+
+
 
 const FAQ = () => {
   const [ads, setAds] = useState([]);
@@ -58,6 +61,8 @@ const FAQ = () => {
           </div>
         ))}
       </div>
+
+
       {/* Aquí vienen los anuncios */}
       <h2 className="my-4">Anuncios</h2>
       <div className="row justify-content-center">
@@ -80,6 +85,13 @@ const FAQ = () => {
             </div>
           </div>
         ))}
+              {/* Anuncio Aleatorio */}
+      <div className="row justify-content-center">
+                <RandomAd />
+                <div className="row justify-content-center">
+  <RandomAd onAdClick={handleAdClick} />
+</div>
+      </div>
       </div>
     </div>
   );

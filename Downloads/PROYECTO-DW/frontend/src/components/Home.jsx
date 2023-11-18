@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import RandomAd from './RandomAd';
 
 const Home = () => {
   const [articles, setArticles] = useState([]);
@@ -160,6 +161,11 @@ const Home = () => {
               </div>
             ))}
           </div>
+                {/* Anuncio Aleatorio */}
+      <div className="row justify-content-center">
+        <RandomAd onAdClick={handleAdClick} />
+      </div>
+          
         </div>
       </div>
 

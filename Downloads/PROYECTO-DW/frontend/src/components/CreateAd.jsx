@@ -14,6 +14,23 @@ const CreateAd = () => {
   const [clickData, setClickData] = useState([]);
   const [showReport, setShowReport] = useState(false);
 
+  
+const handleCreateAdRandom = async () => {
+    const randomAd = { ...ad, page_name: 'adminadd' }; // Asignar 'adminadd' como page_name
+
+    try {
+      const response = await axios.post('http://localhost/CreateAd.php', randomAd);
+      if (response.data.message === 'Ad created successfully') {
+        alert('Anuncio creado exitosamente y asignado para visualización aleatoria');
+        setAd({ image_url: '', link_url: '', page_name: '' });
+        fetchAds();
+      }
+    } catch (error) {
+      console.error('Error creating random ad:', error);
+    }
+};
+
+
   const handleCreateAd = async () => {
     if (!ad.page_name) {
       alert('Por favor, seleccione una página.');
@@ -134,6 +151,8 @@ const CreateAd = () => {
         </select>
       </div>
       <button className="btn btn-primary" onClick={handleCreateAd}>Crear Anuncio</button>
+      <button className="btn btn-secondary" onClick={handleCreateAdRandom}>Crear Anuncio Al Azar</button>
+
   
       <h2 className="my-4">Anuncios existentes</h2>
     <div className="row">

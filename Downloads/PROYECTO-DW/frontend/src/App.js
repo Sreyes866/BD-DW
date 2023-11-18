@@ -38,7 +38,7 @@ import AutomaticOffer from './components/AutomaticOffer';
 import AuthorsArticles from './components/AuthorsArticles.jsx';
 import CommentForm from './components/CommentForm';
 import ModerationPanel from './components/ModerationPanel'; 
-
+import RandomAd from './components/RandomAd.jsx';
 
 const App = () => {
   const { isLoggedIn, userRole } = useAuth();
