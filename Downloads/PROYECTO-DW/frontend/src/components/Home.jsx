@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import RandomAd from './RandomAd';
+import CategoryArticleViewer from './CategoryArticleViewer';
 
 const Home = () => {
   const [articles, setArticles] = useState([]);
@@ -80,9 +81,16 @@ const Home = () => {
     fetchMostVisitedAuthors();
 
 
-    axios.get('http://localhost/Categories.php')
-      .then(response => setCategories(response.data))
-      .catch(error => console.error('Error fetching categories:', error));
+axios.get('http://localhost/Categories.php')
+    .then(response => {
+        if (response.data) {
+            setCategories(response.data);
+        } else {
+            console.error('No data returned or empty response');
+        }
+    })
+    .catch(error => console.error('Error fetching categories:', error));
+  
 
     axios.get('http://localhost/Subcategories.php')
       .then(response => setSubcategories(response.data))
@@ -153,6 +161,7 @@ const Home = () => {
               <ArticleCard article={article} categories={categories} subcategories={subcategories} key={index} />
             ))}
           </div>
+          <CategoryArticleViewer categories={categories} />
 
           <h2 className="text-center mt-4">Anuncios</h2>
           <div className="ads-grid">

@@ -3,6 +3,7 @@ import axios from 'axios';
 import Template1 from './Template1';  
 import Template2 from './Template2';
 import Template3 from './Template3';
+import ModerationEmail from './ModerationEmail';
 
 const ModerateArticles = () => {
   const [articles, setArticles] = useState([]);
@@ -50,6 +51,8 @@ const ModerateArticles = () => {
       });
   };
   
+  const { sendRejectionEmail } = ModerationEmail();
+
   const handleReject = (id) => {
     axios.post('http://localhost/updateApprovalStatus.php', { 
       id, 
@@ -57,7 +60,10 @@ const ModerateArticles = () => {
       publish_status: 'Draft' 
     })
       .then(response => {
-        // Actualizar los artículos, cambiando el estado del rechazado
+        const rejectedArticle = articles.find(article => article.id === id);
+        if (rejectedArticle) {
+          sendRejectionEmail(rejectedArticle.id, rejectedArticle.author_email); // Asumiendo que cada artículo tiene un campo 'author_email'
+        }
         const updatedArticles = articles.map(article => 
           article.id === id ? { ...article, approval_status: 'Pending', publish_status: 'Draft' } : article
         );

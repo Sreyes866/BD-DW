@@ -6,12 +6,17 @@ import PremiumCategoriesManager from './PremiumCategoriesManager';
 import AssignCategoriesToAuthor from './AssignCategoriesToAuthor';
 import ManageFeaturedArticles from './ManageFeaturedArticles';
 import FrequentReportedUsers from './FrequentReportedUsers'; 
+import CommentCounter from './CommentsArticleViewer';
 
 const Profile = () => {
   const history = useHistory();
   const { userName, userUsername, userEmail, userRole, userPassword, isSubscribed, expiryDate } = useAuth();
   const { resetAuth } = useAuth(); // REINICIAR SESION
   const [showFrequentReportedUsers, setShowFrequentReportedUsers] = useState(false); 
+  const [showCommentsCounter, setShowCommentsCounter] = useState(false);
+  const [articleIds, setArticleIds] = useState([]);
+  const [selectedArticleId, setSelectedArticleId] = useState('');
+
 
   const [currentUser, setCurrentUser] = useState({
     username: userUsername,
@@ -84,6 +89,21 @@ const Profile = () => {
   const handleShowFrequentReportedUsers = () => {
     setShowFrequentReportedUsers(!showFrequentReportedUsers); 
   };
+
+  useEffect(() => {
+    // Carga los ID de los artículos al cargar el componente
+    const fetchArticleIds = async () => {
+        try {
+            const response = await fetch('http://localhost/GetArticleIds.php');
+            const data = await response.json();
+            setArticleIds(data);
+        } catch (error) {
+            console.error('Error fetching article IDs:', error);
+        }
+    };
+
+    fetchArticleIds();
+}, []);
 
 
   return (
@@ -177,11 +197,25 @@ const Profile = () => {
 
 
 {userRole === 'moderator' && (
-  <>
-    <button onClick={handleShowFrequentReportedUsers}>Reporte de comentarios de usuarios</button>
-    {showFrequentReportedUsers && <FrequentReportedUsers />} {/* Renderiza el componente si showFrequentReportedUsers es true */}
-  </>
-)}
+                <div>
+                    <button onClick={handleShowFrequentReportedUsers}>
+                        Reporte de comentarios de usuarios
+                    </button>
+                    {showFrequentReportedUsers && <FrequentReportedUsers />}
+
+                    <select 
+                        value={selectedArticleId} 
+                        onChange={(e) => setSelectedArticleId(e.target.value)}>
+                        <option value="">Seleccione un artículo</option>
+                        {articleIds.map((id) => (
+                            <option key={id} value={id}>{id}</option>
+                        ))}
+                    </select>
+
+                    {selectedArticleId && <CommentCounter articleId={selectedArticleId} />}
+                </div>
+            )}
+
 
           </div>
         )}
