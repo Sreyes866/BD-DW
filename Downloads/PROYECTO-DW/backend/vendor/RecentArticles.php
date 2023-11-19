@@ -1,22 +1,28 @@
 <?php
-
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+header('Content-Type: application/json');
 
 include ('db_connect.php');
+error_reporting(E_ALL);
 
 
-$sql = "SELECT * FROM Articles ORDER BY created_at DESC LIMIT 5";
+$sql = "SELECT * FROM Articles WHERE approval_status = 'Approved' ORDER BY id DESC LIMIT 10";
 $stmt = $conn->prepare($sql);
 
 if ($stmt->execute()) {
     $result = $stmt->get_result();
-    $recent_articles = $result->fetch_all(MYSQLI_ASSOC);
-    echo json_encode($recent_articles);
+    $articles = $result->fetch_all(MYSQLI_ASSOC);
+
+    foreach ($articles as &$article) {
+        if (isset($article['image'])) {
+            $article['image'] = base64_encode($article['image']);
+        }
+    }
+
+    echo json_encode($articles);
 } else {
-    echo json_encode(['message' => 'Error al obtener artículos recientes']);
+    echo json_encode(['message' => 'Error al obtener artículos', 'error' => $stmt->error]);
 }
 
-$conn->close(); 
+$conn->close();
+
 ?>

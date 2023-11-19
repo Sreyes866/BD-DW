@@ -13,7 +13,8 @@ if (!isset($data['username'])) {
 }
 $username = $data['username'];
 
-$sql = "SELECT name, username, password, email, role, is_subscribed, expiryDate FROM users WHERE username = ?";
+// Agregamos 'id' a la selección
+$sql = "SELECT id, name, username, password, email, role, is_subscribed, expiryDate FROM users WHERE username = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $username);
 
@@ -25,13 +26,15 @@ if ($stmt->execute()) {
         // Debugging (puedes quitar esta línea en producción)
         // var_dump($user);
 
+        // Incluimos 'id' en la respuesta
         echo json_encode([
             'message' => 'Información del usuario',
             'user' => [
+                'id' => $user['id'], // Asegúrate de que 'id' se incluya aquí
                 'name' => $user['name'],
                 'username' => $user['username'],
                 'email' => $user['email'],
-                'password' => $user['password'],
+                'password' => $user['password'], // Considera la seguridad de exponer la contraseña, incluso si está hasheada
                 'role' => $user['role'],
                 'is_subscribed' => $user['is_subscribed'],
                 'expiryDate' => $user['expiryDate']

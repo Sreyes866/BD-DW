@@ -1,29 +1,23 @@
 <?php
-
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-
-include('db_connect.php');
-
+include ('db_connect.php');
 
 $data = json_decode(file_get_contents('php://input'), true);
 
 $action = $data['action'];
 
+// Categorías
 if ($action === 'create_category') {
     $name = $data['name'];
     $sql = "INSERT INTO Categories (name) VALUES (?)";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $name);
-
+    
     if ($stmt->execute()) {
-        echo json_encode(['message' => 'Category created']);
+        echo json_encode(['message' => 'Categoría creada']);
     } else {
-        echo json_encode(['message' => 'Error creating category']);
+        echo json_encode(['message' => 'Error al crear categoría']);
     }
 }
-
 
 if ($action === 'update_category') {
     $id = $data['id'];
@@ -33,14 +27,16 @@ if ($action === 'update_category') {
     $stmt->bind_param("si", $newName, $id);
 
     if ($stmt->execute()) {
-        echo json_encode(['message' => 'Category updated']);
+        echo json_encode(['message' => 'Categoría actualizada']);
     } else {
-        echo json_encode(['message' => 'Error updating category']);
+        echo json_encode(['message' => 'Error al actualizar categoría']);
     }
 }
 
 
+
 $conn->close();
 ?>
+
 
 

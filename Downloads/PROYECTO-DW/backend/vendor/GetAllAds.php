@@ -6,8 +6,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 include('db_connect.php');
 
-
-$query  = "SELECT id, image_url, link_url FROM ads";  
+$query  = "SELECT id, image_url, link_url, page_name FROM ads";  // Incluido page_name
 $result = $conn->query($query); 
 
 if ($result->num_rows > 0) {

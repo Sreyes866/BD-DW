@@ -7,7 +7,7 @@ include('db_connect.php');
 
 $data = json_decode(file_get_contents('php://input'), true);
 $adId = $data['adId'];
-$pageName = $data['pageName'] ?? 'announcements';  // Utiliza el valor enviado desde el frontend si está disponible
+$pageName = $data['pageName'];  // Utiliza el valor enviado desde el frontend
 
 $query = "INSERT INTO ad_clicks (ad_id, page_name, clicked_at) VALUES (?, ?, NOW())";
 $stmt = $conn->prepare($query);

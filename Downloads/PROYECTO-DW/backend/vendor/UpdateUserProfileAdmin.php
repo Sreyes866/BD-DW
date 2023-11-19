@@ -1,4 +1,4 @@
-<?php
+UpdateUserProfileAdmin.php:    <?php
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
@@ -16,21 +16,13 @@ if (isset($data->action)) {
         $email = $data->email ?? '';
         $role = $data->role ?? '';
         $expiryDate = isset($data->expiryDate) ? $data->expiryDate : NULL;
-    
-        if ($expiryDate !== NULL) {
-            $query = "UPDATE users SET name=?, email=?, role=?, expiryDate=? WHERE username=?";
-            $stmt = $conn->prepare($query);
-            $stmt->bind_param("sssss", $name, $email, $role, $expiryDate, $username);
-        } else {
-            $query = "UPDATE users SET name=?, email=?, role=?, expiryDate=NULL WHERE username=?";
-            $stmt = $conn->prepare($query);
-            $stmt->bind_param("ssss", $name, $email, $role, $username);
-        }
-    
-        if ($stmt === false) {
-            die("Failed to prepare statement: " . $conn->error);
-        }
-    
+        $is_active = $data->is_active ?? 1;
+        $nationality = $data->nationality ?? '';
+
+        $query = "UPDATE users SET name=?, email=?, role=?, expiryDate=?, is_active=?, nationality=? WHERE username=?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("ssssiss", $name, $email, $role, $expiryDate, $is_active, $nationality, $username);
+
         if ($stmt->execute()) {
             echo json_encode(['message' => 'Usuario actualizado exitosamente']);
         } else {
@@ -44,18 +36,15 @@ if (isset($data->action)) {
         $email = $data->email ?? '';
         $role = $data->role ?? '';
         $password = $data->password ?? '';
-        $is_subscribed = $data->is_subscribed ?? '0';  // Valor predeterminado
-        $expiryDate = isset($data->expiryDate) ? $data->expiryDate : NULL;  // Aquí es donde cambiamos para aceptar NULL
-        
-        $query = "INSERT INTO users (username, name, email, role, password, is_subscribed, expiryDate) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $nationality = $data->nationality ?? '';
+        $is_subscribed = $data->is_subscribed ?? '0';
+        $expiryDate = isset($data->expiryDate) ? $data->expiryDate : NULL;
+        $is_active = isset($data->is_active) ? $data->is_active : 1;
+
+        $query = "INSERT INTO users (username, name, email, role, password, nationality, is_subscribed, expiryDate, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($query);
-        
-        if ($stmt === false) {
-            die("Failed to prepare statement: " . $conn->error);
-        }
-        
-        $stmt->bind_param("sssssss", $username, $name, $email, $role, $password, $is_subscribed, $expiryDate);
-        
+        $stmt->bind_param("sssssssii", $username, $name, $email, $role, $password, $nationality, $is_subscribed, $expiryDate, $is_active);
+
         if ($stmt->execute()) {
             echo json_encode(['message' => 'Usuario creado exitosamente']);
         } else {
@@ -70,16 +59,26 @@ if (isset($data->action)) {
         $stmt = $conn->prepare($query);
         $stmt->bind_param("s", $username);
 
-        if ($stmt === false) {
-            die("Failed to prepare statement: " . $conn->error);
-        }
-
         if ($stmt->execute()) {
             echo json_encode(['message' => 'Usuario eliminado exitosamente']);
         } else {
             echo json_encode(['message' => 'Error al eliminar usuario', 'error' => $stmt->error]);
         }
         $stmt->close();
+    }
+    elseif ($action === 'toggleActive') {
+        $username = $data->username;
+        $is_active = $data->is_active;
+
+        $query = "UPDATE users SET is_active = ? WHERE username = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("is", $is_active, $username);
+
+        if ($stmt->execute()) {
+            echo json_encode(['message' => 'Usuario activado/desactivado exitosamente']);
+        } else {
+            echo json_encode(['message' => 'Error al activar/desactivar usuario']);
+        }
     }
     else {
         echo json_encode(['message' => 'Acción no válida']);

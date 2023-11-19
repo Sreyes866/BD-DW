@@ -7,24 +7,25 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-include('db_connect.php');  
+include('db_connect.php');
 
+$data = json_decode(file_get_contents("php://input"), true);
+$username = $data['username'];
 
-$name = $_POST['userName'] ?? '';
-
-$query = "SELECT is_subscribed FROM users WHERE name = ?";
-
+$query = "SELECT is_subscribed, expiryDate FROM users WHERE username = ?";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("s", $name);
-$stmt->execute();
+$stmt->bind_param("s", $username);
 
-$result = $stmt->get_result();
-$row = $result->fetch_assoc();
-
-if ($row) {
-    echo json_encode($row);
+if ($stmt->execute()) {
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    
+    echo json_encode([
+        'is_subscribed' => $row['is_subscribed'],
+        'expiryDate' => $row['expiryDate']
+    ]);
 } else {
-    echo json_encode(['message' => 'No user found']);
+    echo json_encode(['message' => 'Error al recuperar el estado de la suscripción']);
 }
 
 $conn->close();
